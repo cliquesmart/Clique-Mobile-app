@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "917108325882",
+    "project_id": "clique-ba43f",
+    "storage_bucket": "clique-ba43f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917108325882:android:f9c17997fd9a5e24e4b843",
+        "android_client_info": {
+          "package_name": "com.cliqueapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "917108325882-necf07egskm154tngl8a0o2qg6n81ae7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJfgA4OlBz0s-K2H8PgYbxZp04SU6ScnI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "917108325882-necf07egskm154tngl8a0o2qg6n81ae7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "917108325882-l3va2jcbgfe5darqr29i6r1opastvhiu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cliquenfc.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

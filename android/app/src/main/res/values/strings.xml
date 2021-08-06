@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Clique</string>
+    <string name="facebook_app_id">797151164322896</string>
+    <string name="facebook_client_token">Clique</string>
+</resources>
