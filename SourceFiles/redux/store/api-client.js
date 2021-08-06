@@ -1,46 +1,35 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {APIURL} from '../../Constants/APIURL';
-import {create} from 'apisauce';
 
-/**
- * Create an Axios Client with defaults
- */
-
-const getToken = async () => await AsyncStorage.getItem('access-token');
-
-const client = create({
+const client = axios.create({
   baseURL: APIURL.BaseURL,
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Cache-Control': 'no-cache',
+    // Authorization: 'Bearer',
   },
   timeout: 100000,
-  // auth: { Authorization: 'Bearer ' + { getToken } }
 });
-
 /**
  * Request Wrapper with default success/error actions
  */
+client.interceptors.request.use(
+  async (config) => {
+    if (!config.headers.Authorization) {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        config.headers.authorization = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
+  (error) => console.log(error),
+);
 export const apiCall = function (method, route, body = null, token = null) {
-  console.log(method, route, body, 'method, route, body');
   const onSuccess = function (response) {
     console.log('Request Successful!', response);
     return response.data;
   };
-  client.addResponseTransform((response) => {
-    if (response.problem == 'NETWORK_ERROR') {
-      alert('No Internet Connection');
-
-      return null;
-      // Toast.showWithGravity(ValidationMsg.InternetConnection, Toast.SHORT, Toast.CENTER);
-    } else if (response.problem == 'TIMEOUT_ERROR') {
-      alert('Server not responding please try again');
-      return null;
-      // Toast.showWithGravity(ValidationMsg.Server_Not_Responding, Toast.SHORT, Toast.CENTER);
-    }
-  });
 
   const onError = function (error) {
     console.log('Request Failed:', error.config);

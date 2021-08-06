@@ -98,6 +98,12 @@ class Login extends Component {
             'user_id',
             JSON.stringify(response.data.data.user.user_id),
           );
+          await AsyncStorage.setItem('token', response.data.data.access_token);
+          await AsyncStorage.setItem(
+            'custom_id',
+            response.data.data.user.custom_id,
+          );
+          console.log(response.data.data);
           this.props.navigation.navigate('Dashboard');
         } else {
           this.setState({isloading: false});
@@ -182,6 +188,14 @@ class Login extends Component {
             await AsyncStorage.setItem(
               'user_id',
               JSON.stringify(response.data.data.user.user_id),
+            );
+            await AsyncStorage.setItem(
+              'token',
+              response.data.data.access_token,
+            );
+            await AsyncStorage.setItem(
+              'custom_id',
+              response.data.data.user.custom_id,
             );
             this.props.navigation.navigate('Dashboard');
             await this.googleSignOut();
@@ -302,6 +316,14 @@ class Login extends Component {
                     await AsyncStorage.setItem(
                       'user_id',
                       JSON.stringify(response.data.data.user.user_id),
+                    );
+                    await AsyncStorage.setItem(
+                      'token',
+                      response.data.data.access_token,
+                    );
+                    await AsyncStorage.setItem(
+                      'custom_id',
+                      response.data.data.user.custom_id,
                     );
                     self.props.navigation.navigate('Dashboard');
                     await LoginManager.logOut();

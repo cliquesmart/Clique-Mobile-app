@@ -26,7 +26,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import {images} from '../Assets/Images/images';
 import {Button} from '../components';
-import {wp} from '../components/responsive';
+import {hp, wp} from '../components/responsive';
 import {useEffect} from 'react';
 import {showAlert} from '../utils/mobile-utils';
 import Geolocation from '@react-native-community/geolocation';
@@ -127,13 +127,8 @@ const Tutorial = () => {
 
   const _renderItem = ({item}) => {
     return (
-      <ImageBackground
-        // imageStyle={{
-        //   resizeMode: 'stretch', // works only here!
-        // }}
-        source={item.image}
-        style={styles.slide}>
-        <View style={{paddingBottom: 40, marginHorizontal: wp(5)}}>
+      <ImageBackground source={item.image} style={styles.slide}>
+        <View style={{paddingBottom: hp(9), marginHorizontal: wp(5)}}>
           <Button onPress={() => goToRegister()} linear color="primary">
             Sign Up
           </Button>
@@ -207,28 +202,14 @@ const styles = StyleSheet.create({
   slide: {
     height:
       Platform.OS === 'ios'
-        ? Dimensions.get('window').height
-        : Dimensions.get('window').height,
+        ? Dimensions.get('screen').height
+        : Dimensions.get('screen').height,
     width: Dimensions.get('screen').width,
     justifyContent: 'flex-end',
     // backgroundColor: CommonColors.primaryColor,
   },
   image: {
     flex: 1,
-  },
-  btnSignUp: {
-    marginLeft: 20,
-    marginRight: 20,
-    height: 50,
-    backgroundColor: CommonColors.PurpleColor,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  txtSignUp: {
-    color: CommonColors.whiteColor,
-    fontSize: SetFontSize.ts16,
-    fontFamily: ConstantKeys.Averta_REGULAR,
   },
   txtAlreadyAccount: {
     marginLeft: 20,
@@ -246,42 +227,12 @@ const styles = StyleSheet.create({
     fontSize: SetFontSize.ts14,
     color: CommonColors.secondaryText,
   },
-  viewClique: {
-    backgroundColor: '#F2F0F7',
-    width: 135,
-    height: 150,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowRadius: 5,
-    shadowOpacity: 0.2,
-    shadowOffset: {width: 5, height: 5},
-    borderRadius: 20,
-  },
-  txtIntoTitle: {
-    marginLeft: 20,
-    marginRight: 20,
-    textAlign: 'center',
-    fontSize: SetFontSize.ts30,
-    fontFamily: ConstantKeys.Averta_BOLD,
-    color: CommonColors.whiteColor,
-  },
-  txtIntroDesc: {
-    marginLeft: 20,
-    marginRight: 20,
-    textAlign: 'center',
-    fontSize: SetFontSize.ts14,
-    marginTop: 10,
-    fontFamily: ConstantKeys.Averta_REGULAR,
-    color: CommonColors.whiteColor,
-  },
   paginationContainer: {
     position: 'absolute',
-    bottom: 30,
+    bottom: hp(5),
     alignSelf: 'center',
   },
   paginationDots: {
-    height: 16,
-    marginTop: 16,
     flexDirection: 'row',
     alignItems: 'center',
   },

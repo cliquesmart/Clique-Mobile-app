@@ -121,7 +121,11 @@ const ScanCard = () => {
     return Ndef.encodeMessage([Ndef.uriRecord(valueToWrite)]);
   }
   const writeCard = async () => {
-    const user_id = await AsyncStorage.getItem('user_id');
+    const user_id = await AsyncStorage.getItem('custom_id');
+    console.log(
+      'http://admin.cliquesocial.co/user/profile/' + user_id,
+      'card id sync successfully',
+    );
     try {
       let bytes = await buildUrlPayload(
         'http://admin.cliquesocial.co/user/profile/' + user_id,

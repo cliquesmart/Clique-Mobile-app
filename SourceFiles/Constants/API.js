@@ -1,20 +1,20 @@
+/* eslint-disable dot-notation */
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {create} from 'apisauce';
 import qs from 'qs';
 import R from 'ramda';
 // import Toast from 'react-native-simple-toast';
 import {APIURL} from './APIURL';
 
-import ValidationMsg from './ValidationMsg';
-
 const api = create({
   baseURL: APIURL.BaseURL,
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Cache-Control': 'no-cache',
+    // Authorization: 'Bearer',
   },
   timeout: 100000,
 });
+// console.log('Bearer ' + JSON.parse(getToken()));
 
 const monitor = (response) => {
   const {
@@ -29,14 +29,34 @@ const monitor = (response) => {
 };
 api.addMonitor(monitor);
 
-api.addRequestTransform((request) => {
-  if (R.contains(request.method, ['delete', 'post', 'put'])) {
+api.addAsyncRequestTransform((request) => async () => {
+  const token = await AsyncStorage.getItem('token');
+  const authorization = token ? `Bearer ${token}` : null;
+  request.headers['Authorization'] = authorization;
+  if (R.contains(request.method, ['get', 'delete', 'post', 'put'])) {
     if (!(request.data instanceof FormData)) {
       request.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+      request.headers['Authorization'] = authorization;
       request.data = qs.stringify(request.data);
     }
   }
 });
+
+api.addAsyncResponseTransform(async (response) => {
+  const token = await AsyncStorage.getItem('token');
+  const authorization = token ? `Bearer ${token}` : null;
+  console.log(authorization);
+  if (authorization) {
+    api.setHeaders({Authorization: authorization});
+  }
+});
+// const serverRequestModifier = async (req) => {
+//   const token = await AsyncStorage.getItem('token');
+//   const authorization = token ? `Bearer ${token}` : null;
+//   if (authorization) {
+//     api.setHeaders({Authorization: authorization});
+//   }
+// };
 
 api.addResponseTransform((response) => {
   if (response.problem == 'NETWORK_ERROR') {

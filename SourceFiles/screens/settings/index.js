@@ -194,8 +194,6 @@ const Settings = () => {
     try {
       const keys = await AsyncStorage.getAllKeys();
       await AsyncStorage.multiRemove(keys);
-      await GoogleSignin.signOut();
-      await LoginManager.logOut();
       navigation.reset({
         routes: [{name: 'Login'}],
       });

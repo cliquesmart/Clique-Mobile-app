@@ -1,42 +1,25 @@
 import React, {Component} from 'react';
 import {
-  View,
   SafeAreaView,
   StyleSheet,
-  StatusBar,
-  Image,
   TouchableOpacity,
   ScrollView,
-  TextInput,
-  Keyboard,
-  Platform,
   Alert,
-  FlatList,
-  Dimensions,
 } from 'react-native';
-
 //Constant Files
 import {CommonColors} from '../Constants/ColorConstant';
 import {IMG} from '../Constants/ImageConstant';
 import {SetFontSize} from '../Constants/FontSize';
 import {ConstantKeys} from '../Constants/ConstantKey';
-import ValidationMsg from '../Constants/ValidationMsg';
 import LoadingView from '../Constants/LoadingView';
 import {APIURL} from '../Constants/APIURL';
 import Webservice from '../Constants/API';
-import {Block, Button, ImageComponent, Input, Text} from '../components';
+import {Block, Button, ImageComponent, Text} from '../components';
 import {hp, wp} from '../components/responsive';
 
 //Third Party
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {CommonActions} from '@react-navigation/native';
 import Snackbar from 'react-native-snackbar';
-// import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import {EventRegister} from 'react-native-event-listeners';
-import {Neomorph, Shadow, NeomorphFlex} from 'react-native-neomorph-shadows';
-import LinearGradient from 'react-native-linear-gradient';
-import FastImage from 'react-native-fast-image';
-import {images} from '../Assets/Images/images';
 import HeaderPreLogin from '../common/header';
 import NeoInputField from '../components/neo-input';
 import {connect} from 'react-redux';
@@ -110,6 +93,11 @@ class RegisterName extends Component {
             'user_id',
             JSON.stringify(response.data.data.user.user_id),
           );
+          await AsyncStorage.setItem('token', response.data.data.access_token);
+          await AsyncStorage.setItem(
+            'custom_id',
+            response.data.data.user.custom_id,
+          );
           this.showAlert(response.data.message);
         } else {
           this.setState({
@@ -176,6 +164,11 @@ class RegisterName extends Component {
             'user_id',
             JSON.stringify(response.data.data.user.user_id),
           );
+          await AsyncStorage.setItem('token', response.data.data.access_token);
+          await AsyncStorage.setItem(
+            'custom_id',
+            response.data.data.user.custom_id,
+          );
           this.showAlert(response.data.message);
         } else {
           this.setState({
@@ -225,8 +218,6 @@ class RegisterName extends Component {
   };
 
   render() {
-    let BackIcon = IMG.OtherFlow.BackIcon;
-    let RedPlay = IMG.InitialFlow.RedPlay;
     console.log(this.props.location, 'location');
     const data = {
       name: this.props.route.params.name,

@@ -72,9 +72,12 @@ const ScanTag = () => {
   // API Get Country
   const API_WRITE_CARD = async (card_id) => {
     // this.setState({isloading: isload});
+    const user_id = await AsyncStorage.getItem('user_id');
+
     setIsloading(true);
     Webservice.post(APIURL.validateCard, {
-      tag_id: card_id,
+      card_id: card_id,
+      user_id: user_id,
     })
       .then((response) => {
         if (response.data == null) {
@@ -117,16 +120,12 @@ const ScanTag = () => {
     return Ndef.encodeMessage([Ndef.uriRecord(valueToWrite)]);
   }
   const writeCard = async () => {
-    const user_id = await AsyncStorage.getItem('user_id');
-
+    const user_id = await AsyncStorage.getItem('custom_id');
+    console.log(
+      'http://admin.cliquesocial.co/user/profile/' + user_id,
+      'card id sync successfully',
+    );
     try {
-      // let resp = await NfcManager.requestTechnology(NfcTech.Ndef, {
-      //   alertMessage: 'Ready to write some NFC tags!'
-      // });
-      // console.log("REspo : "+resp);
-      // let ndef = await NfcManager.getNdefMessage();
-      // console.log("NDFE : "+JSON.stringify(ndef));
-
       let bytes = buildUrlPayload(
         'http://admin.cliquesocial.co/user/profile/' + user_id,
       );
