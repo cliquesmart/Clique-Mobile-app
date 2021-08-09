@@ -39,4 +39,5 @@ export const APIURL = {
   validateCard: 'validatecard',
   userprofileupdate: 'userprofileupdate',
   makePayment: 'makepayment',
+  analytics: 'data-analyst',
 };

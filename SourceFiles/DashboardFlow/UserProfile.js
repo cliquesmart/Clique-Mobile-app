@@ -44,6 +44,7 @@ import {
 } from '../utils/commonUtils';
 import {hp, wp} from '../components/responsive';
 import NeuView from '../common/neu-element/lib/NeuView';
+import {OpenLinks} from '../utils/mobile-utils';
 
 export default class UserProfile extends Component {
   constructor(props) {
@@ -314,19 +315,6 @@ export default class UserProfile extends Component {
   //For Tap Social Media Details & Linking
   SocialTap = (item) => {
     requestAnimationFrame(() => {
-      // if (item.media_type == 'homeNumber' || item.media_type == 'workNumber' || item.media_type == 'otherNumber') {
-      //   Linking.openURL(`tel:${item.media_value}`);
-      // }
-      // else {
-      //   Linking.canOpenURL(item.media_value).then(supported => {
-      //     if (supported) {
-      //       Linking.openURL(item.media_value);
-      //     } else {
-      //       console.log('Don\'t know how to open URI: ' + item.media_value);
-      //     }
-      //   })
-      // }
-
       if (
         item.media_type == 'homeNumber' ||
         item.media_type == 'workNumber' ||
@@ -551,14 +539,14 @@ export default class UserProfile extends Component {
           return (
             <>
               <TouchableOpacity
-                onPress={() => this.openLink(item.link, item.icone.name)}
+                onPress={() => OpenLinks(item.icone.name, item.username)}
                 style={{paddingHorizontal: wp(1), marginTop: hp(2)}}>
                 {strictValidObjectWithKeys(item.icone) && (
                   <ImageComponent
                     isURL
                     name={`${APIURL.iconUrl}${item.icone.url}`}
-                    height={hp(10)}
-                    width={wp(22)}
+                    height={Platform.OS === 'ios' ? 90 : 85}
+                    width={Platform.OS === 'ios' ? 90 : 85}
                   />
                 )}
               </TouchableOpacity>
@@ -570,20 +558,6 @@ export default class UserProfile extends Component {
   };
 
   render() {
-    let BusinessIcon = IMG.OtherFlow.BusinessIcon;
-    let SocialIcon = IMG.OtherFlow.SocialIcon;
-    let MusicIcon = IMG.OtherFlow.MusicIcon;
-    let PaymentIcon = IMG.OtherFlow.PaymentIcon;
-    let ExternalLinkIcon = IMG.OtherFlow.ExternalLinkIcon;
-    let BackIcon = IMG.OtherFlow.BackIcon;
-
-    let CallIcon = IMG.OtherFlow.CallIcon;
-    let SocialMailIcon = IMG.OtherFlow.SocialMailIcon;
-    let RightArrowIcon = IMG.OtherFlow.RightArrowIcon;
-    let SpotifyIcon = IMG.OtherFlow.SpotifyIcon;
-    let PayIcon = IMG.OtherFlow.PayIcon;
-    let LinkIcon = IMG.OtherFlow.LinkIcon;
-    console.log(this.state.profileData, 'this.state.profileData');
     const {profileData} = this.state;
     return (
       <Block linear>
@@ -622,10 +596,6 @@ export default class UserProfile extends Component {
               {strictValidObjectWithKeys(profileData) &&
                 strictValidArray(profileData.social_data) &&
                 this.renderSocialIcons(profileData.social, 'social')}
-              {/* {strictValidObjectWithKeys(profileData) &&
-                  strictValidArray(profileData.business) &&
-                  activeOptions === 'business' &&
-                  renderSocialIcons(profileData.business, 'business')} */}
             </Block>
           </ScrollView>
         </Block>

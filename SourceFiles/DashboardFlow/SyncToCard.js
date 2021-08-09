@@ -41,7 +41,6 @@ import NfcManager, {
 } from 'react-native-nfc-manager';
 import {Neomorph, Shadow, NeomorphFlex} from 'react-native-neomorph-shadows';
 import LinearGradient from 'react-native-linear-gradient';
-import Video from 'react-native-video';
 
 function buildUrlPayload(valueToWrite) {
   return Ndef.encodeMessage([Ndef.uriRecord(valueToWrite)]);

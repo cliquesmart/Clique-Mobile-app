@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, SafeAreaView, ScrollView} from 'react-native';
+import {StyleSheet, SafeAreaView, ScrollView, Alert} from 'react-native';
 import HeaderPostLogin from '../../../common/header-post-login';
 import {Block, ImageComponent, Text} from '../../../components';
 import {hp, wp} from '../../../components/responsive';
@@ -9,16 +9,64 @@ import {Text as TextSVG} from 'react-native-svg';
 import {CustomLineChart} from '../../common/lineChart';
 import PieChart from 'react-native-pie-chart';
 import {AvertaBold, t1, t2, w3} from '../../../components/theme/fontsize';
+import {useState} from 'react';
+import Webservice from '../../../Constants/API';
+import {APIURL} from '../../../Constants/APIURL';
+import {showAlert} from '../../../utils/mobile-utils';
+import {useFocusEffect} from '@react-navigation/native';
+import LoadingView from '../../../Constants/LoadingView';
+import {strictValidObjectWithKeys} from '../../../utils/commonUtils';
 
-const barData = {
-  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-  datasets: [
-    {
-      data: [120, 180, 120, 150, 100, 140, 95],
-    },
-  ],
-};
 const AnalyticsView = () => {
+  const [loading, setLoading] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState([]);
+  console.log(analyticsData, 'analyticsData');
+  useFocusEffect(
+    React.useCallback(() => {
+      API_NEARBY_USERS();
+    }, []),
+  );
+  const API_NEARBY_USERS = async (isload) => {
+    // setArNearbyPeople([]);
+    setLoading(true);
+    Webservice.post(APIURL.analytics)
+      .then((response) => {
+        if (response.data == null) {
+          setLoading(false);
+          // alert('error');
+          showAlert(response.originalError.message);
+          return;
+        }
+        console.log('Get Newrby users Response : ' + JSON.stringify(response));
+
+        if (response.data.status === true) {
+          // Already User
+          var nearByData = response.data.data;
+          setLoading(false);
+          setAnalyticsData(nearByData);
+        } else {
+          setLoading(false);
+          showAlert(response.data.message);
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+        setLoading(false);
+        Alert.alert(
+          error.message,
+          '',
+          [
+            {
+              text: 'Try Again',
+              onPress: () => {
+                API_NEARBY_USERS(true);
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+      });
+  };
   const chart_wh = 180;
   const series = [125, 125];
   const sliceColor = ['#8562EF', '#CC65C6'];
@@ -117,6 +165,7 @@ const AnalyticsView = () => {
             right>
             Last 7 Days
           </Text>
+
           <CustomLineChart
             withOuterLines={false}
             withVerticalLines={false}
@@ -127,7 +176,7 @@ const AnalyticsView = () => {
             width={wp(85)} // from react-native
             height={hp(25)}
             transparent
-            data={barData}
+            data={analyticsData.Analyst}
             chartConfig={{
               strokeWidth: 4, // optional, default 3
               useShadowColorFromDataset: true,
@@ -146,7 +195,9 @@ const AnalyticsView = () => {
               },
             }}
             renderDotContent={({x, y, index}) => {
-              const val = barData.datasets[0].data[index];
+              const val =
+                strictValidObjectWithKeys(analyticsData) &&
+                analyticsData.Analyst.datasets[0].data[index];
               return (
                 <TextSVG
                   key={index}
@@ -204,15 +255,39 @@ const AnalyticsView = () => {
           <Text margin={[hp(0.5), 0, 0]} grey regular size={16} center>
             business card in the world
           </Text>
-          <Block row flex={false} space="between" margin={[t2, wp(5)]}>
-            {renderItem('Views', '2k', 'views_icon', 12, 19)}
-            {renderItem('Clicks', '1k', 'clicks_icon', 15, 15)}
-            {renderItem('Shares', '50', 'share_icon', 14, 16)}
-          </Block>
-          {renderAnalyticsChart()}
+          {strictValidObjectWithKeys(analyticsData) && (
+            <Block row flex={false} space="between" margin={[t2, wp(5)]}>
+              {strictValidObjectWithKeys(analyticsData) &&
+                renderItem(
+                  'Views',
+                  analyticsData.is_click,
+                  'views_icon',
+                  12,
+                  19,
+                )}
+              {strictValidObjectWithKeys(analyticsData) &&
+                renderItem(
+                  'Clicks',
+                  analyticsData.is_click,
+                  'clicks_icon',
+                  15,
+                  15,
+                )}
+              {strictValidObjectWithKeys(analyticsData) &&
+                renderItem(
+                  'Shares',
+                  analyticsData.is_share,
+                  'share_icon',
+                  14,
+                  16,
+                )}
+            </Block>
+          )}
+          {strictValidObjectWithKeys(analyticsData) && renderAnalyticsChart()}
           {renderDoughnutChart()}
         </ScrollView>
       </Block>
+      {loading ? <LoadingView /> : null}
     </Block>
   );
 };

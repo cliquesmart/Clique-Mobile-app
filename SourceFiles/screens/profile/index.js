@@ -429,8 +429,6 @@ const Profile = () => {
                   <ImageComponent
                     isURL
                     name={`${APIURL.iconUrl}${item.icone.url}`}
-                    // height={hp(10)}
-                    // width={wp(22)}
                     height={Platform.OS === 'ios' ? 90 : 85}
                     width={Platform.OS === 'ios' ? 90 : 85}
                   />
@@ -776,13 +774,6 @@ const Profile = () => {
                     color="primary">
                     Open Link
                   </Button>
-                  {/* <Button
-                    style={{width: wp(32)}}
-                    onPress={() => deleteSocialAccount(newState)}
-                    isLoading={deleteSocialLoading}
-                    color="accent">
-                    Delete
-                  </Button> */}
                 </Block>
                 <Button
                   disabled={!field}
