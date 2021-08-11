@@ -114,7 +114,6 @@ const ChoosePassword = () => {
                   />
                 </NeuView>
               </TouchableOpacity>
-              {console.log(errors, 'errors')}
               <ImageComponent
                 resizeMode="contain"
                 height={140}
@@ -143,7 +142,7 @@ const ChoosePassword = () => {
                     value={values.password}
                     secure
                   />
-                  {errors.password && errorText(errors.password)}
+                  {/* {errors.password && errorText(errors.password)} */}
 
                   <Block flex={false} margin={[hp(1), 0]} />
                   <NeoInputField
@@ -154,8 +153,8 @@ const ChoosePassword = () => {
                     onChangeText={handleChange('confirm_password')}
                     value={values.confirm_password}
                   />
-                  {errors.confirm_password &&
-                    errorText(errors.confirm_password)}
+                  {/* {errors.confirm_password &&
+                    errorText(errors.confirm_password)} */}
                 </Block>
                 <Block row margin={[hp(1.5), wp(2)]} flex={false}>
                   <Text grey size={14}>

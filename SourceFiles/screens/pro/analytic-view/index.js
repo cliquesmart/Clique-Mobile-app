@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import {StyleSheet, SafeAreaView, ScrollView, Alert} from 'react-native';
 import HeaderPostLogin from '../../../common/header-post-login';
@@ -273,18 +274,18 @@ const AnalyticsView = () => {
                   15,
                   15,
                 )}
-              {strictValidObjectWithKeys(analyticsData) &&
+              {/* {strictValidObjectWithKeys(analyticsData) &&
                 renderItem(
                   'Shares',
                   analyticsData.is_share,
                   'share_icon',
                   14,
                   16,
-                )}
+                )} */}
             </Block>
           )}
           {strictValidObjectWithKeys(analyticsData) && renderAnalyticsChart()}
-          {renderDoughnutChart()}
+          {/* {renderDoughnutChart()} */}
         </ScrollView>
       </Block>
       {loading ? <LoadingView /> : null}
