@@ -187,18 +187,7 @@ const ScanCard = () => {
           <Text purple semibold size={28} height={40}>
             Behind Your Phone{' '}
           </Text>
-          <Text
-            onPress={() =>
-              navigate('ActivatedCard', {
-                header: 'Congratulations',
-                subtitle: 'Your card has been linked to your account',
-                error: false,
-              })
-            }
-            color="#707070"
-            regular
-            size={12}
-            height={26}>
+          <Text color="#707070" regular size={12} height={26}>
             To update your card
           </Text>
         </Block>

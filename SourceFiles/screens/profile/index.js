@@ -211,7 +211,12 @@ const Profile = () => {
   };
   const renderHeader = () => {
     return (
-      <Block center padding={[hp(2), wp(3)]} space="between" flex={false} row>
+      <Block
+        center
+        padding={[hp(2), wp(3), 0]}
+        space="between"
+        flex={false}
+        row>
         <Text white semibold size={18}>
           {'      '}
         </Text>
@@ -296,28 +301,46 @@ const Profile = () => {
             </Text>
           </Block>
         </Block>
-        <TouchableOpacity
-          onPress={() =>
-            navigate('EditProfile', {
-              profile: profile,
-            })
-          }>
-          <NeuView
-            concave
-            color="#E866B6"
-            width={40}
-            height={40}
-            borderRadius={20}
-            customGradient={['#BD64CE', '#AE28A1']}>
-            <ImageComponent
-              resizeMode="contain"
-              height={20}
-              width={20}
-              name={'edit_icon'}
-              color="#fff"
-            />
-          </NeuView>
-        </TouchableOpacity>
+        <Block flex={false} right>
+          <TouchableOpacity
+            onPress={() =>
+              navigate('EditProfile', {
+                profile: profile,
+              })
+            }>
+            <NeuView
+              concave
+              color="#E866B6"
+              width={40}
+              height={40}
+              borderRadius={20}
+              customGradient={['#BD64CE', '#AE28A1']}>
+              <ImageComponent
+                resizeMode="contain"
+                height={20}
+                width={20}
+                name={'edit_icon'}
+                color="#fff"
+              />
+            </NeuView>
+          </TouchableOpacity>
+          <TouchableOpacity style={{marginTop: hp(2)}}>
+            <NeuView
+              concave
+              color="#E866B6"
+              width={40}
+              height={40}
+              borderRadius={20}
+              customGradient={['#BD64CE', '#AE28A1']}>
+              <ImageComponent
+                resizeMode="contain"
+                height={20}
+                width={20}
+                name={'share_icon'}
+              />
+            </NeuView>
+          </TouchableOpacity>
+        </Block>
       </Block>
     );
   };
@@ -611,6 +634,7 @@ const Profile = () => {
     <Block linear>
       <SafeAreaView />
       {renderHeader()}
+
       {strictValidObjectWithKeys(profile) && renderProfile()}
 
       <Block

@@ -193,11 +193,9 @@ export default class UserProfile extends Component {
 
   // API Add Constact
   API_ADD_CONTACT = async (isload, contact_id) => {
-    const user_id = await AsyncStorage.getItem('user_id');
     this.setState({isloading: isload});
 
     Webservice.post(APIURL.addContact, {
-      user_id: user_id,
       contact_id: contact_id,
     })
       .then((response) => {
@@ -230,7 +228,7 @@ export default class UserProfile extends Component {
     const user_id = await AsyncStorage.getItem('user_id');
     this.setState({isloading: isload});
     Webservice.post(APIURL.removeContact, {
-      user_id: user_id,
+      action: 'remove',
       contact_id: contact_id,
     })
       .then((response) => {
