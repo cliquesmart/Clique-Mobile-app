@@ -7,7 +7,6 @@ import {light} from '../../../components/theme/colors';
 import NeuView from '../../../common/neu-element/lib/NeuView';
 import {Text as TextSVG} from 'react-native-svg';
 import {CustomLineChart} from '../../common/lineChart';
-import PieChart from 'react-native-pie-chart';
 import {AvertaBold, t1, t2, w3} from '../../../components/theme/fontsize';
 import {useState} from 'react';
 import Webservice from '../../../Constants/API';
@@ -16,6 +15,7 @@ import {showAlert} from '../../../utils/mobile-utils';
 import {useFocusEffect} from '@react-navigation/native';
 import LoadingView from '../../../Constants/LoadingView';
 import {strictValidObjectWithKeys} from '../../../utils/commonUtils';
+import Pie from '../../../components/pie-chart/index';
 
 const AnalyticsView = () => {
   const [loading, setLoading] = useState(false);
@@ -84,7 +84,7 @@ const AnalyticsView = () => {
             Last 7 Days
           </Text>
           <Block space="around" row flex={false} center>
-            <PieChart
+            <Pie
               style={{
                 transform: [{rotateX: '180deg'}, {rotateZ: '90deg'}],
               }}

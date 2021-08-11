@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import {Alert, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
-import ResponsiveImage from 'react-native-responsive-image';
+import {StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+
 import {hp, wp} from './responsive';
 import Block from './Block';
-import Button from './Button';
+
 import Text from './Text';
-import {AvertaRegular, t1} from './theme/fontsize';
+import {AvertaRegular} from './theme/fontsize';
 import {ImageComponent} from '.';
 import Neomorph from '../common/shadow-src/Neomorph';
 
