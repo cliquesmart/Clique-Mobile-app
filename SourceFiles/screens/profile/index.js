@@ -851,8 +851,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   bgImage: {
-    height: Platform.OS === 'ios' ? 72 : 67,
-    width: Platform.OS === 'ios' ? 72 : 67,
+    height: Platform.OS === 'ios' ? hp(8) : 67,
+    width: Platform.OS === 'ios' ? hp(8) : 67,
   },
   pro: {position: 'absolute', right: -10, top: -15, zIndex: 99},
   socialIcons: {

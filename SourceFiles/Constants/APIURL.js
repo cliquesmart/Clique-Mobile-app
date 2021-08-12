@@ -40,4 +40,5 @@ export const APIURL = {
   userprofileupdate: 'userprofileupdate',
   makePayment: 'makepayment',
   analytics: 'data-analyst',
+  myContactList: 'mycontactlist',
 };

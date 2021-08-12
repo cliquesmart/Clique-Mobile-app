@@ -1,16 +1,10 @@
 import React, {Component} from 'react';
 import {
-  View,
   SafeAreaView,
   StyleSheet,
-  StatusBar,
   TouchableOpacity,
-  Image,
   FlatList,
-  LogBox,
-  Dimensions,
   Alert,
-  PermissionsAndroid,
   ScrollView,
   Linking,
   Platform,
@@ -18,7 +12,6 @@ import {
 
 //Constants
 import {CommonColors} from '../Constants/ColorConstant';
-import {IMG} from '../Constants/ImageConstant';
 import {ConstantKeys} from '../Constants/ConstantKey';
 import {SetFontSize} from '../Constants/FontSize';
 import LoadingView from '../Constants/LoadingView';
@@ -27,14 +20,8 @@ import {APIURL} from '../Constants/APIURL';
 import ValidationMsg from '../Constants/ValidationMsg';
 
 //Third Party
-import {DrawerActions} from '@react-navigation/native';
 import Snackbar from 'react-native-snackbar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import FastImage from 'react-native-fast-image';
-import {CommonActions} from '@react-navigation/native';
-import QRCode from 'react-native-qrcode-svg';
-import {Neomorph, Shadow, NeomorphFlex} from 'react-native-neomorph-shadows';
-import LinearGradient from 'react-native-linear-gradient';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {Block, Button, ImageComponent, Text} from '../components';
 import {
@@ -49,7 +36,6 @@ import {OpenLinks} from '../utils/mobile-utils';
 export default class UserProfile extends Component {
   constructor(props) {
     super(props);
-    console.log(props, 'props');
     this.state = {
       isloading: false,
       userData: {},
@@ -70,29 +56,6 @@ export default class UserProfile extends Component {
     this.API_USERDETAILS(true);
   }
 
-  getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem(ConstantKeys.USERDATA);
-      if (value !== null) {
-        // value previously stored
-        console.log('User Data: ' + value);
-        var userData = JSON.parse(value);
-
-        await this.setState({
-          userData: userData,
-          user: userData.user,
-          is_temp: userData.user.is_temp,
-        });
-
-        this.API_USERDETAILS(true);
-      } else {
-        console.log('User Data: null ' + value);
-      }
-    } catch (e) {
-      console.log('Error : ' + e);
-    }
-  };
-
   showAlert(text) {
     Snackbar.show({
       text: text,
@@ -105,75 +68,31 @@ export default class UserProfile extends Component {
 
   // API Get Country
   API_USERDETAILS = async (isload) => {
-    const user_id = await AsyncStorage.getItem('user_id');
     this.setState({isloading: isload});
 
     Webservice.post(APIURL.usersDetails, {
       user_id: this.state.profileID,
-      login_id: user_id,
     })
       .then((response) => {
-        console.log(response, 'response', 'response');
         if (response.data == null) {
           this.setState({isloading: false});
           // alert('error');
-          alert(response.originalError.message);
+          this.showAlert(response.originalError.message);
           return;
         }
-        //   console.log(response);
         this.setState({isloading: false});
-        console.log('Get User Detail Response : ' + JSON.stringify(response));
 
-        if (response.data.status == true) {
+        if (response.data.status === true) {
+          console.log(response.data.data, 'response.data.data');
           var userData = response.data.data;
           var user = response.data.data.user;
           this.setState({profileData: user, isContact: userData.is_contact});
-
-          console.log('is Contact : ' + JSON.stringify(userData.is_contact));
-          var social_data = userData.user.social_data;
-
-          var social = [];
-          var music = [];
-          var payment = [];
-          var externalLink = [];
-          var company = userData.user.company_data;
-
-          for (var i = 0; i < social_data.length; i++) {
-            var item = social_data[i];
-
-            if (item.media_value != '') {
-              if (item.media_type == 'music') {
-                music.push(item);
-              } else if (item.media_type == 'payment') {
-                payment.push(item);
-              } else if (item.media_type == 'externalLink') {
-                externalLink.push(item);
-              } else if (
-                item.media_type != 'externalLink' &&
-                item.media_type != 'payment' &&
-                item.media_type != 'music'
-              ) {
-                social.push(item);
-              } else {
-              }
-            } else {
-            }
-          }
-
-          this.setState({
-            SocialData: social,
-            MusicData: music,
-            CompanyData: company,
-            PaymentData: payment,
-            ExternalLinkData: externalLink,
-          });
         } else {
           this.setState({isloading: false});
           this.showAlert(response.data.message);
         }
       })
       .catch((error) => {
-        console.log(error.message);
         this.setState({isloading: false});
         Alert.alert(
           error.message,
@@ -207,7 +126,6 @@ export default class UserProfile extends Component {
         }
         //   console.log(response);
         this.setState({isloading: false});
-        console.log('Get Add Contact Response : ' + JSON.stringify(response));
 
         if (response.data.status === true) {
           this.setState({isloading: false});
@@ -225,7 +143,6 @@ export default class UserProfile extends Component {
   };
 
   API_REMOVE_CONTACT = async (isload, contact_id) => {
-    const user_id = await AsyncStorage.getItem('user_id');
     this.setState({isloading: isload});
     Webservice.post(APIURL.removeContact, {
       action: 'remove',
@@ -254,7 +171,6 @@ export default class UserProfile extends Component {
         }
       })
       .catch((error) => {
-        console.log(error.message);
         this.setState({isloading: false});
       });
   };
@@ -310,75 +226,6 @@ export default class UserProfile extends Component {
     });
   };
 
-  //For Tap Social Media Details & Linking
-  SocialTap = (item) => {
-    requestAnimationFrame(() => {
-      if (
-        item.media_type == 'homeNumber' ||
-        item.media_type == 'workNumber' ||
-        item.media_type == 'otherNumber'
-      ) {
-        Linking.openURL(`tel:${item.media_value}`);
-      } else if (item.media_type == 'socialMail') {
-        Linking.openURL(`mailto:${item.media_value}`);
-      } else if (item.media_type == 'instagram') {
-        Linking.openURL(`instagram://user?username=${item.media_value}`).catch(
-          () => {
-            Linking.openURL('https://www.instagram.com/' + item.media_value);
-          },
-        );
-      } else if (item.media_type == 'facebook') {
-        Linking.openURL(`fb://profile/${item.media_value}`).catch(() => {
-          Linking.openURL('https://www.facebook.com/' + item.media_value);
-        });
-      } else if (item.media_type == 'youtube') {
-        Linking.openURL(`vnd.youtube://${item.media_value}`).catch(() => {
-          Linking.openURL('https://www.youtube.com/' + item.media_value);
-        });
-      } else if (item.media_type == 'linkdin') {
-        Linking.openURL(`linkedin://profile?id=${item.media_value}`).catch(
-          () => {
-            Linking.openURL('https://www.linkedin.com/in/' + item.media_value);
-          },
-        );
-      } else if (item.media_type == 'twitter') {
-        Linking.openURL('twitter://user?screen_name=' + item.media_value).catch(
-          () => {
-            Linking.openURL('https://www.twitter.com/' + item.media_value);
-          },
-        );
-      } else {
-        Linking.openURL('http://' + item.media_value);
-      }
-    });
-  };
-
-  //For Tap Music Details & Linking
-  MusicTap = (item) => {
-    requestAnimationFrame(() => {
-      Linking.canOpenURL(item.media_value).then((supported) => {
-        if (supported) {
-          Linking.openURL(item.media_value);
-        } else {
-          console.log("Don't know how to open URI: " + item.media_value);
-        }
-      });
-    });
-  };
-
-  //For Tap External Links & open in Browser
-  ExternalLinkTap = (item) => {
-    requestAnimationFrame(() => {
-      Linking.canOpenURL(item.media_value).then((supported) => {
-        if (supported) {
-          Linking.openURL(item.media_value);
-        } else {
-          console.log("Don't know how to open URI: " + item.media_value);
-        }
-      });
-    });
-  };
-
   //For Copy Text From Long Press
   CopyTextToClipBoard = (item) => {
     requestAnimationFrame(() => {
@@ -386,26 +233,6 @@ export default class UserProfile extends Component {
       this.showAlert('Coppied!');
     });
   };
-
-  renderImage(item) {
-    if (item.media_type == 'website') {
-      return IMG.OtherFlow.WebIcon;
-    } else if (item.media_type == 'socialMail') {
-      return IMG.OtherFlow.SocialMailIcon;
-    } else if (item.media_type == 'instagram') {
-      return IMG.OtherFlow.InstaIcon;
-    } else if (item.media_type == 'facebook') {
-      return IMG.OtherFlow.FacebookIcon;
-    } else if (item.media_type == 'twitter') {
-      return IMG.OtherFlow.TwitterIcon;
-    } else if (item.media_type == 'youtube') {
-      return IMG.OtherFlow.YoutubeIcon;
-    } else if (item.media_type == 'linkdin') {
-      return IMG.OtherFlow.LinkdInIcon;
-    } else {
-      return IMG.OtherFlow.CallIcon;
-    }
-  }
 
   renderHeader = () => {
     return (
@@ -462,7 +289,7 @@ export default class UserProfile extends Component {
                 margin={[hp(0.5), 0, 0]}
                 size={14}
                 white
-                numberOfLines={2}
+                numberOfLines={3}
                 regular>
                 {this.state.profileData.bio}
               </Text>
@@ -498,7 +325,6 @@ export default class UserProfile extends Component {
     Linking.canOpenURL(url)
       .then((supported) => {
         if (!supported) {
-          console.log('Unsupported url: ' + url);
         } else {
           return Linking.openURL(url);
         }
@@ -514,7 +340,6 @@ export default class UserProfile extends Component {
 
   openLink = async (url, name) => {
     // Checking if the link is supported for links with custom URL scheme.
-    console.log(url, name);
     switch (name) {
       case 'Phone':
         return this.openPhoneNumber(url);
@@ -525,7 +350,6 @@ export default class UserProfile extends Component {
     }
   };
   renderSocialIcons = (data, type) => {
-    console.log(data, 'data');
     return (
       <FlatList
         contentContainerStyle={styles.socialIcons}
@@ -533,7 +357,6 @@ export default class UserProfile extends Component {
         bounces={false}
         data={data}
         renderItem={({item}) => {
-          console.log(item);
           return (
             <>
               <TouchableOpacity
@@ -571,25 +394,34 @@ export default class UserProfile extends Component {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.container}
             bounces={false}>
-            {!this.state.isloading && (
-              <>
-                {this.state.isContact === 0 ? (
-                  <Button
-                    onPress={() => this.btnAddContactTap()}
-                    color="primary"
-                    linear>
-                    Request for Connection
-                  </Button>
-                ) : (
-                  <Button
-                    onPress={() => this.btnRemoveContactTap()}
-                    color="primary"
-                    linear>
-                    Remove from Connection
-                  </Button>
-                )}
-              </>
-            )}
+            {strictValidObjectWithKeys(profileData) &&
+              strictValidObjectWithKeys(profileData.my_connection) &&
+              profileData.my_connection.type === 'public' &&
+              !this.state.isloading && (
+                <>
+                  {profileData.my_connection.status === 'request' && (
+                    <Button
+                      onPress={() => this.btnAddContactTap()}
+                      color="primary"
+                      linear>
+                      Request for Connection
+                    </Button>
+                  )}
+                  {profileData.my_connection.status === 'approve' && (
+                    <Button
+                      onPress={() => this.btnRemoveContactTap()}
+                      color="primary"
+                      linear>
+                      Remove from Connection
+                    </Button>
+                  )}
+                  {profileData.my_connection.status === 'pending' && (
+                    <Button activeOpacity={1} color="primary" linear>
+                      Pending
+                    </Button>
+                  )}
+                </>
+              )}
             <Block flex={false}>
               {strictValidObjectWithKeys(profileData) &&
                 strictValidArray(profileData.social_data) &&
@@ -614,7 +446,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
-
   headerText: {
     flex: 1,
     fontFamily: ConstantKeys.Averta_BOLD,
