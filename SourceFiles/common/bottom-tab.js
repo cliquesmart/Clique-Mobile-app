@@ -88,7 +88,6 @@ const BottomTab = ({state, descriptors, navigation}) => {
     v.profile.data,
     v.profile.loading,
   ]);
-  console.log(profile, loading, 'profile');
   return (
     <View style={styles.ButtonContainer}>
       {state.routes.map((route, index) => {
@@ -100,7 +99,6 @@ const BottomTab = ({state, descriptors, navigation}) => {
             type: 'tabPress',
             target: route.key,
           });
-          console.log(event, 'event');
 
           if (!isFocused && !event.defaultPrevented) {
             if (route.name === 'Pro' && profile.is_pro === '0') {

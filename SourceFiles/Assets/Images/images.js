@@ -63,6 +63,7 @@ export const images = {
   tejus_icon: require('./icons/tejus.jpeg'),
   close_request_icon: require('./icons/close_r.png'),
   accept_request_icon: require('./icons/tick-mark.png'),
+  lock_icon: require('./icons/lock.png'),
 
   //Card
   mastercard: require('./icons/mastercard.png'),

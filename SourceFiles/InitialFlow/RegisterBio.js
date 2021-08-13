@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 //Constant Files
 import {CommonColors} from '../Constants/ColorConstant';
-import {IMG} from '../Constants/ImageConstant';
 import {SetFontSize} from '../Constants/FontSize';
 import {ConstantKeys} from '../Constants/ConstantKey';
 import LoadingView from '../Constants/LoadingView';
@@ -16,7 +15,6 @@ import {APIURL} from '../Constants/APIURL';
 import Webservice from '../Constants/API';
 import {Block, Button, ImageComponent, Text} from '../components';
 import {hp, wp} from '../components/responsive';
-
 //Third Party
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Snackbar from 'react-native-snackbar';
@@ -24,6 +22,7 @@ import HeaderPreLogin from '../common/header';
 import NeoInputField from '../components/neo-input';
 import {connect} from 'react-redux';
 import NeuView from '../common/neu-element/lib/NeuView';
+import messaging from '@react-native-firebase/messaging';
 
 class RegisterName extends Component {
   constructor(props) {
@@ -56,7 +55,9 @@ class RegisterName extends Component {
     });
   };
 
-  createAccount = () => {
+  createAccount = async () => {
+    const fcmToken = await messaging().getToken();
+
     this.setState({
       isloading: true,
     });
@@ -70,6 +71,7 @@ class RegisterName extends Component {
       bio: this.state.txtBio,
       current_lat: this.props.location.latitude,
       current_long: this.props.location.longitude,
+      device_token: fcmToken,
     })
       .then(async (response) => {
         if (response.data == null) {
@@ -127,7 +129,8 @@ class RegisterName extends Component {
       });
   };
 
-  btnSkipTap = () => {
+  btnSkipTap = async () => {
+    const fcmToken = await messaging().getToken();
     this.setState({
       isloading: true,
     });
@@ -141,6 +144,7 @@ class RegisterName extends Component {
       bio: '',
       current_lat: this.props.location.latitude,
       current_long: this.props.location.longitude,
+      device_token: fcmToken,
     })
       .then(async (response) => {
         if (response.data == null) {

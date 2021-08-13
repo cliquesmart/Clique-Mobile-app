@@ -68,11 +68,13 @@ const AnalyticsView = () => {
         );
       });
   };
-  const chart_wh = 180;
-  const series = [125, 125];
-  const sliceColor = ['#8562EF', '#CC65C6'];
 
   const renderDoughnutChart = () => {
+    const newConnection = 2;
+    const old = 4;
+    const chart_wh = 180;
+    const series = [newConnection, old];
+    const sliceColor = ['#8562EF', '#CC65C6'];
     return (
       <Block flex={false} margin={[hp(2), 0, 0]} center>
         <NeuView
@@ -285,7 +287,7 @@ const AnalyticsView = () => {
             </Block>
           )}
           {strictValidObjectWithKeys(analyticsData) && renderAnalyticsChart()}
-          {/* {renderDoughnutChart()} */}
+          {renderDoughnutChart()}
         </ScrollView>
       </Block>
       {loading ? <LoadingView /> : null}

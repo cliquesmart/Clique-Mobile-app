@@ -9,7 +9,7 @@
 import React, {Component} from 'react';
 import {AppState, Linking, StatusBar} from 'react-native';
 
-import AppIntroSlider from 'react-native-app-intro-slider';
+import FlashMessage from 'react-native-flash-message';
 import Navigation from './SourceFiles/Constants/Navigation';
 import * as NavigationService from './SourceFiles/Constants/NavigationService';
 
@@ -20,6 +20,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 import {sagaMiddleware, store, persistor} from './SourceFiles/redux/store';
 import rootSaga from './SourceFiles/redux/saga';
 import {Provider} from 'react-redux';
+import FcmService from './SourceFiles/utils/noti-services';
 
 sagaMiddleware.run(rootSaga);
 
@@ -213,6 +214,7 @@ export default class App extends Component {
             <Navigation />
           </PersistGate>
         </Provider>
+        <FlashMessage position="top" />
       </>
     );
   }

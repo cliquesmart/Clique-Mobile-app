@@ -21,7 +21,7 @@ import {ConstantKeys} from '../Constants/ConstantKey';
 //Third Party
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CommonActions, useNavigation} from '@react-navigation/native';
-import LinearGradient from 'react-native-linear-gradient';
+import messaging from '@react-native-firebase/messaging';
 
 import AppIntroSlider from 'react-native-app-intro-slider';
 import {images} from '../Assets/Images/images';
@@ -117,6 +117,7 @@ const Tutorial = () => {
   };
 
   useEffect(() => {
+    requestUserPermission();
     if (Platform.OS === 'ios') {
       getLocation();
     } else {
@@ -178,6 +179,31 @@ const Tutorial = () => {
         </View>
       </View>
     );
+  };
+
+  const registerAppWithFCM = async () => {};
+  const requestUserPermission = async () => {
+    const authStatus = await messaging().requestPermission();
+
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      getFcmToken();
+    }
+  };
+  const getFcmToken = async () => {
+    if (Platform.OS === 'ios') {
+      await messaging().registerDeviceForRemoteMessages();
+      await messaging().setAutoInitEnabled(true);
+    }
+    const fcmToken = await messaging().getToken();
+    if (fcmToken) {
+      console.log('Your Firebase Token is:', fcmToken);
+    } else {
+      console.log('Failed', 'No token received');
+    }
   };
   return (
     <View style={{flex: 1}}>

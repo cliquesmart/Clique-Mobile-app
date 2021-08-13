@@ -76,7 +76,6 @@ export default class AddJob extends Component {
       const value = await AsyncStorage.getItem(ConstantKeys.USERDATA);
       if (value !== null) {
         // value previously stored
-        console.log('User Data: ' + value);
         var userData = JSON.parse(value);
         var user = userData.user;
 

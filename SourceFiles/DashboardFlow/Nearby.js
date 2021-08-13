@@ -119,16 +119,12 @@ const Nearby = () => {
           latitude: position.coords.latitude,
         });
 
-        console.log('Longitude : ' + position.coords.longitude);
-        console.log('Latitude : ' + position.coords.latitude);
-
         // set Timeout for display animation jkp
         setTimeout(() => {
           API_NEARBY_USERS(true);
-        }, 2000);
+        }, 1000);
       },
       (error) => {
-        console.log(error.message);
         getOneTimeLocation();
       },
       {
@@ -159,7 +155,6 @@ const Nearby = () => {
       lat: location.latitude,
       long: location.longitude,
     };
-    console.log(data, 'kk');
     Webservice.post(APIURL.nearbyUsers, {
       user_id: user_id,
       lat: location.latitude,
@@ -173,7 +168,6 @@ const Nearby = () => {
           showAlert(response.originalError.message);
           return;
         }
-        console.log('Get Newrby users Response : ' + JSON.stringify(response));
 
         if (response.data.status === true) {
           // Already User
@@ -189,7 +183,6 @@ const Nearby = () => {
         }
       })
       .catch((error) => {
-        console.log(error.message);
         setLoading(false);
         Alert.alert(
           error.message,
@@ -222,9 +215,7 @@ const Nearby = () => {
           showAlert(response.originalError.message);
           return;
         }
-        //   console.log(response);
         setLoading(false);
-        console.log('Get Add Contact Response : ' + JSON.stringify(response));
 
         if (response.data.status === true) {
           showAlert(response.data.message);
@@ -235,7 +226,6 @@ const Nearby = () => {
         }
       })
       .catch((error) => {
-        console.log(error.message);
         setLoading(false);
       });
   };

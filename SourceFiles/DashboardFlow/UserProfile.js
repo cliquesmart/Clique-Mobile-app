@@ -32,6 +32,7 @@ import {
 import {hp, wp} from '../components/responsive';
 import NeuView from '../common/neu-element/lib/NeuView';
 import {OpenLinks} from '../utils/mobile-utils';
+import {light} from '../components/theme/colors';
 
 export default class UserProfile extends Component {
   constructor(props) {
@@ -424,9 +425,30 @@ export default class UserProfile extends Component {
               )}
             <Block flex={false}>
               {strictValidObjectWithKeys(profileData) &&
+                strictValidObjectWithKeys(profileData.my_connection) &&
+                profileData.my_connection.status === 'approve' &&
+                strictValidObjectWithKeys(profileData) &&
                 strictValidArray(profileData.social_data) &&
                 this.renderSocialIcons(profileData.social, 'social')}
             </Block>
+            {strictValidObjectWithKeys(profileData) &&
+              strictValidObjectWithKeys(profileData.my_connection) &&
+              profileData.my_connection.status !== 'approve' && (
+                <Block style={{flexGrow: 1}} center middle>
+                  <ImageComponent
+                    name={'lock_icon'}
+                    height={80}
+                    width={80}
+                    color={light.subtitleColor}
+                  />
+                  <Text margin={[hp(2), 0, 0]} grey semibold>
+                    This account is Private
+                  </Text>
+                  <Text grey semibold>
+                    Request to see their Account
+                  </Text>
+                </Block>
+              )}
           </ScrollView>
         </Block>
         {this.state.isloading ? <LoadingView /> : null}

@@ -30,6 +30,7 @@ import {
   GraphRequestManager,
 } from 'react-native-fbsdk';
 import {connect} from 'react-redux';
+import messaging from '@react-native-firebase/messaging';
 
 class Login extends Component {
   constructor(props) {
@@ -72,7 +73,8 @@ class Login extends Component {
     });
   };
 
-  onSubmit = (values) => {
+  onSubmit = async (values) => {
+    const fcmToken = await messaging().getToken();
     this.setState({isloading: true});
 
     Webservice.post(APIURL.userLogin, {
@@ -81,6 +83,7 @@ class Login extends Component {
       social_type: 'N',
       current_lat: this.props.location.latitude,
       current_long: this.props.location.longitude,
+      device_token: fcmToken,
     })
       .then(async (response) => {
         if (response.data == null) {
@@ -149,6 +152,8 @@ class Login extends Component {
   };
 
   signIn = async () => {
+    const fcmToken = await messaging().getToken();
+
     this.setState({
       isloading: true,
     });
@@ -166,6 +171,7 @@ class Login extends Component {
         password: '12345678',
         current_lat: this.props.location.latitude,
         current_long: this.props.location.longitude,
+        device_token: fcmToken,
       };
       console.log(data, 'data');
       this.setState({isloading: true});
@@ -255,6 +261,7 @@ class Login extends Component {
   };
 
   fbLogin = async () => {
+    const fcmToken = await messaging().getToken();
     var self = this;
     self.setState({
       isloading: true,
@@ -295,6 +302,7 @@ class Login extends Component {
                 avatar: result.picture.data.url || null,
                 current_lat: self.props.location.latitude,
                 current_long: self.props.location.longitude,
+                device_token: fcmToken,
               };
               console.log('Success fetching data: ', data);
               Webservice.post(APIURL.userLogin, data)

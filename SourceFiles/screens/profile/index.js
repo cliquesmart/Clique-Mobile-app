@@ -297,7 +297,7 @@ const Profile = () => {
                 </Text>
               )}
             <Text margin={[hp(0.5), 0, 0]} size={16} semibold white>
-              1 Connections
+              {profile.my_connections} Connections
             </Text>
           </Block>
         </Block>

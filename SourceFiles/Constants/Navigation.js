@@ -63,6 +63,9 @@ import Success from '../screens/success';
 import ProfileAnalytics from '../screens/pro/analytics';
 import UserMap from '../screens/pro/usermap';
 import AnalyticsView from '../screens/pro/analytic-view';
+import {Alert} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
+import {onDisplayNotification} from '../utils/mobile-utils';
 
 //Constant Variable for navigation
 const Stack = createStackNavigator();
@@ -406,19 +409,28 @@ const AppNavigator = createSwitchNavigator(
 
 //***************************************************************/
 
-export default class Navigation extends Component {
-  async componentDidMount() {}
+// export default class Navigation extends Component {
+const Navigation = () => {
+  React.useEffect(() => {
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      onDisplayNotification({
+        type: remoteMessage.notification.title,
+        message: remoteMessage.notification.body,
+      });
+    });
 
-  render() {
-    return (
-      <NavigationContainer
-        linking={linking}
-        ref={navigationRef}
-        onReady={() => {
-          isReadyRef.current = true;
-        }}>
-        <AppNavigator />
-      </NavigationContainer>
-    );
-  }
-}
+    return unsubscribe;
+  }, []);
+
+  return (
+    <NavigationContainer
+      linking={linking}
+      ref={navigationRef}
+      onReady={() => {
+        isReadyRef.current = true;
+      }}>
+      <AppNavigator />
+    </NavigationContainer>
+  );
+};
+export default Navigation;

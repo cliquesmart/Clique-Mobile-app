@@ -1,12 +1,14 @@
 import {Linking, Platform} from 'react-native';
+import {showMessage} from 'react-native-flash-message';
 import Snackbar from 'react-native-snackbar';
 import {images} from '../Assets/Images/images';
 import {CommonColors} from '../Constants/ColorConstant';
+import {strictValidObjectWithKeys} from './commonUtils';
 
-export const showAlert = (text) => {
+export const showAlert = (text, color) => {
   Snackbar.show({
     text: text,
-    backgroundColor: CommonColors.errorColor,
+    backgroundColor: CommonColors.errorColor || color,
     textColor: CommonColors.whiteColor,
     // fontFamily: ConstantKeys.Averta_BOLD,
     duration: Snackbar.LENGTH_LONG,
@@ -151,6 +153,20 @@ export const checkColor = (type) => {
       return '#E3674B';
     default:
       return '#4BE351';
+  }
+};
+
+export const onDisplayNotification = async (obj) => {
+  if (strictValidObjectWithKeys(obj)) {
+    showMessage({
+      message: obj.type,
+      description: obj.message,
+      type: 'default',
+      backgroundColor: '#4BE351', // background color
+      color: '#fff', // text color
+    });
+  } else {
+    return null;
   }
 };
 
