@@ -15,7 +15,11 @@ import {APIURL} from '../../../Constants/APIURL';
 import {showAlert} from '../../../utils/mobile-utils';
 import {useFocusEffect} from '@react-navigation/native';
 import LoadingView from '../../../Constants/LoadingView';
-import {strictValidObjectWithKeys} from '../../../utils/commonUtils';
+import {
+  strictValidNumber,
+  strictValidObjectWithKeys,
+  strictValidString,
+} from '../../../utils/commonUtils';
 import Pie from '../../../components/pie-chart/index';
 
 const AnalyticsView = () => {
@@ -70,8 +74,8 @@ const AnalyticsView = () => {
   };
 
   const renderDoughnutChart = () => {
-    const newConnection = 2;
-    const old = 4;
+    const newConnection = analyticsData.new_connections || 1;
+    const old = analyticsData.already_connections || 1;
     const chart_wh = 180;
     const series = [newConnection, old];
     const sliceColor = ['#8562EF', '#CC65C6'];
@@ -98,13 +102,18 @@ const AnalyticsView = () => {
               coverRadius={0.75}
               coverFill={'#f2f0f7'}
             />
-            <Text
-              style={{position: 'absolute', left: wp(18), bottom: hp(10)}}
-              grey
-              semibold
-              size={22}>
-              1.500
-            </Text>
+            {strictValidObjectWithKeys(analyticsData) && (
+              <Text
+                style={{position: 'absolute', left: wp(18), bottom: hp(10)}}
+                grey
+                semibold
+                size={22}>
+                {strictValidString(analyticsData.total_connections) ||
+                strictValidNumber(analyticsData.total_connections)
+                  ? analyticsData.total_connections
+                  : '1.500'}
+              </Text>
+            )}
             <Text
               style={{position: 'absolute', left: wp(13), bottom: hp(7.5)}}
               grey
@@ -287,7 +296,7 @@ const AnalyticsView = () => {
             </Block>
           )}
           {strictValidObjectWithKeys(analyticsData) && renderAnalyticsChart()}
-          {renderDoughnutChart()}
+          {strictValidObjectWithKeys(analyticsData) && renderDoughnutChart()}
         </ScrollView>
       </Block>
       {loading ? <LoadingView /> : null}
