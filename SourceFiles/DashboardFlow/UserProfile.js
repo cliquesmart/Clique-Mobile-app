@@ -426,14 +426,16 @@ export default class UserProfile extends Component {
             <Block flex={false}>
               {strictValidObjectWithKeys(profileData) &&
                 strictValidObjectWithKeys(profileData.my_connection) &&
-                profileData.my_connection.status === 'approve' &&
+                (profileData.my_connection.status === 'approve' ||
+                  profileData.my_connection.type === 'private') &&
                 strictValidObjectWithKeys(profileData) &&
                 strictValidArray(profileData.social_data) &&
                 this.renderSocialIcons(profileData.social, 'social')}
             </Block>
             {strictValidObjectWithKeys(profileData) &&
               strictValidObjectWithKeys(profileData.my_connection) &&
-              profileData.my_connection.status !== 'approve' && (
+              profileData.my_connection.status !== 'approve' &&
+              profileData.my_connection.type !== 'private' && (
                 <Block style={{flexGrow: 1}} center middle>
                   <ImageComponent
                     name={'lock_icon'}

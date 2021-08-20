@@ -336,7 +336,7 @@ const Profile = () => {
                 resizeMode="contain"
                 height={20}
                 width={20}
-                name={'share_icon'}
+                name={'profile_share_icon'}
               />
             </NeuView>
           </TouchableOpacity>

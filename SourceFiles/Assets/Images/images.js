@@ -64,6 +64,7 @@ export const images = {
   close_request_icon: require('./icons/close_r.png'),
   accept_request_icon: require('./icons/tick-mark.png'),
   lock_icon: require('./icons/lock.png'),
+  profile_share_icon: require('./icons/share-2.png'),
 
   //Card
   mastercard: require('./icons/mastercard.png'),

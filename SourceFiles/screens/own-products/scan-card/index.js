@@ -8,17 +8,11 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import {Block, ImageComponent, Text} from '../../../components';
 import {hp, wp} from '../../../components/responsive';
 import {StyleSheet} from 'react-native';
 import {APIURL} from '../../../Constants/APIURL';
-import NfcManager, {
-  NfcEvents,
-  NfcAdapter,
-  NfcTech,
-  Ndef,
-} from 'react-native-nfc-manager';
+import NfcManager, {NfcTech, Ndef} from 'react-native-nfc-manager';
 import Webservice from '../../../Constants/API';
 import ValidationMsg from '../../../Constants/ValidationMsg';
 import {useRoute} from '@react-navigation/native';
