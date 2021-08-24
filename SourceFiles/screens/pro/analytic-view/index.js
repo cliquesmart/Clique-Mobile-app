@@ -1,6 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import {StyleSheet, SafeAreaView, ScrollView, Alert} from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  ScrollView,
+  Alert,
+  Platform,
+} from 'react-native';
 import HeaderPostLogin from '../../../common/header-post-login';
 import {Block, ImageComponent, Text} from '../../../components';
 import {hp, wp} from '../../../components/responsive';
@@ -83,7 +89,7 @@ const AnalyticsView = () => {
       <Block flex={false} margin={[hp(2), 0, 0]} center>
         <NeuView
           containerStyle={styles.doughnut}
-          height={hp(26)}
+          height={Platform.OS === 'ios' ? hp(26) : hp(28)}
           color={'#f2f0f7'}
           width={wp(90)}
           borderRadius={16}>

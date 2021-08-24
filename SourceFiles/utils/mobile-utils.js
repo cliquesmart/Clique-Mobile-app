@@ -1,7 +1,6 @@
 import {Linking, Platform} from 'react-native';
 import {showMessage} from 'react-native-flash-message';
 import Snackbar from 'react-native-snackbar';
-import {images} from '../Assets/Images/images';
 import {CommonColors} from '../Constants/ColorConstant';
 import {strictValidObjectWithKeys} from './commonUtils';
 
@@ -187,11 +186,15 @@ export const OpenLinks = (item, url) => {
         Linking.openURL('https://www.instagram.com/' + url);
       });
     } else if (item === 'Facebook') {
-      console.log(`fb://${url}`, 'facebook');
-      Linking.openURL(`fb://profile?app_scoped_user_id=%@${url}`).catch(() => {
-        console.log('catch', url);
-        Linking.openURL('https://www.facebook.com/' + url);
-      });
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL(`fb://profile?app_scoped_user_id=%@${url}`).catch(
+          () => {
+            Linking.openURL('https://www.facebook.com/' + url);
+          },
+        );
+      }
     } else if (item === 'Youtube') {
       Linking.openURL(`vnd.youtube://${url}`).catch(() => {
         Linking.openURL('https://www.youtube.com/' + url);
@@ -207,17 +210,21 @@ export const OpenLinks = (item, url) => {
     } else if (item === 'Tiktok') {
       Linking.openURL('https://www.tiktok.com/@' + url);
     } else if (item === 'Whatsapp') {
-      Linking.openURL('https://wa.me//' + url);
-    } else if (item === 'Paypal') {
-      Linking.openURL('paypal://' + url);
-    } else if (item === 'Amazon music') {
-      Linking.openURL('https://www.primevideo.com/' + url);
-    } else if (item === 'Paytm') {
-      Linking.openURL('http://m.p-y.tm/' + url);
-    } else if (item === 'Snapchat') {
+      Linking.openURL('https://wa.me/' + `+91${url}`);
+    }
+    //  else if (item === 'Paypal') {
+    //   Linking.openURL('paypal://' + url);
+    // }
+    // else if (item === 'Amazon music') {
+    //   Linking.openURL('https://www.primevideo.com/' + url);
+    // }
+    // else if (item === 'Paytm') {
+    //   Linking.openURL('http://m.p-y.tm/' + url);
+    // }
+    else if (item === 'Snapchat') {
       Linking.openURL('https://story.snapchat.com/u/' + url);
     } else if (item === 'Zomato') {
-      Linking.openURL(url);
+      Linking.openURL('https://zoma.to/u/' + url);
     } else if (item === 'Spotify') {
       Linking.openURL('http://open.spotify.com/user/' + url);
     } else if (item === 'Sound cloud') {
@@ -230,195 +237,43 @@ export const OpenLinks = (item, url) => {
       Linking.openURL('https://files.google.com/' + url).catch(() => {
         Linking.openURL('https://files.google.com/' + url);
       });
+    } else if (item === 'Clubhouse') {
+      Linking.openURL('https://www.joinclubhouse.com/@' + url).catch(() => {
+        Linking.openURL('https://www.joinclubhouse.com/@' + url);
+      });
+    } else if (item === 'Bitclout') {
+      Linking.openURL('https://bitclout.com/u/' + url).catch(() => {
+        Linking.openURL('https://bitclout.com/u/' + url);
+      });
+    } else if (item === 'Venmo') {
+      Linking.openURL('https://venmo.com/' + url).catch(() => {
+        Linking.openURL('https://venmo.com/' + url);
+      });
+    } else if (item === 'Deezer') {
+      Linking.openURL('https://www.deezer.com/' + url);
+    } else if (item === 'Podcasts') {
+      Linking.openURL('https://www.podcasts.com/' + url);
     } else {
-      Linking.openURL(url);
+      if (url.includes('https' && 'http')) {
+        Linking.canOpenURL(url)
+          .then((supported) => {
+            if (!supported) {
+            } else {
+              return Linking.openURL(url);
+            }
+          })
+          .catch((err) => console.log('An log occurred', err));
+      } else {
+        Linking.canOpenURL(url)
+          .then((supported) => {
+            if (!supported) {
+              console.log("Can't handle url: " + url);
+            } else {
+              return Linking.openURL(`https://${url}`);
+            }
+          })
+          .catch((err) => console.log('An log occurred', err));
+      }
     }
   });
 };
-
-// Pending
-
-//  else if (item === 'Venmo') {
-//       Linking.openURL('soundcloud://' + url).catch(() => {
-//         Linking.openURL('https://soundcloud.com/' + url);
-//       });
-//     }
-
-//
-// if($request->id == 1){
-// 					if(substr_count($request->link, 'tel')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'tel:'.$request->link;
-// 					}
-// 				}else if($request->id == 2){
-// 					if(substr_count($request->link, 'mailto')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'mailto:'.$request->link;
-// 					}
-// 				}else if($request->id == 3){
-// 					if(substr_count($request->link, 'story.snapchat.com')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://story.snapchat.com/u/'.$request->link;
-// 					}
-// 				}else if($request->id == 4){
-// 					if(substr_count($request->link, 'primevideo.com')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://www.primevideo.com/'.$request->link;
-// 					}
-// 				}else if($request->id == 5){
-// 					if(substr_count($request->link, 'paypal://')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'paypal://'.$request->link;
-// 					}
-// 				}else if($request->id == 6){
-// 					if(substr_count($request->link, 'm.p-y.tm')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'http://m.p-y.tm/'.$request->link;
-// 					}
-// 				}else if($request->id == 7){
-// 					if(substr_count($request->link, 'google.com')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'http://google.com/'.$request->link;
-// 					}
-// 				}else if($request->id == 8){
-// 					if(substr_count($request->link, 'player.vimeo.com')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'http://player.vimeo.com/video/'.$request->link;
-// 					}
-// 				}else if($request->id == 11){
-// 					if(substr_count($request->link, 'zomato.com')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://www.zomato.com/'.$request->link;
-// 					}
-// 				}else if($request->id == 12){
-// 					if(substr_count($request->link, 'https://youtube.com')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://youtube.com/'.$request->link;
-// 					}
-// 				}else if($request->id == 13){
-// 					if(substr_count($request->link, 'instagram')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'instagram://media?id='.$request->link;
-// 					}
-// 				}else if($request->id == 14){
-// 					if(substr_count($request->link, 'linkedin://')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'linkedin://profile/'.$request->link;
-// 					}
-// 				}else if($request->id == 15){
-// 					if(substr_count($request->link, 'spotify')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'spotify:'.$request->link;
-// 					}
-// 				}else if($request->id == 16){
-// 					if(substr_count($request->link, 'fb:')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'fb://'.$request->link;
-// 					}
-// 				}else if($request->id == 17){
-// 					if(substr_count($request->link, 'https')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://www.twitter.com/'.$request->link;
-// 					}
-// 				}else if($request->id == 19){
-// 					if(substr_count($request->link, 'musics')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'musics://'.$request->link;
-// 					}
-// 				}else if($request->id == 20){
-// 					if(substr_count($request->link, 'cash.app/')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'cash.app/'.$request->link;
-// 					}
-// 				}else if($request->id == 21){
-// 					if(substr_count($request->link, 'joinclubhouse.com')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://www.joinclubhouse.com/'.$request->link;
-// 					}
-// 				}else if($request->id == 22){
-// 					if(substr_count($request->link, 'apps.apple.com/us/app/facetime')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://apps.apple.com/us/app/facetime/'.$request->link;
-// 					}
-// 				}else if($request->id == 23){
-// 					if(substr_count($request->link, 'deezer.com')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://www.deezer.com/'.$request->link;
-// 					}
-// 				}else if($request->id == 24){
-// 					if(substr_count($request->link, 'deezer.com')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://www.deezer.com/'.$request->link;
-// 					}
-// 				}else if($request->id == 25){
-// 					if(substr_count($request->link, 'files.google.com')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://files.google.com/'.$request->link;
-// 					}
-// 				}else if($request->id == 26){
-// 					if(substr_count($request->link, 'pinterest')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'pinterest://'.$request->link;
-// 					}
-// 				}else if($request->id == 27){
-// 					if(substr_count($request->link, 'pcast')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'pcast://'.$request->link;
-// 					}
-// 				}else if($request->id == 28){
-// 					if(substr_count($request->link, 'soundcloud')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'soundcloud://'.$request->link;
-// 					}
-// 				}else if($request->id == 29){
-// 					if(substr_count($request->link, 'tiktok.com')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://www.tiktok.com/'.$request->link;
-// 					}
-// 				}else if($request->id == 30){
-// 					if(substr_count($request->link, 'https')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://'.$request->link;
-// 					}
-// 				}else if($request->id == 31){
-// 					if(substr_count($request->link, 'bitclout')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'bitclout://'.$request->link;
-// 					}
-// 				}else if($request->id == 32){
-// 					if(substr_count($request->link, 'wa.me')){
-// 						$link_url = $request->link;
-// 					}else{
-// 						$link_url = 'https://wa.me/'.$request->link;
-// 					}
-// 				}else{
-// 					$link_url = $request->link;
-// 				}

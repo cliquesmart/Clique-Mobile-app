@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, SafeAreaView, StyleSheet} from 'react-native';
+import {FlatList, Platform, SafeAreaView, StyleSheet} from 'react-native';
 import HeaderSettings from '../../../common/header-setting';
 import NeuButton from '../../../common/neu-element/lib/NeuButton';
 import NeuView from '../../../common/neu-element/lib/NeuView';
@@ -77,7 +77,7 @@ const HelpAndTutorials = () => {
       <Block center margin={[hp(2), 0, hp(1)]}>
         <NeuView
           containerStyle={styles.helpView}
-          height={hp(24)}
+          height={Platform.OS === 'ios' ? hp(24) : hp(27)}
           color="#F2F0F7"
           width={wp(90)}
           borderRadius={16}>

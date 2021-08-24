@@ -395,6 +395,10 @@ export default class UserProfile extends Component {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.container}
             bounces={false}>
+            <Text margin={[hp(1), 0]} grey regular size={16} center>
+              {strictValidObjectWithKeys(this.state.profileData) &&
+                `${this.state.profileData.name}${' Contacts:'}`}
+            </Text>
             {strictValidObjectWithKeys(profileData) &&
               strictValidObjectWithKeys(profileData.my_connection) &&
               profileData.my_connection.type === 'public' &&
