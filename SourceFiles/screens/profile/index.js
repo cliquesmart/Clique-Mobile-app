@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   SectionList,
+  Share,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {
@@ -251,6 +252,31 @@ const Profile = () => {
       </Block>
     );
   };
+
+  const onShare = async () => {
+    const user_id = await AsyncStorage.getItem('custom_id');
+    let url = 'http://admin.cliquesocial.co/user/profile/' + user_id;
+    try {
+      const result = await Share.share({
+        message: 'My Clique Profile ' + url,
+        // url: url,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+          console.log(result, 'result');
+        } else {
+          console.log(result, 'result');
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   const renderProfile = () => {
     return (
       <Block padding={[hp(2), wp(3)]} space="between" flex={false} row>
@@ -324,7 +350,9 @@ const Profile = () => {
               />
             </NeuView>
           </TouchableOpacity>
-          <TouchableOpacity style={{marginTop: hp(2)}}>
+          <TouchableOpacity
+            onPress={() => onShare()}
+            style={{marginTop: hp(2)}}>
             <NeuView
               concave
               color="#E866B6"

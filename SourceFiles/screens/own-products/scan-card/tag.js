@@ -8,7 +8,6 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import {Block, ImageComponent, Text} from '../../../components';
 import {hp, wp} from '../../../components/responsive';
 import {StyleSheet} from 'react-native';
@@ -121,42 +120,19 @@ const ScanTag = () => {
   }
   const writeCard = async () => {
     const user_id = await AsyncStorage.getItem('custom_id');
-    console.log(
-      'http://admin.cliquesocial.co/user/profile/' + user_id,
-      'card id sync successfully',
-    );
     try {
       let bytes = buildUrlPayload(
         'http://admin.cliquesocial.co/user/profile/' + user_id,
       );
-      await NfcManager.writeNdefMessage(bytes);
-      console.log('successfully write ndef');
-
-      if (Platform.OS === 'ios') {
-        // await NfcManager.setAlertMessageIOS('Card Sync Successfully');
-
-        Alert.alert(ValidationMsg.AppName, 'Card Sync Successfully', [
-          {
-            text: 'OK',
-            onPress: () => {
-              this._cancel();
-              // this.props.navigation.goBack();
-            },
-          },
-        ]);
-
-        // this._cancel();
-        // this.props.navigation.goBack()
-      } else {
-        Alert.alert(ValidationMsg.AppName, 'Card Sync Successfully', [
-          {
-            text: 'OK',
-            onPress: () => {
-              this._cancel();
-              // this.props.navigation.goBack();
-            },
-          },
-        ]);
+      if (bytes) {
+        await NfcManager.writeNdefMessage(bytes);
+        console.log('successfully write ndef', bytes);
+        if (Platform.OS === 'ios') {
+          await NfcManager.setAlertMessageIOS('Card Sync Successfully');
+        } else {
+          Alert.alert(ValidationMsg.AppName, 'Card Sync Successfully');
+        }
+        _cancel();
       }
     } catch (ex) {
       console.log('ex', ex);

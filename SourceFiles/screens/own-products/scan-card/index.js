@@ -116,10 +116,6 @@ const ScanCard = () => {
   }
   const writeCard = async () => {
     const user_id = await AsyncStorage.getItem('custom_id');
-    console.log(
-      'http://admin.cliquesocial.co/user/profile/' + user_id,
-      'card id sync successfully',
-    );
     try {
       let bytes = await buildUrlPayload(
         'http://admin.cliquesocial.co/user/profile/' + user_id,
@@ -132,6 +128,7 @@ const ScanCard = () => {
         } else {
           Alert.alert(ValidationMsg.AppName, 'Card Sync Successfully');
         }
+        _cancel();
       }
     } catch (ex) {
       console.log('error =>', ex);
