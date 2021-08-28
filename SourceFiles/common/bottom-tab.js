@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity, Linking, Alert} from 'react-native';
 import PropTypes from 'prop-types';
 import Text from '../components/Text';
 import {hp, wp} from '../components/responsive';
@@ -103,6 +103,27 @@ const BottomTab = ({state, descriptors, navigation}) => {
           if (!isFocused && !event.defaultPrevented) {
             if (route.name === 'Pro' && profile.is_pro === '0') {
               navigation.navigate('ProCard');
+            } else if (
+              route.name === 'Nearby' &&
+              profile.is_card_assign === 0
+            ) {
+              Alert.alert(
+                'Info Message',
+                'Please proceed to buy the clique product',
+                [
+                  {
+                    text: 'Cancel',
+                    style: 'destructive',
+                  },
+                  {
+                    text: 'Buy Now',
+                    onPress: () => {
+                      Linking.openURL('https://cliquesocial.co/');
+                    },
+                  },
+                ],
+                {cancelable: false},
+              );
             } else {
               navigation.navigate(route.name);
             }

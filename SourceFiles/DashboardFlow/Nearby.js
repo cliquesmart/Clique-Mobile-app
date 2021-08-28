@@ -10,6 +10,7 @@ import {
   FlatList,
   RefreshControl,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import {Block, Text, ImageComponent, CustomButton} from '../components';
@@ -45,33 +46,6 @@ const Nearby = () => {
   });
   const [refreshing, setRefreshing] = useState(false);
   const {navigate, goBack} = useNavigation();
-  const logoanimation2 = {
-    0: {
-      opacity: 1,
-      scale: 1,
-    },
-    0.2: {
-      opacity: 1,
-      scale: 0.8,
-    },
-    0.4: {
-      opacity: 1,
-      scale: 0.6,
-    },
-    0.6: {
-      opacity: 1,
-      scale: 0.6,
-    },
-    0.8: {
-      opacity: 1,
-      scale: 0.8,
-    },
-    1: {
-      opacity: 1,
-      scale: 1,
-    },
-  };
-  const easing = 'ease-in-out-sine';
 
   const onRefresh = () => {
     setRefreshing(true);

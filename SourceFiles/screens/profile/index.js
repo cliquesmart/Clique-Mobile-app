@@ -254,26 +254,43 @@ const Profile = () => {
   };
 
   const onShare = async () => {
-    const user_id = await AsyncStorage.getItem('custom_id');
-    let url = 'http://admin.cliquesocial.co/user/profile/' + user_id;
-    try {
-      const result = await Share.share({
-        message: 'My Clique Profile ' + url,
-        // url: url,
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-          console.log(result, 'result');
-        } else {
-          console.log(result, 'result');
-          // shared
+    if (profile.is_card_assign === 0) {
+      Alert.alert(
+        'Info Message',
+        'Please proceed to buy the clique product',
+        [
+          {text: 'Cancel', style: 'destructive'},
+          {
+            text: 'Buy Now',
+            onPress: () => {
+              Linking.openURL('https://cliquesocial.co/');
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+    } else {
+      const user_id = await AsyncStorage.getItem('custom_id');
+      let url = 'http://admin.cliquesocial.co/user/profile/' + user_id;
+      try {
+        const result = await Share.share({
+          message: 'My Clique Profile ' + url,
+          // url: url,
+        });
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            // shared with activity type of result.activityType
+            console.log(result, 'result');
+          } else {
+            console.log(result, 'result');
+            // shared
+          }
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
         }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
+      } catch (error) {
+        console.log(error.message);
       }
-    } catch (error) {
-      console.log(error.message);
     }
   };
 
