@@ -153,7 +153,6 @@ class Login extends Component {
 
   signIn = async () => {
     const fcmToken = await messaging().getToken();
-
     this.setState({
       isloading: true,
     });

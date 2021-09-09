@@ -87,4 +87,6 @@ export const images = {
   BackIcon: require('./OtherImages/ic_back.png'),
   MinEmailIcon: require('./InitialFlowIcons/ic_minEmail.png'),
   CameraIcon: require('./OtherImages/ic_camera.png'),
+
+  splash: require('./icons/splash.gif'),
 };

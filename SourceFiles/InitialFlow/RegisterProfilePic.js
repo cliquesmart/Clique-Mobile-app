@@ -16,8 +16,6 @@ import {SetFontSize} from '../Constants/FontSize';
 import {ConstantKeys} from '../Constants/ConstantKey';
 import LoadingView from '../Constants/LoadingView';
 import Snackbar from 'react-native-snackbar';
-import LinearGradient from 'react-native-linear-gradient';
-
 import {Block, Button, ImageComponent, Text} from '../components';
 import {hp, wp} from '../components/responsive';
 import ValidationMsg from '../Constants/ValidationMsg';
@@ -26,7 +24,6 @@ import ValidationMsg from '../Constants/ValidationMsg';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import HeaderPreLogin from '../common/header';
-import Neomorph from '../common/shadow-src/Neomorph';
 import NeuView from '../common/neu-element/lib/NeuView';
 
 export default class RegisterProfilePic extends Component {

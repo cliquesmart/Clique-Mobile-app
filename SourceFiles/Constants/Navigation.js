@@ -1,5 +1,4 @@
-import React, {Component} from 'react';
-
+import React from 'react';
 //Navigation Libraries
 import {NavigationContainer} from '@react-navigation/native';
 import {
@@ -8,10 +7,8 @@ import {
 } from '@react-navigation/stack';
 import {createSwitchNavigator} from '@react-navigation/compat';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-
 //Constants
 import {navigationRef, isReadyRef} from './NavigationService';
-
 //Initial Flow Files
 import Tutorial from '../InitialFlow/Tutorial';
 import AutoLogin from '../InitialFlow/AutoLogin';
@@ -30,26 +27,16 @@ import ForgotMail from '../screens/forgot/mail/index';
 import RecoverPassword from '../screens/forgot/recover/index';
 
 //Dashborad Flow Files
-import Dashboard from '../DashboardFlow/Dashboard';
-// import Profile from '../DashboardFlow/Profile';
 import Nearby from '../DashboardFlow/Nearby';
-import Scan from '../DashboardFlow/Scan';
 import UserProfile from '../DashboardFlow/UserProfile';
 
-// Profile Inner Flow
-import QrCode from '../DashboardFlow/QrCode';
 import JobDetail from '../DashboardFlow/JobDetail';
-import PurchaseCard from '../DashboardFlow/PurchaseCard';
-import SyncToCard from '../DashboardFlow/SyncToCard';
-import TempProfile from '../DashboardFlow/TempProfile';
-import AddJob from '../DashboardFlow/AddJob';
 import ChoosePassword from '../screens/choose-password';
 import OwnProducts from '../screens/own-products';
 import ScanCard from '../screens/own-products/scan-card';
 import ActivatedCard from '../screens/own-products/activated-card';
 import Contacts from '../screens/messages/contacts';
 import BottomTab from '../common/bottom-tab';
-import Chat from '../screens/messages';
 import Profile from '../screens/profile';
 import Pro from '../screens/pro';
 import Messages from '../screens/messages/chat';
@@ -63,9 +50,9 @@ import Success from '../screens/success';
 import ProfileAnalytics from '../screens/pro/analytics';
 import UserMap from '../screens/pro/usermap';
 import AnalyticsView from '../screens/pro/analytic-view';
-import {Alert} from 'react-native';
 import messaging from '@react-native-firebase/messaging';
 import {onDisplayNotification} from '../utils/mobile-utils';
+import Splash from '../screens/splash';
 
 //Constant Variable for navigation
 const Stack = createStackNavigator();
@@ -85,25 +72,16 @@ const animationOptions = {
   animationEnabled: true,
   cardStyleInterpolator: CardStyleInterpolators.forScaleFromCenterAndroid,
 };
-// Tutorial Flow Navigator
-
-function TutorialFlow() {
-  return (
-    <Stack.Navigator initialRouteName="Tutorial">
-      <Stack.Screen
-        name="Tutorial"
-        component={Tutorial}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
-  );
-}
-
 // Initial Flow Navigator
 function InitialFlow() {
   return (
-    <Stack.Navigator initialRouteName="Tutorial" headerMode="none">
-      <Stack.Screen name="Tutorial" component={Tutorial} />
+    <Stack.Navigator initialRouteName="Splash" headerMode="none">
+      <Stack.Screen name="Splash" component={Splash} />
+      <Stack.Screen
+        options={animationOptions}
+        name="Tutorial"
+        component={Tutorial}
+      />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="AutoLogin" component={AutoLogin} />
       <Stack.Screen name="OTPView" component={OTPView} />
@@ -131,43 +109,6 @@ function InitialFlow() {
   );
 }
 
-function DashboardStackScreen() {
-  return (
-    <Stack.Navigator initialRouteName="Dashboard">
-      <Stack.Screen
-        name="Dashboard"
-        component={Dashboard}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="UserProfile"
-        component={UserProfile}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="PurchaseCard"
-        component={PurchaseCard}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="SyncToCard"
-        component={SyncToCard}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="Scan"
-        component={Scan}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="JobDetail"
-        component={JobDetail}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
-  );
-}
-
 function NearByStackScreen() {
   return (
     <Stack.Navigator initialRouteName="Nearby">
@@ -190,84 +131,6 @@ function NearByStackScreen() {
   );
 }
 
-function ScanStackScreen() {
-  return (
-    <Stack.Navigator initialRouteName="Scan">
-      <Stack.Screen
-        name="Scan"
-        component={Scan}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="UserProfile"
-        component={UserProfile}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="QrCode"
-        component={QrCode}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="JobDetail"
-        component={JobDetail}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="SyncToCard"
-        component={SyncToCard}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
-  );
-}
-
-function ProfileStackScreen() {
-  return (
-    <Stack.Navigator initialRouteName="Profile">
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="QrCode"
-        component={QrCode}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="JobDetail"
-        component={JobDetail}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="PurchaseCard"
-        component={PurchaseCard}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="SyncToCard"
-        component={SyncToCard}
-        options={{headerShown: false}}
-      />
-      <Stack.Screen
-        name="TempProfile"
-        component={TempProfile}
-        options={{headerShown: false}}
-      />
-      {/* <Stack.Screen
-        name="EditProfile"
-        component={EditProfile}
-        options={{headerShown: false}}
-      /> */}
-      <Stack.Screen
-        name="AddJob"
-        component={AddJob}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
-  );
-}
 function ProStack() {
   return (
     <Stack.Navigator initialRouteName="Pro" headerMode="none">
@@ -297,7 +160,6 @@ function ChatStack() {
     </Stack.Navigator>
   );
 }
-// Use For Hide Tab bar
 
 //Dashboard Stacks
 function DashboardSubStack() {
@@ -386,11 +248,6 @@ function DashboardStack() {
         name="ProfileAnalytics"
         component={ProfileAnalytics}
       />
-      {/* <Stack.Screen
-        options={animationOptions}
-        name="UserMap"
-        component={UserMap}
-      /> */}
     </Stack.Navigator>
   );
 }
@@ -399,6 +256,7 @@ function DashboardStack() {
 
 const AppNavigator = createSwitchNavigator(
   {
+    // Splash: Splash,
     Login: InitialFlow,
     Dashboard: DashboardStack,
   },
@@ -406,8 +264,6 @@ const AppNavigator = createSwitchNavigator(
     initialRouteName: 'Login',
   },
 );
-
-//***************************************************************/
 
 // export default class Navigation extends Component {
 const Navigation = () => {

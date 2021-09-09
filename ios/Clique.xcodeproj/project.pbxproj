@@ -24,7 +24,7 @@
 		5822497925E3DBF60020CD69 /* Averta-Thin.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5822497425E3DBF60020CD69 /* Averta-Thin.otf */; };
 		58FC2F6625FB450E00A6B156 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58FC2F6525FB450E00A6B156 /* NetworkExtension.framework */; };
 		7C5079B3267B26AB002B5A03 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5079B2267B26AB002B5A03 /* File.swift */; };
-		7C7A232C2679D1E3005B2D00 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C7A232B2679D1E3005B2D00 /* GoogleService-Info.plist */; };
+		7CA0E3BD26DF4D3500BFFAE3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7CA0E3BC26DF4D3500BFFAE3 /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		87D8C7C051A13BA26A3B3B76 /* libPods-Clique.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18995721F8067E8CC06CF122 /* libPods-Clique.a */; };
 		8BBA359D2DE2EEA6FF2ECABE /* libPods-Clique-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D952922CD88681F454083E9 /* libPods-Clique-tvOS.a */; };
@@ -74,7 +74,7 @@
 		6FB29C2FF2E02A4683E1088E /* Pods-Clique-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clique-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-Clique-tvOSTests/Pods-Clique-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		7C5079B1267B26AB002B5A03 /* Clique-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clique-Bridging-Header.h"; sourceTree = "<group>"; };
 		7C5079B2267B26AB002B5A03 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
-		7C7A232B2679D1E3005B2D00 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7CA0E3BC26DF4D3500BFFAE3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7EA72C6C873B09EF32310589 /* Pods-Clique-CliqueTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clique-CliqueTests.debug.xcconfig"; path = "Target Support Files/Pods-Clique-CliqueTests/Pods-Clique-CliqueTests.debug.xcconfig"; sourceTree = "<group>"; };
 		817D950FD334235D5BD17BB5 /* Pods-Clique-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clique-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-Clique-tvOS/Pods-Clique-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Clique/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -144,7 +144,6 @@
 		13B07FAE1A68108700A75B9A /* Clique */ = {
 			isa = PBXGroup;
 			children = (
-				7C7A232B2679D1E3005B2D00 /* GoogleService-Info.plist */,
 				5845115825ED213E00D05695 /* Clique.entitlements */,
 				5822496F25E3DBF60020CD69 /* Fonts */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -153,6 +152,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
+				7CA0E3BC26DF4D3500BFFAE3 /* GoogleService-Info.plist */,
 				13B07FB71A68108700A75B9A /* main.m */,
 				7C5079B2267B26AB002B5A03 /* File.swift */,
 				7C5079B1267B26AB002B5A03 /* Clique-Bridging-Header.h */,
@@ -382,7 +382,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				7C7A232C2679D1E3005B2D00 /* GoogleService-Info.plist in Resources */,
+				7CA0E3BD26DF4D3500BFFAE3 /* GoogleService-Info.plist in Resources */,
 				5822497525E3DBF60020CD69 /* Averta-Light.otf in Resources */,
 				5822497725E3DBF60020CD69 /* Averta-ExtraBold.otf in Resources */,
 				5822497925E3DBF60020CD69 /* Averta-Thin.otf in Resources */,
@@ -775,7 +775,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Clique/Clique.entitlements;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = 9LYLUR6445;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Clique/Info.plist;
@@ -802,7 +802,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Clique/Clique.entitlements;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = 9LYLUR6445;
 				INFOPLIST_FILE = Clique/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

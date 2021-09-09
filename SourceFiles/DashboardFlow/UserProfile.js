@@ -33,6 +33,7 @@ import {hp, wp} from '../components/responsive';
 import NeuView from '../common/neu-element/lib/NeuView';
 import {OpenLinks} from '../utils/mobile-utils';
 import {light} from '../components/theme/colors';
+import NeuButton from '../common/neu-element/lib/NeuButton';
 
 export default class UserProfile extends Component {
   constructor(props) {
@@ -50,6 +51,7 @@ export default class UserProfile extends Component {
       CompanyData: [],
       PaymentData: [],
       ExternalLinkData: [],
+      activeOptions: 'social',
     };
   }
 
@@ -379,8 +381,79 @@ export default class UserProfile extends Component {
     );
   };
 
+  setActiveState = (val) => {
+    this.setState({
+      activeOptions: val,
+    });
+  };
+
+  renderOptions = () => {
+    const {activeOptions} = this.state;
+    return (
+      <Block middle center margin={[hp(2), 0]} flex={false}>
+        <NeuView
+          color="#F2F0F7"
+          height={hp(5)}
+          width={wp(45)}
+          borderRadius={16}
+          containerStyle={styles.neoContainer}
+          inset>
+          {activeOptions === 'social' ? (
+            <NeuButton
+              color="#F2F0F7"
+              width={wp(20)}
+              height={hp(3.5)}
+              style={{marginHorizontal: wp(2)}}
+              borderRadius={6}>
+              <Text semibold purple size={13}>
+                Social
+              </Text>
+            </NeuButton>
+          ) : (
+            <Text
+              style={[styles.inactiveText, {marginRight: wp(1)}]}
+              onPress={() => this.setActiveState('social')}
+              grey
+              regular
+              center
+              size={13}>
+              Social
+            </Text>
+          )}
+          {activeOptions === 'business' ? (
+            <NeuButton
+              color="#F2F0F7"
+              width={wp(20)}
+              height={hp(3.5)}
+              style={{marginRight: wp(2)}}
+              borderRadius={6}>
+              <Text
+                semibold
+                onPress={() => this.setActiveState('business')}
+                purple
+                center
+                size={13}>
+                Business
+              </Text>
+            </NeuButton>
+          ) : (
+            <Text
+              style={[styles.inactiveText]}
+              onPress={() => this.setActiveState('business')}
+              grey
+              regular
+              center
+              size={13}>
+              Business
+            </Text>
+          )}
+        </NeuView>
+      </Block>
+    );
+  };
+
   render() {
-    const {profileData} = this.state;
+    const {profileData, activeOptions} = this.state;
     return (
       <Block linear>
         <SafeAreaView />
@@ -427,15 +500,29 @@ export default class UserProfile extends Component {
                   )}
                 </>
               )}
-            <Block flex={false}>
-              {strictValidObjectWithKeys(profileData) &&
-                strictValidObjectWithKeys(profileData.my_connection) &&
-                (profileData.my_connection.status === 'approve' ||
-                  profileData.my_connection.type === 'private') &&
-                strictValidObjectWithKeys(profileData) &&
-                strictValidArray(profileData.social_data) &&
-                this.renderSocialIcons(profileData.social, 'social')}
-            </Block>
+            {this.renderOptions()}
+            {activeOptions === 'social' && (
+              <Block flex={false}>
+                {strictValidObjectWithKeys(profileData) &&
+                  strictValidObjectWithKeys(profileData.my_connection) &&
+                  (profileData.my_connection.status === 'approve' ||
+                    profileData.my_connection.type === 'private') &&
+                  strictValidObjectWithKeys(profileData) &&
+                  strictValidArray(profileData.social) &&
+                  this.renderSocialIcons(profileData.social, 'social')}
+              </Block>
+            )}
+            {activeOptions === 'business' && (
+              <Block flex={false}>
+                {strictValidObjectWithKeys(profileData) &&
+                  strictValidObjectWithKeys(profileData.my_connection) &&
+                  (profileData.my_connection.status === 'approve' ||
+                    profileData.my_connection.type === 'private') &&
+                  strictValidObjectWithKeys(profileData) &&
+                  strictValidArray(profileData.business) &&
+                  this.renderSocialIcons(profileData.business, 'business')}
+              </Block>
+            )}
             {strictValidObjectWithKeys(profileData) &&
               strictValidObjectWithKeys(profileData.my_connection) &&
               profileData.my_connection.status !== 'approve' &&
@@ -487,5 +574,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
+  },
+  inactiveText: {
+    width: wp(20),
+  },
+  neoContainer: {
+    flexDirection: 'row',
   },
 });

@@ -57,6 +57,6 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
-android/app/release/clique.apk
+android/app/release/
 android/app/release/output-metadata.json
 android/app/release/output-metadata.json
