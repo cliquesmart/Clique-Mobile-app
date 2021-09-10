@@ -253,6 +253,8 @@ export const OpenLinks = (item, url) => {
       Linking.openURL('https://www.deezer.com/' + url);
     } else if (item === 'Podcasts') {
       Linking.openURL('https://www.podcasts.com/' + url);
+    } else if (item === 'Google pay') {
+      Linking.openURL('https://gpay.app.goo.gl/9i2F');
     } else {
       if (url.includes('https' && 'http')) {
         Linking.canOpenURL(url)
