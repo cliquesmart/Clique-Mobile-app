@@ -101,13 +101,13 @@
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) want to use camera for capture image</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) need to access your current location</string>
+	<string>$(PRODUCT_NAME) want to use your location when clocking in and out. Clocking in through nearby feature may be rejected if location information is not provided.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>$(PRODUCT_NAME) need to access your current location</string>
+	<string>$(PRODUCT_NAME) want to use your location when clocking in and out. Clocking in through nearby feature may be rejected if location information is not provided.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>$(PRODUCT_NAME) need to access your current location</string>
+	<string>$(PRODUCT_NAME) want to use your location when clocking in and out. Clocking in through nearby feature may be rejected if location information is not provided.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) need to access your current location</string>
+	<string>$(PRODUCT_NAME) want to use your location when clocking in and out. Clocking in through nearby feature may be rejected if location information is not provided.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>$(PRODUCT_NAME) want to use photo library for get image</string>
 	<key>NSPhotoLibraryUsageDescription</key>

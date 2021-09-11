@@ -21,7 +21,6 @@ import ValidationMsg from '../Constants/ValidationMsg';
 
 //Third Party
 import Snackbar from 'react-native-snackbar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {Block, Button, ImageComponent, Text} from '../components';
 import {
@@ -369,8 +368,8 @@ export default class UserProfile extends Component {
                   <ImageComponent
                     isURL
                     name={`${APIURL.iconUrl}${item.icone.url}`}
-                    height={Platform.OS === 'ios' ? 90 : 85}
-                    width={Platform.OS === 'ios' ? 90 : 85}
+                    height={Platform.OS === 'ios' ? hp(10) : 67}
+                    width={Platform.OS === 'ios' ? hp(10) : 67}
                   />
                 )}
               </TouchableOpacity>
@@ -470,7 +469,7 @@ export default class UserProfile extends Component {
             bounces={false}>
             <Text margin={[hp(1), 0]} grey regular size={16} center>
               {strictValidObjectWithKeys(this.state.profileData) &&
-                `${this.state.profileData.name}${' Contacts:'}`}
+                `${this.state.profileData.name}'s${' Contacts:'}`}
             </Text>
             {strictValidObjectWithKeys(profileData) &&
               strictValidObjectWithKeys(profileData.my_connection) &&
@@ -500,8 +499,8 @@ export default class UserProfile extends Component {
                   )}
                 </>
               )}
-            {this.renderOptions()}
-            {activeOptions === 'social' && (
+            {strictValidObjectWithKeys(profileData) &&
+            profileData.account_flag === 'social' ? (
               <Block flex={false}>
                 {strictValidObjectWithKeys(profileData) &&
                   strictValidObjectWithKeys(profileData.my_connection) &&
@@ -511,8 +510,7 @@ export default class UserProfile extends Component {
                   strictValidArray(profileData.social) &&
                   this.renderSocialIcons(profileData.social, 'social')}
               </Block>
-            )}
-            {activeOptions === 'business' && (
+            ) : (
               <Block flex={false}>
                 {strictValidObjectWithKeys(profileData) &&
                   strictValidObjectWithKeys(profileData.my_connection) &&
@@ -523,6 +521,7 @@ export default class UserProfile extends Component {
                   this.renderSocialIcons(profileData.business, 'business')}
               </Block>
             )}
+
             {strictValidObjectWithKeys(profileData) &&
               strictValidObjectWithKeys(profileData.my_connection) &&
               profileData.my_connection.status !== 'approve' &&

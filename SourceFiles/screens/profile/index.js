@@ -59,10 +59,16 @@ const Profile = () => {
   const [field, setField] = useState('');
   const dispatch = useDispatch();
 
+  const updateTypeOfAccount = async () => {
+    const val = (await AsyncStorage.getItem('flag')) || 'social';
+    setactiveOptions(val);
+  };
+
   useFocusEffect(
     React.useCallback(() => {
       getProfile();
       callProfile();
+      updateTypeOfAccount();
     }, []),
   );
 
@@ -339,7 +345,12 @@ const Profile = () => {
                   {profile.bio}
                 </Text>
               )}
-            <Text margin={[hp(0.5), 0, 0]} size={16} semibold white>
+            <Text
+              onPress={() => navigate('Chat')}
+              margin={[hp(0.5), 0, 0]}
+              size={16}
+              semibold
+              white>
               {profile.my_connections} Connections
             </Text>
           </Block>
@@ -389,6 +400,35 @@ const Profile = () => {
       </Block>
     );
   };
+  const activeFlagValue = async (type) => {
+    setloading(true);
+    Webservice.post(APIURL.flagValue, {
+      flag: type,
+    })
+      .then(async (response) => {
+        if (response.data == null) {
+          setloading(false);
+          // alert('error');
+          showAlert(response.originalError.message);
+
+          return;
+        }
+
+        if (response.data.status === true) {
+          setloading(false);
+          showAlert(response.data.message);
+          setactiveOptions(type);
+          await AsyncStorage.setItem('flag', type);
+        } else {
+          setloading(false);
+          showAlert(response.data.message);
+        }
+      })
+      .catch((error) => {
+        setloading(false);
+        showAlert(error.message);
+      });
+  };
   const renderOptions = () => {
     return (
       <Block middle center margin={[hp(2), 0]} flex={false}>
@@ -413,7 +453,7 @@ const Profile = () => {
           ) : (
             <Text
               style={[styles.inactiveText, {marginRight: wp(1)}]}
-              onPress={() => setactiveOptions('social')}
+              onPress={() => activeFlagValue('social')}
               grey
               regular
               center
@@ -423,24 +463,20 @@ const Profile = () => {
           )}
           {activeOptions === 'business' ? (
             <NeuButton
+              onPress={() => activeFlagValue('business')}
               color="#F2F0F7"
               width={wp(20)}
               height={hp(3.5)}
               style={{marginRight: wp(2)}}
               borderRadius={6}>
-              <Text
-                semibold
-                onPress={() => setactiveOptions('business')}
-                purple
-                center
-                size={13}>
+              <Text semibold purple center size={13}>
                 Business
               </Text>
             </NeuButton>
           ) : (
             <Text
               style={[styles.inactiveText]}
-              onPress={() => setactiveOptions('business')}
+              onPress={() => activeFlagValue('business')}
               grey
               regular
               center
@@ -469,7 +505,7 @@ const Profile = () => {
         height={hp(9.3)}
         width={wp(19.3)}
         borderRadius={16}
-        style={{marginHorizontal: wp(1.1), marginTop: hp(2.5)}}>
+        style={{marginHorizontal: wp(1.5), marginTop: hp(2.5)}}>
         <ImageComponent name="add_icon" height={25} width={25} />
       </NeuButton>
     );
@@ -497,8 +533,8 @@ const Profile = () => {
                   <ImageComponent
                     isURL
                     name={`${APIURL.iconUrl}${item.icone.url}`}
-                    height={Platform.OS === 'ios' ? 90 : 85}
-                    width={Platform.OS === 'ios' ? 90 : 85}
+                    height={Platform.OS === 'ios' ? hp(10) : 67}
+                    width={Platform.OS === 'ios' ? hp(10) : 67}
                   />
                 )}
               </TouchableOpacity>

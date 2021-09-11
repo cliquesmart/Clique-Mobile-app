@@ -41,4 +41,5 @@ export const APIURL = {
   makePayment: 'makepayment',
   analytics: 'data-analyst',
   myContactList: 'mycontactlist',
+  flagValue: 'account-flag',
 };

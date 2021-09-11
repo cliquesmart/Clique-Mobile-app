@@ -182,9 +182,13 @@ export const OpenLinks = (item, url) => {
     } else if (item === 'Messages') {
       Linking.openURL(`sms:${url}${separator}body=${'Hi'}`);
     } else if (item === 'Instagram') {
-      Linking.openURL(`instagram://user?username=${url}`).catch(() => {
-        Linking.openURL('https://www.instagram.com/' + url);
-      });
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL(`instagram://user?username=${url}`).catch(() => {
+          Linking.openURL('https://www.instagram.com/' + url);
+        });
+      }
     } else if (item === 'Facebook') {
       if (url.includes('https') || url.includes('http')) {
         Linking.openURL(url);
@@ -196,19 +200,35 @@ export const OpenLinks = (item, url) => {
         );
       }
     } else if (item === 'Youtube') {
-      Linking.openURL(`vnd.youtube://${url}`).catch(() => {
-        Linking.openURL('https://www.youtube.com/' + url);
-      });
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL(`vnd.youtube://${url}`).catch(() => {
+          Linking.openURL('https://www.youtube.com/' + url);
+        });
+      }
     } else if (item === 'Linkedin') {
-      Linking.openURL(`linkedin://profile?id=${url}`).catch(() => {
-        Linking.openURL('https://www.linkedin.com/in/' + url);
-      });
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL(`linkedin://profile?id=${url}`).catch(() => {
+          Linking.openURL('https://www.linkedin.com/in/' + url);
+        });
+      }
     } else if (item === 'Twitter') {
-      Linking.openURL('twitter://user?screen_name=' + url).catch(() => {
-        Linking.openURL('https://www.twitter.com/' + url);
-      });
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('twitter://user?screen_name=' + url).catch(() => {
+          Linking.openURL('https://www.twitter.com/' + url);
+        });
+      }
     } else if (item === 'Tiktok') {
-      Linking.openURL('https://www.tiktok.com/@' + url);
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://www.tiktok.com/@' + url);
+      }
     } else if (item === 'Whatsapp') {
       Linking.openURL('https://wa.me/' + `+91${url}`);
     }
@@ -222,39 +242,87 @@ export const OpenLinks = (item, url) => {
     //   Linking.openURL('http://m.p-y.tm/' + url);
     // }
     else if (item === 'Snapchat') {
-      Linking.openURL('https://story.snapchat.com/u/' + url);
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://story.snapchat.com/u/' + url);
+      }
     } else if (item === 'Zomato') {
-      Linking.openURL('https://zoma.to/u/' + url);
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://zoma.to/u/' + url);
+      }
     } else if (item === 'Spotify') {
-      Linking.openURL('http://open.spotify.com/user/' + url);
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('http://open.spotify.com/user/' + url);
+      }
     } else if (item === 'Sound cloud') {
-      Linking.openURL('https://soundcloud.com/' + url);
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://soundcloud.com/' + url);
+      }
     } else if (item === 'Pinterest') {
-      Linking.openURL('pinterest://' + url).catch(() => {
-        Linking.openURL('https://pinterest.com/' + url);
-      });
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('pinterest://' + url).catch(() => {
+          Linking.openURL('https://pinterest.com/' + url);
+        });
+      }
     } else if (item === 'File') {
-      Linking.openURL('https://files.google.com/' + url).catch(() => {
-        Linking.openURL('https://files.google.com/' + url);
-      });
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://files.google.com/' + url).catch(() => {
+          Linking.openURL('https://files.google.com/' + url);
+        });
+      }
     } else if (item === 'Clubhouse') {
-      Linking.openURL('https://www.joinclubhouse.com/@' + url).catch(() => {
-        Linking.openURL('https://www.joinclubhouse.com/@' + url);
-      });
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://www.joinclubhouse.com/@' + url).catch(() => {
+          Linking.openURL('https://www.joinclubhouse.com/@' + url);
+        });
+      }
     } else if (item === 'Bitclout') {
-      Linking.openURL('https://bitclout.com/u/' + url).catch(() => {
-        Linking.openURL('https://bitclout.com/u/' + url);
-      });
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://bitclout.com/u/' + url).catch(() => {
+          Linking.openURL('https://bitclout.com/u/' + url);
+        });
+      }
     } else if (item === 'Venmo') {
-      Linking.openURL('https://venmo.com/' + url).catch(() => {
-        Linking.openURL('https://venmo.com/' + url);
-      });
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://venmo.com/' + url).catch(() => {
+          Linking.openURL('https://venmo.com/' + url);
+        });
+      }
     } else if (item === 'Deezer') {
-      Linking.openURL('https://www.deezer.com/' + url);
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://www.deezer.com/' + url);
+      }
     } else if (item === 'Podcasts') {
-      Linking.openURL('https://www.podcasts.com/' + url);
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://www.podcasts.com/' + url);
+      }
     } else if (item === 'Google pay') {
-      Linking.openURL('https://gpay.app.goo.gl/9i2F');
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://gpay.app.goo.gl/9i2F');
+      }
     } else {
       if (url.includes('https' && 'http')) {
         Linking.canOpenURL(url)
