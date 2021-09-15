@@ -20,7 +20,6 @@ const ImageComponent = ({
       borderRadius={radius}
       style={color && {tintColor: color}}
       resizeMode={resizeMode}
-      // indicator={ActivityIndicator}
     />
   );
 };

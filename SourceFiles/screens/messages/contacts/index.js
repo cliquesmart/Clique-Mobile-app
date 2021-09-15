@@ -7,6 +7,7 @@ import {
   FlatList,
   Alert,
   RefreshControl,
+  Platform,
 } from 'react-native';
 import HeaderPostLogin from '../../../common/header-post-login';
 import Neomorph from '../../../common/shadow-src/Neomorph';
@@ -432,9 +433,9 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     backgroundColor: '#F2F0F7',
     width: wp(90),
-    height: hp(10),
+    height: Platform.OS === 'ios' ? hp(10) : hp(12),
     justifyContent: 'center',
-    marginTop: hp(1),
+    marginTop: Platform.OS === 'ios' ? hp(1) : hp(2.5),
     borderRadius: 10,
   },
   linear: {

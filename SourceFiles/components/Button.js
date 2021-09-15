@@ -87,6 +87,7 @@ const Button = ({
   iconHeight = 22,
   iconWidth = 22,
   iconStyle,
+  iconColor,
   ...rest
 }) => {
   const styles = componentStyles();
@@ -132,6 +133,7 @@ const Button = ({
                 name={icon}
                 height={iconHeight}
                 width={iconWidth}
+                color={iconColor}
               />
             </Block>
             <Text

@@ -42,4 +42,7 @@ export const APIURL = {
   analytics: 'data-analyst',
   myContactList: 'mycontactlist',
   flagValue: 'account-flag',
+  AddMember: 'add-member',
+  UpdateMember: 'update-member',
+  DeleteMember: 'delete-member',
 };

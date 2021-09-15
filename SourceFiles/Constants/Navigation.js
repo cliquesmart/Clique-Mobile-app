@@ -13,14 +13,11 @@ import {navigationRef, isReadyRef} from './NavigationService';
 import Tutorial from '../InitialFlow/Tutorial';
 import AutoLogin from '../InitialFlow/AutoLogin';
 import Login from '../InitialFlow/Login';
-import OTPView from '../InitialFlow/OTPView';
 import RegisterName from '../InitialFlow/RegisterName';
 import RegisterMobile from '../InitialFlow/RegisterMobile';
-import RegisterOTPView from '../InitialFlow/RegisterOTPView';
 import RegisterEmail from '../InitialFlow/RegisterEmail';
 import RegisterProfilePic from '../InitialFlow/RegisterProfilePic';
 import RegisterBio from '../InitialFlow/RegisterBio';
-import RegisterSocialMedia from '../InitialFlow/RegisterSocialMedia';
 import Congratulation from '../InitialFlow/Congratulation';
 import ForgotPassword from '../screens/forgot/index';
 import ForgotMail from '../screens/forgot/mail/index';
@@ -53,6 +50,7 @@ import AnalyticsView from '../screens/pro/analytic-view';
 import messaging from '@react-native-firebase/messaging';
 import {onDisplayNotification} from '../utils/mobile-utils';
 import Splash from '../screens/splash';
+import AddFamilyMember from '../screens/profile/family';
 
 //Constant Variable for navigation
 const Stack = createStackNavigator();
@@ -75,8 +73,8 @@ const animationOptions = {
 // Initial Flow Navigator
 function InitialFlow() {
   return (
-    <Stack.Navigator initialRouteName="Splash" headerMode="none">
-      <Stack.Screen name="Splash" component={Splash} />
+    <Stack.Navigator initialRouteName="Tutorial" headerMode="none">
+      {/* <Stack.Screen name="Splash" component={Splash} /> */}
       <Stack.Screen
         options={animationOptions}
         name="Tutorial"
@@ -84,17 +82,11 @@ function InitialFlow() {
       />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="AutoLogin" component={AutoLogin} />
-      <Stack.Screen name="OTPView" component={OTPView} />
       <Stack.Screen name="RegisterName" component={RegisterName} />
       <Stack.Screen name="RegisterMobile" component={RegisterMobile} />
-      <Stack.Screen name="RegisterOTPView" component={RegisterOTPView} />
       <Stack.Screen name="RegisterEmail" component={RegisterEmail} />
       <Stack.Screen name="RegisterProfilePic" component={RegisterProfilePic} />
       <Stack.Screen name="RegisterBio" component={RegisterBio} />
-      <Stack.Screen
-        name="RegisterSocialMedia"
-        component={RegisterSocialMedia}
-      />
       <Stack.Screen name="Congratulation" component={Congratulation} />
       <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
       <Stack.Screen name="ForgotMail" component={ForgotMail} />
@@ -204,6 +196,11 @@ function DashboardStack() {
         component={EditProfile}
       />
       <Stack.Screen
+        options={animationOptions}
+        name="AddFamilyMember"
+        component={AddFamilyMember}
+      />
+      <Stack.Screen
         name="ChangePasswordSettings"
         component={ChangePasswordSettings}
         options={animationOptions}
@@ -256,12 +253,12 @@ function DashboardStack() {
 
 const AppNavigator = createSwitchNavigator(
   {
-    // Splash: Splash,
+    Splash: Splash,
     Login: InitialFlow,
     Dashboard: DashboardStack,
   },
   {
-    initialRouteName: 'Login',
+    initialRouteName: 'Splash',
   },
 );
 

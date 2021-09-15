@@ -1,3 +1,5 @@
+/* eslint-disable consistent-this */
+/* eslint-disable no-shadow */
 import React, {Component} from 'react';
 import {
   StyleSheet,
@@ -31,6 +33,7 @@ import {
 } from 'react-native-fbsdk';
 import {connect} from 'react-redux';
 import messaging from '@react-native-firebase/messaging';
+import {appleAuth} from '@invertase/react-native-apple-authentication';
 
 class Login extends Component {
   constructor(props) {
@@ -389,6 +392,114 @@ class Login extends Component {
     );
   };
 
+  onAppleButtonPress = async () => {
+    const self = this;
+    const fcmToken = await messaging().getToken();
+    // performs login request
+    try {
+      // performs login request
+      const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+      });
+
+      const credentialState = await appleAuth.getCredentialStateForUser(
+        appleAuthRequestResponse.user,
+      );
+
+      if (credentialState === appleAuth.State.AUTHORIZED) {
+        console.log('appleAuthRequestResponse', appleAuthRequestResponse);
+
+        const response = appleAuthRequestResponse;
+        console.log('apple-response', response);
+        // you may also want to send the device's ID to your server to link a device with the account
+        // identityToken generated
+
+        if (response) {
+          if (response.identityToken) {
+            // let device_identifier = DeviceInfo.getUniqueId();
+            let data = {
+              social_type: 'I',
+              social_token: response.identityToken,
+              name: response.fullName ? response.fullName.givenName : '-',
+              email: response.email ? response.email : '-',
+              password: '12345678',
+              current_lat: self.props.location.latitude,
+              current_long: self.props.location.longitude,
+              device_token: fcmToken,
+            };
+            Webservice.post(APIURL.userLogin, data)
+              .then(async (response) => {
+                if (response.data == null) {
+                  // alert('error');
+                  Alert.alert(response.originalError.message);
+                  self.setState({
+                    isloading: false,
+                  });
+                  return;
+                }
+                console.log('Get Register User Response : ' + response);
+
+                if (response.data.status === true) {
+                  self.setState({
+                    isloading: false,
+                  });
+                  await AsyncStorage.setItem(
+                    'user_id',
+                    JSON.stringify(response.data.data.user.user_id),
+                  );
+                  await AsyncStorage.setItem(
+                    'token',
+                    response.data.data.access_token,
+                  );
+                  await AsyncStorage.setItem(
+                    'custom_id',
+                    response.data.data.user.custom_id,
+                  );
+                  await appleAuth.performRequest({
+                    requestedOperation: appleAuth.Operation.LOGOUT,
+                  });
+                  self.props.navigation.navigate('Dashboard');
+                } else {
+                  //
+                  self.showAlert(response.data.message);
+                }
+              })
+              .catch((err) => {
+                self.setState({isloading: false});
+                console.log(err.message);
+                Alert.alert(
+                  err.message,
+                  '',
+                  [
+                    {
+                      text: 'Try Again',
+                      onPress: () => {
+                        self.fbLogin(true);
+                      },
+                    },
+                  ],
+                  {cancelable: false},
+                );
+              });
+            // props.appleLogin({values: details});
+          }
+        }
+        // user is authenticated
+      }
+    } catch (error) {
+      if (appleAuth.Error.CANCELED === error.code) {
+        console.log('apple-error-CANCELED', JSON.stringify(error));
+      } else if (appleAuth.Error.FAILED === error.code) {
+        console.log('apple-error-FAILED', error);
+      } else if (appleAuth.Error.NOT_HANDLED === error.code) {
+        console.log('apple-error-NOT_HANDLED', error);
+      } else {
+        console.log('apple-error', error);
+      }
+    }
+  };
+
   render() {
     return (
       <LinearGradient colors={['#6961FF', '#E866B6']} style={styles.container}>
@@ -417,7 +528,9 @@ class Login extends Component {
             isValid,
             dirty,
           }) => (
-            <ScrollView contentContainerStyle={{flexGrow: 1}} bounces={false}>
+            <ScrollView
+              contentContainerStyle={styles.mainContainer}
+              bounces={false}>
               <Block flex={false} middle padding={[0, wp(3)]}>
                 <Text center size={30} semibold white margin={[hp(4), 0]}>
                   {'Login Into\nYour Account'}
@@ -440,7 +553,7 @@ class Login extends Component {
                 <Block flex={false} margin={[hp(0.5), 0]} />
                 <Button
                   onPress={() => this.fbLogin()}
-                  iconStyle={{marginTop: hp(0.8)}}
+                  iconStyle={{marginTop: hp(0.5)}}
                   icon="facebook_icon"
                   iconWithText
                   color="secondary">
@@ -448,12 +561,23 @@ class Login extends Component {
                 </Button>
                 <Button
                   onPress={() => this.signIn()}
-                  iconStyle={{marginTop: hp(0.8)}}
+                  iconStyle={{marginTop: hp(0.5), marginRight: wp(2)}}
                   icon="google"
                   iconWithText
                   color="secondary">
                   Sign in with Google
                 </Button>
+                {Platform.OS === 'ios' && (
+                  <Button
+                    onPress={() => this.onAppleButtonPress()}
+                    iconStyle={{marginRight: wp(2), marginVertical: hp(0.2)}}
+                    iconColor="#fff"
+                    icon="apple_icon"
+                    iconWithText
+                    color="secondary">
+                    Sign in with Apple
+                  </Button>
+                )}
                 <Button
                   disabled={!isValid || !dirty}
                   onPress={handleSubmit}
@@ -474,27 +598,9 @@ class Login extends Component {
             </ScrollView>
           )}
         </Formik>
-        <Text
-          style={{
-            marginLeft: 20,
-            marginRight: 20,
-            marginTop: 15,
-            textAlign: 'center',
-            flexDirection: 'row',
-            marginBottom: 30,
-            fontFamily: ConstantKeys.Averta_REGULAR,
-            fontSize: SetFontSize.ts14,
-            color: CommonColors.whiteColor,
-          }}>
+        <Text style={styles.dontacc}>
           Don't have an account yet?{' '}
-          <Text
-            style={{
-              fontFamily: ConstantKeys.Averta_BOLD,
-              fontSize: SetFontSize.ts14,
-              color: CommonColors.whiteColor,
-              textDecorationLine: 'underline',
-            }}
-            onPress={() => this.btnSignUpTap()}>
+          <Text style={styles.signup} onPress={() => this.btnSignUpTap()}>
             Sign Up{' '}
           </Text>
         </Text>
@@ -506,6 +612,9 @@ class Login extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  mainContainer: {
     flex: 1,
   },
   btnLogin: {
@@ -562,6 +671,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 8,
     marginRight: 10,
+  },
+  dontacc: {
+    textAlign: 'center',
+    marginBottom: 30,
+    fontFamily: ConstantKeys.Averta_REGULAR,
+    fontSize: SetFontSize.ts14,
+    color: CommonColors.whiteColor,
+  },
+  signup: {
+    fontFamily: ConstantKeys.Averta_BOLD,
+    fontSize: SetFontSize.ts14,
+    color: CommonColors.whiteColor,
+    textDecorationLine: 'underline',
   },
 });
 const mapStateToProps = (state, ownProps) => {

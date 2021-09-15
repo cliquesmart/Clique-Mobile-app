@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {StyleSheet, View, ViewPropTypes} from 'react-native';
 import Shadow from './Shadow';
-
+import {Block} from '../../../components';
 import {hexToHsl, hslToHex} from './utils';
 
 import LinearGradient from 'react-native-linear-gradient';
@@ -26,6 +26,7 @@ const NeuView = (props) => {
     style = {},
     containerStyle,
     noShadow,
+    error,
   } = props;
 
   const {h, s, l} = hexToHsl(color);
@@ -154,13 +155,16 @@ const NeuView = (props) => {
 
     return (
       <>
-        <View
+        <Block
+          flex={false}
+          borderColor={error ? 'red' : 'transparent'}
+          borderWidth={error ? 1 : 0}
           style={{
             ...styles.view,
             ...containerStyle,
           }}>
           {children}
-        </View>
+        </Block>
       </>
     );
   };

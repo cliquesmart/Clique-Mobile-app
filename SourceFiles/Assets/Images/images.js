@@ -65,7 +65,8 @@ export const images = {
   accept_request_icon: require('./icons/tick-mark.png'),
   lock_icon: require('./icons/lock.png'),
   profile_share_icon: require('./icons/share-2.png'),
-
+  apple_icon: require('./icons/apple.png'),
+  default_profile: require('./icons/default.png'),
   //Card
   mastercard: require('./icons/mastercard.png'),
   jcb: require('./icons/jcb.png'),
@@ -75,6 +76,8 @@ export const images = {
   amex: require('./icons/amex.png'),
   expiry_icon: require('./icons/expiry.png'),
   cvv_icon: require('./icons/cvv.png'),
+  trash_icon: require('./icons/trash-bin.png'),
+  more_icon: require('./icons/vertical-dots.png'),
 
   // Forgot
   forgotBg: require('./forgot/forgot.png'),

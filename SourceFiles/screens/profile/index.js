@@ -42,6 +42,8 @@ import {t2} from '../../components/theme/fontsize';
 import {light} from '../../components/theme/colors';
 import {profileRequest} from './action';
 import {useDispatch} from 'react-redux';
+import Neomorph from '../../common/shadow-src/Neomorph';
+import {CommonColors} from '../../Constants/ColorConstant';
 
 const Profile = () => {
   const {navigate} = useNavigation();
@@ -57,6 +59,7 @@ const Profile = () => {
   const [Icons, setIcons] = useState([]);
   const [newState, setNewState] = useState({});
   const [field, setField] = useState('');
+  const [more, setMore] = useState({});
   const dispatch = useDispatch();
 
   const updateTypeOfAccount = async () => {
@@ -435,7 +438,7 @@ const Profile = () => {
         <NeuView
           color="#F2F0F7"
           height={hp(5)}
-          width={wp(45)}
+          width={wp(66)}
           borderRadius={16}
           containerStyle={styles.neoContainer}
           inset>
@@ -482,6 +485,28 @@ const Profile = () => {
               center
               size={13}>
               Business
+            </Text>
+          )}
+          {activeOptions === 'hospital' ? (
+            <NeuButton
+              color="#F2F0F7"
+              width={wp(20)}
+              height={hp(3.5)}
+              style={{marginHorizontal: wp(2)}}
+              borderRadius={6}>
+              <Text semibold purple size={13}>
+                Hospital
+              </Text>
+            </NeuButton>
+          ) : (
+            <Text
+              style={[styles.inactiveText, {marginRight: wp(1)}]}
+              onPress={() => activeFlagValue('hospital')}
+              grey
+              regular
+              center
+              size={13}>
+              Hospital
             </Text>
           )}
         </NeuView>
@@ -533,8 +558,8 @@ const Profile = () => {
                   <ImageComponent
                     isURL
                     name={`${APIURL.iconUrl}${item.icone.url}`}
-                    height={Platform.OS === 'ios' ? hp(10) : 67}
-                    width={Platform.OS === 'ios' ? hp(10) : 67}
+                    height={Platform.OS === 'ios' ? hp(10) : 88}
+                    width={Platform.OS === 'ios' ? hp(10) : 88}
                   />
                 )}
               </TouchableOpacity>
@@ -676,17 +701,25 @@ const Profile = () => {
         showAlert(error.message);
       });
   };
-  const deleteSocialAccount = async (data) => {
-    const user_id = await AsyncStorage.getItem('user_id');
-    setDeleteSocialLoading(true);
-    Webservice.post(APIURL.socialIcons, {
-      user_id: user_id,
-      id: data.id,
-      action: 'delete',
+  function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+  const deleteMemberFromHospital = async (act, id) => {
+    setloading(true);
+    Webservice.post(APIURL.DeleteMember, {
+      action: act,
+      id: id,
     })
       .then(async (response) => {
         if (response.data == null) {
-          setDeleteSocialLoading(false);
+          setloading(false);
           // alert('error');
           showAlert(response.originalError.message);
 
@@ -694,23 +727,154 @@ const Profile = () => {
         }
 
         if (response.data.status === true) {
-          setDeleteSocialLoading(false);
-          setIcons(response.data.data);
-          setAction('');
-          setField('');
-          modalizeRef.current?.close();
+          // setloading(false);
           getProfile();
+          showAlert(response.data.message);
         } else {
-          setDeleteSocialLoading(false);
+          setloading(false);
           showAlert(response.data.message);
         }
       })
       .catch((error) => {
-        setDeleteSocialLoading(false);
+        setloading(false);
         showAlert(error.message);
       });
   };
 
+  const deleteMemberAlert = (act, id) => {
+    modalizeRef.current?.close();
+    Alert.alert(
+      'Info Message',
+      'Are you sure you want to delete the member profile?',
+      [
+        {
+          text: 'No',
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            deleteMemberFromHospital(act, id);
+          },
+        },
+      ],
+    );
+  };
+  const renderHospital = (data) => {
+    return (
+      <Block flex={false}>
+        <FlatList
+          data={data}
+          contentContainerStyle={{paddingBottom: hp(2)}}
+          renderItem={({item}) => {
+            return (
+              <CustomButton
+                disabled={item.by_default === 1}
+                onPress={() => deleteMemberFromHospital('default', item.id)}
+                activeOpacity={0.8}
+                flex={false}
+                center>
+                <Neomorph
+                  style={[
+                    styles.neoSubContainer,
+                    item.by_default === 1
+                      ? {
+                          borderWidth: 1.5,
+                          borderColor: CommonColors.gradientEnd,
+                        }
+                      : {},
+                  ]}>
+                  <Block
+                    space="between"
+                    center
+                    row
+                    padding={[hp(2)]}
+                    flex={false}>
+                    <Block row flex={false}>
+                      {strictValidString(item.photo) ? (
+                        <ImageComponent
+                          isURL={strictValidString(item.photo)}
+                          name={
+                            strictValidString(item.photo)
+                              ? `${APIURL.ImageUrl}/${item.photo}`
+                              : 'default_profile'
+                          }
+                          height={50}
+                          width={50}
+                          radius={50}
+                        />
+                      ) : (
+                        <ImageComponent
+                          name={'default_profile'}
+                          height={50}
+                          width={50}
+                          radius={50}
+                        />
+                      )}
+                      <Block
+                        style={{width: wp(55)}}
+                        margin={[0, 0, 0, wp(3)]}
+                        flex={false}>
+                        <Text capitalize semibold grey size={18}>
+                          {item.start_name} {item.first_name} {item.last_name}
+                        </Text>
+                        <Text
+                          capitalize
+                          margin={[hp(0.8), 0, 0]}
+                          regular
+                          grey
+                          size={14}>
+                          {item.relation} | {getAge(item.date_of_birth)} Years
+                          {item.by_default === 1 ? (
+                            <Text
+                              color={CommonColors.gradientEnd}
+                              size={12}
+                              semibold
+                              margin={[0, 0, 0, wp(3)]}>
+                              {'   '} Default
+                            </Text>
+                          ) : null}
+                        </Text>
+                      </Block>
+                    </Block>
+                    <Block flex={false}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          modalizeRef.current?.open();
+                          setAction('more-option');
+                          setMore(item);
+                        }}>
+                        <ImageComponent
+                          name="more_icon"
+                          height={20}
+                          width={20}
+                          color={CommonColors.gradientEnd}
+                        />
+                      </TouchableOpacity>
+                    </Block>
+                  </Block>
+                </Neomorph>
+              </CustomButton>
+            );
+          }}
+        />
+        <Block padding={[0, wp(3)]}>
+          <Button
+            onPress={() => {
+              navigate('AddFamilyMember', {
+                profile: profile,
+              });
+            }}
+            size={14}
+            style={{width: wp(40)}}
+            color="primary"
+            linear>
+            Add Family Member
+          </Button>
+        </Block>
+      </Block>
+    );
+  };
   return (
     <Block linear>
       <SafeAreaView />
@@ -740,16 +904,18 @@ const Profile = () => {
               strictValidArray(profile.business) &&
               activeOptions === 'business' &&
               renderSocialIcons(profile.business, 'business')}
+            {strictValidObjectWithKeys(profile) &&
+              strictValidArray(profile.hospital) &&
+              activeOptions === 'hospital' &&
+              renderHospital(profile.hospital)}
           </Block>
         </ScrollView>
       </Block>
       <Modalize
         adjustToContentHeight={action === 'add_account' ? !toggle : toggle}
+        overlayStyle={{backgroundColor: 'rgba(72, 30, 140,0.7)'}}
         tapGestureEnabled={false}
-        modalStyle={[
-          {backgroundColor: '#F2F0F7'},
-          // action === 'add_account' ? {flexGrow: 1} : {flexGrow: 0},
-        ]}
+        modalStyle={[{backgroundColor: '#F2F0F7'}]}
         scrollViewProps={{
           scrollEnabled: true,
           showsVerticalScrollIndicator: false,
@@ -774,7 +940,7 @@ const Profile = () => {
               margin={[hp(4), wp(3), 0]}
               flex={false}
               style={{alignSelf: 'flex-end'}}>
-              <NeuView
+              {/* <NeuView
                 concave
                 color="#eef2f9"
                 width={40}
@@ -788,7 +954,7 @@ const Profile = () => {
                   name={'close_icon'}
                   color={light.purple}
                 />
-              </NeuView>
+              </NeuView> */}
             </CustomButton>
             {AddSocialIcons()}
           </>
@@ -826,6 +992,49 @@ const Profile = () => {
               </Block>
             </Block>
           </>
+        )}
+        {action === 'more-option' && (
+          <Block
+            flex={false}
+            margin={[hp(1), 0, 0]}
+            padding={[hp(4), 0, hp(2)]}>
+            <Text semibold purple margin={[0, 0, hp(2)]} size={16} center>
+              Select Action
+            </Text>
+            <Block flex={false} margin={[hp(1), 0, 0]} center>
+              <NeuButton
+                onPress={() => {
+                  modalizeRef.current?.close();
+                  navigate('AddFamilyMember', {
+                    item: more,
+                  });
+                }}
+                color="#eef2f9"
+                width={wp(90)}
+                height={hp(5)}
+                // containerStyle={styles.buttonStyle}
+                borderRadius={16}>
+                <Text grey size={14}>
+                  Edit Profile
+                </Text>
+              </NeuButton>
+            </Block>
+            <Block center flex={false} margin={[hp(2), 0, 0]}>
+              <NeuButton
+                onPress={() => {
+                  deleteMemberAlert('delete', more.id);
+                }}
+                color="#EC5F5F"
+                width={wp(90)}
+                height={hp(5)}
+                noShadow
+                borderRadius={16}>
+                <Text white size={14}>
+                  Delete Member
+                </Text>
+              </NeuButton>
+            </Block>
+          </Block>
         )}
         {action === 'open_link' && (
           <>
@@ -932,8 +1141,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   bgImage: {
-    height: Platform.OS === 'ios' ? hp(8) : 67,
-    width: Platform.OS === 'ios' ? hp(8) : 67,
+    height: Platform.OS === 'ios' ? hp(8) : 62,
+    width: Platform.OS === 'ios' ? hp(8) : 62,
   },
   pro: {position: 'absolute', right: -10, top: -15, zIndex: 99},
   socialIcons: {
@@ -941,6 +1150,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(1),
     flexDirection: 'row',
     flexWrap: 'wrap',
+  },
+  buttonStyle: {
+    justifyContent: 'space-between',
+    paddingHorizontal: wp(2),
+    flexDirection: 'row',
+  },
+  neoSubContainer: {
+    shadowRadius: 3,
+    backgroundColor: '#F2F0F7',
+    width: wp(90),
+    height: Platform.OS === 'ios' ? hp(10) : hp(12),
+    marginTop: Platform.OS === 'ios' ? hp(1) : hp(2.5),
+    borderRadius: 10,
   },
 });
 export default Profile;

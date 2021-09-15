@@ -3,7 +3,10 @@ import {showMessage} from 'react-native-flash-message';
 import Snackbar from 'react-native-snackbar';
 import {CommonColors} from '../Constants/ColorConstant';
 import {strictValidObjectWithKeys} from './commonUtils';
-
+import RNFS from 'react-native-fs';
+import RNFetchBlob from 'rn-fetch-blob';
+import {APIURL} from '../Constants/APIURL';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export const showAlert = (text, color) => {
   Snackbar.show({
     text: text,
@@ -346,4 +349,40 @@ export const OpenLinks = (item, url) => {
       }
     }
   });
+};
+export const UPLOAD = async (fileName, filePath, filetype) => {
+  console.log(fileName, filePath, filetype);
+  const date = new Date();
+  const token = await AsyncStorage.getItem('token');
+  const tempPath =
+    RNFS.DocumentDirectoryPath + '/' + date.getMilliseconds() + date.getHours();
+
+  await RNFS.copyFile(filePath, tempPath);
+
+  const fileExist = await RNFS.exists(tempPath);
+
+  if (!fileExist) {
+    showAlert('does not exist!');
+    return false;
+  }
+  const _headers = {
+    'Content-Type': 'multipart/form-data',
+    Authorization: `Bearer ${token}`,
+  };
+  let res = {};
+
+  res = await RNFetchBlob.fetch(
+    'POST',
+    `${APIURL.BaseURL}add-member-uplod-file`,
+    _headers,
+    [
+      {
+        name: 'image',
+        filename: 'image',
+        data: RNFetchBlob.wrap(tempPath),
+        type: filetype,
+      },
+    ],
+  );
+  return res;
 };

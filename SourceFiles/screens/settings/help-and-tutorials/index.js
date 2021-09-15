@@ -75,15 +75,16 @@ const HelpAndTutorials = () => {
   const _renderItem = () => {
     return (
       <Block center margin={[hp(2), 0, hp(1)]}>
-        <NeuView
-          containerStyle={styles.helpView}
+        <Block
+          shadow
+          center
+          row
           height={Platform.OS === 'ios' ? hp(26) : hp(29)}
           color="#F2F0F7"
-          width={wp(90)}
           borderRadius={16}>
           <ImageComponent
             name="help_icon"
-            height={Platform.OS === 'ios' ? hp(26) : hp(33)}
+            height={210}
             width={130}
             radius={16}
           />
@@ -105,7 +106,7 @@ const HelpAndTutorials = () => {
               Read This
             </Button>
           </Block>
-        </NeuView>
+        </Block>
       </Block>
     );
   };

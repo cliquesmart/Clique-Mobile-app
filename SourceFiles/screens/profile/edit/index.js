@@ -488,7 +488,10 @@ const EditProfile = () => {
                 height={hp(5)}
                 containerStyle={styles.buttonStyle}
                 borderRadius={16}>
-                <Text black size={14}>
+                <Text
+                  grey={!strictValidString(dob)}
+                  black={strictValidString(dob)}
+                  size={14}>
                   {strictValidString(dob) ? dob : 'MM/DD/YYYY'}
                 </Text>
                 <Block flex={false} margin={[0, wp(2), 0, 0]}>
@@ -515,7 +518,11 @@ const EditProfile = () => {
                 height={hp(5)}
                 containerStyle={styles.buttonStyle}
                 borderRadius={16}>
-                <Text capitalize black size={14}>
+                <Text
+                  capitalize
+                  grey={!strictValidString(gender)}
+                  black={strictValidString(gender)}
+                  size={14}>
                   {strictValidString(gender) ? gender : 'Select Gender'}
                 </Text>
                 <Block flex={false} margin={[0, wp(2), 0, 0]}>
