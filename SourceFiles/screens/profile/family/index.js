@@ -1,9 +1,9 @@
+/* eslint-disable no-shadow */
 import React, {useEffect, useRef, useState} from 'react';
 import {
   Alert,
   FlatList,
   Keyboard,
-  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -27,15 +27,15 @@ import {APIURL} from '../../../Constants/APIURL';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ValidationMsg from '../../../Constants/ValidationMsg';
 import ImagePicker from 'react-native-image-crop-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Webservice from '../../../Constants/API';
-import {showAlert, UPLOAD} from '../../../utils/mobile-utils';
+import {showAlert} from '../../../utils/mobile-utils';
 import LoadingView from '../../../Constants/LoadingView';
 import moment from 'moment';
 import {Modalize} from 'react-native-modalize';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DocumentPicker from 'react-native-document-picker';
 import {light} from '../../../components/theme/colors';
+import UploadFile from '../../../components/upload-file';
 
 const AddFamilyMember = () => {
   const {params} = useRoute();
@@ -47,6 +47,9 @@ const AddFamilyMember = () => {
   const formikRef = useRef();
   const [profileImage, setProfileImage] = useState('');
   const [loading, setloading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [progress, setProgess] = useState(false);
+  const [file, setFile] = useState({});
   const [uploadedFiles, setUploadedFiles] = useState(
     strictValidObjectWithKeys(item) &&
       strictValidArrayWithLength(item.uplod_file)
@@ -66,7 +69,7 @@ const AddFamilyMember = () => {
       });
       setUploadededFiles(data);
     }
-  }, [strictValidObjectWithKeys(item) && item.uplod_file]);
+  }, [item]);
   const btnSelectImage = () => {
     Alert.alert(
       ValidationMsg.AppName,
@@ -238,10 +241,7 @@ const AddFamilyMember = () => {
         />
         <TouchableOpacity
           onPress={() => btnSelectImage()}
-          style={{
-            position: 'absolute',
-            top: 0,
-          }}>
+          style={styles.editStyle}>
           <NeuView color="#F2F0F7" height={30} width={30} borderRadius={30}>
             <ImageComponent
               resizeMode="contain"
@@ -257,9 +257,6 @@ const AddFamilyMember = () => {
   };
   const fomatDOB = (a) => {
     return moment(a).format('MM/DD/YYYY');
-  };
-  const showDatePicker = () => {
-    setIsDatePickerVisible(true);
   };
 
   const hideDatePicker = () => {
@@ -305,42 +302,33 @@ const AddFamilyMember = () => {
       } else if (uploadedFiles.length >= 5) {
         showAlert('you can upload 5 files at one time');
       } else {
-        const {uri} = res;
-        const uriParts = uri.split('.');
-        const filename = uriParts[uriParts.length - 1];
-
-        // setUploadedFiles((state) => res);
-        // console.log(res, 'res');
-
-        // console.log(
-        //   'Selected File : ' + res.uri,
-        //   res.type, // mime type
-        //   res.name,
-        //   res.size,
+        setFile(res);
+        // const {uri} = res;
+        // const uriParts = uri.split('.');
+        // const filename = uriParts[uriParts.length - 1];
+        // setUploading(true);
+        // const response = await UPLOAD(
+        //   res.name ? res.name : `photo.${filename}`,
+        //   Platform.OS === 'ios' ? res.uri : res.uri,
+        //   res.type,
         // );
-        setloading(true);
-        const response = await UPLOAD(
-          res.name ? res.name : `photo.${filename}`,
-          Platform.OS === 'ios' ? res.uri : res.uri,
-          res.type,
-        );
-        if (response) {
-          setloading(false);
+        // if (response) {
+        //   setUploading(false);
 
-          const parsed = JSON.parse(response.data);
-          console.log(
-            response,
-            'respose getting from the backend ====== > ',
-            parsed,
-          );
-          setUploadedFiles((state) => [...state, res]);
-          if (strictValidObjectWithKeys(parsed)) {
-            setUploadededFiles((prevState) => [
-              ...prevState,
-              parsed.uplod_file,
-            ]);
-          }
-        }
+        //   const parsed = JSON.parse(response.data);
+        //   console.log(
+        //     response,
+        //     'respose getting from the backend ====== > ',
+        //     parsed,
+        //   );
+        //   setUploadedFiles((state) => [...state, res]);
+        //   if (strictValidObjectWithKeys(parsed)) {
+        //     setUploadededFiles((prevState) => [
+        //       ...prevState,
+        //       parsed.uplod_file,
+        //     ]);
+        //   }
+        // }
       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -350,6 +338,7 @@ const AddFamilyMember = () => {
       }
     }
   };
+  // console.log(files);
   const onSubmit = (value) => {
     setloading(true);
     if (strictValidObjectWithKeys(item) && item.id) {
@@ -511,8 +500,6 @@ const AddFamilyMember = () => {
           dirty,
           isValid,
         }) => {
-          console.log(errors, 'errors', values);
-          console.log(dirty, isValid);
           const {
             sex,
             firstName,
@@ -525,7 +512,6 @@ const AddFamilyMember = () => {
             govtId,
             idNumber,
             title,
-            personalId,
             dob,
             relation,
             maritial_status,
@@ -542,7 +528,7 @@ const AddFamilyMember = () => {
                     contentContainerStyle={styles.container}
                     bounces={false}>
                     <Block
-                      style={{flexGrow: 1}}
+                      style={styles.mainContainer}
                       borderTopLeftRadius={20}
                       borderTopRightRadius={20}
                       padding={[hp(2), wp(3)]}
@@ -705,25 +691,6 @@ const AddFamilyMember = () => {
                           error={touched.address && errors.address}
                         />
                       </Block>
-                      {/* <Block
-                        margin={[hp(1), 0]}
-                        alignSelf="center"
-                        flex={false}>
-                        <NeuInput
-                          width={wp(80)}
-                          height={hp(5)}
-                          borderRadius={16}
-                          containerStyle={{paddingVetical: hp(1)}}
-                          color="#eef2f9"
-                          onChangeText={handleChange('personalId')}
-                          value={personalId}
-                          placeholder="Personal ID"
-                          placeholderTextColor="grey"
-                          onBlur={() => setFieldTouched('personalId')}
-                          errorText={touched.personalId && errors.personalId}
-                          error={touched.personalId && errors.personalId}
-                        />
-                      </Block> */}
                       <Block center flex={false} margin={[hp(1), 0]}>
                         <NeuButton
                           error={touched.relation && errors.relation}
@@ -930,6 +897,18 @@ const AddFamilyMember = () => {
                             />
                           </Block>
                         </NeuButton>
+                        <UploadFile
+                          file={file}
+                          onProgressChange={(v) => setProgess(v)}
+                          onUploadComplete={(data) => {
+                            console.log(data, 'data');
+                            setUploadedFiles((state) => [...state, file]);
+                            setUploadededFiles((prevState) => [
+                              ...prevState,
+                              data.uplod_file,
+                            ]);
+                          }}
+                        />
                       </Block>
                     </Block>
                     <FlatList
@@ -978,9 +957,9 @@ const AddFamilyMember = () => {
                 adjustToContentHeight={true}
                 tapGestureEnabled={false}
                 handlePosition="inside"
-                overlayStyle={{backgroundColor: 'rgba(72, 30, 140,0.7)'}}
-                handleStyle={{backgroundColor: '#6B37C3'}}
-                modalStyle={[{backgroundColor: '#F2F0F7'}]}
+                overlayStyle={styles.overlayStyle}
+                handleStyle={styles.handleStyle}
+                modalStyle={styles.modalStyle}
                 ref={modalizeRef}>
                 {action === 'sex' && (
                   <Block flex={false} margin={[hp(1), 0, 0]} padding={[hp(4)]}>
@@ -1364,6 +1343,9 @@ const AddFamilyMember = () => {
         }}
       </Formik>
       {loading ? <LoadingView /> : null}
+      {uploading ? (
+        <LoadingView text="Cancel" onPress={() => setUploading(false)} />
+      ) : null}
       <DateTimePickerModal
         isVisible={isDatePickerVisible}
         mode="date"
@@ -1421,5 +1403,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: wp(2),
     flexDirection: 'row',
   },
+  editStyle: {
+    position: 'absolute',
+    top: 0,
+  },
+  mainContainer: {flexGrow: 1},
+  overlayStyle: {backgroundColor: 'rgba(72, 30, 140,0.7)'},
+  handleStyle: {backgroundColor: '#6B37C3'},
+  modalStyle: {backgroundColor: '#F2F0F7'},
 });
 export default AddFamilyMember;

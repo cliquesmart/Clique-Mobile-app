@@ -1,7 +1,7 @@
 import {BackHandler} from 'react-native';
 import {useEffect} from 'react';
 
-const useHardwareBack = handler => {
+const useHardwareBack = (handler) => {
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handler);
 

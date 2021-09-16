@@ -383,6 +383,8 @@ export const UPLOAD = async (fileName, filePath, filetype) => {
         type: filetype,
       },
     ],
-  );
+  ).catch((err) => {
+    console.log(err, 'err');
+  });
   return res;
 };

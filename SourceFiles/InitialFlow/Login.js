@@ -60,8 +60,6 @@ class Login extends Component {
     });
   }
 
-  API_LOGIN(isload) {}
-
   // Action Methods
   btnForgotPasswordTap = () => {
     requestAnimationFrame(() => {
@@ -141,6 +139,12 @@ class Login extends Component {
       webClientId:
         '917108325882-necf07egskm154tngl8a0o2qg6n81ae7.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
       offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+    });
+  }
+
+  componentWillUnmount() {
+    appleAuth.onCredentialRevoked(() => {
+      console.log('User auth has been revoked');
     });
   }
 

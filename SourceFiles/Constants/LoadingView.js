@@ -39,6 +39,7 @@ export default class LoadingView extends Component {
           <ActivityIndicator size={'large'} color={CommonColors.primaryColor} />
           {this.props.text !== '' && this.props.text !== undefined ? (
             <Text
+              onPress={this.props.onPress}
               style={{
                 margin: 5,
                 fontSize: SetFontSize.ts14,
