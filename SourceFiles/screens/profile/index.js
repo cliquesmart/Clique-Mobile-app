@@ -13,7 +13,6 @@ import {
   SectionList,
   Share,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import {
   Block,
   Text,
@@ -30,7 +29,7 @@ import NeoInputField from '../../components/neo-input';
 import Webservice from '../../Constants/API';
 import {APIURL} from '../../Constants/APIURL';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {OpenLinks, showAlert} from '../../utils/mobile-utils';
+import {OpenLinks, showAlert, viewFile} from '../../utils/mobile-utils';
 import LoadingView from '../../Constants/LoadingView';
 import {
   strictValidArray,
@@ -44,35 +43,42 @@ import {profileRequest} from './action';
 import {useDispatch} from 'react-redux';
 import Neomorph from '../../common/shadow-src/Neomorph';
 import {CommonColors} from '../../Constants/ColorConstant';
+import DocumentPicker from 'react-native-document-picker';
+import UploadFile from '../../components/upload-file';
 
 const Profile = () => {
   const {navigate} = useNavigation();
   const [activeOptions, setactiveOptions] = useState('social');
-  const [modalType, setModalType] = useState('social');
   const [toggle, setToggle] = useState(true);
   const [action, setAction] = useState(null);
   const modalizeRef = useRef();
   const [profile, setprofile] = useState({});
   const [loading, setloading] = useState(false);
   const [socialLoading, setSocialLoading] = useState(false);
-  const [deleteSocialLoading, setDeleteSocialLoading] = useState(false);
   const [Icons, setIcons] = useState([]);
   const [newState, setNewState] = useState({});
   const [field, setField] = useState('');
   const [more, setMore] = useState({});
   const dispatch = useDispatch();
+  const [file, setFile] = useState({});
+  const [uploadedFiles, setUploadedFiles] = useState({});
 
   const updateTypeOfAccount = async () => {
-    const val = (await AsyncStorage.getItem('flag')) || 'social';
+    const val = (await AsyncStorage.getItem('flag')) || profile.account_flag;
     setactiveOptions(val);
   };
+  console.log(uploadedFiles, 'uploadedFiles', file);
 
   useFocusEffect(
     React.useCallback(() => {
       getProfile();
       callProfile();
-      updateTypeOfAccount();
     }, []),
+  );
+  useFocusEffect(
+    React.useCallback(() => {
+      updateTypeOfAccount();
+    }, [profile]),
   );
 
   const callProfile = async () => {
@@ -119,19 +125,6 @@ const Profile = () => {
     return Linking.openURL(`fb://profile/${url}`).catch(() => {
       Linking.openURL('https://www.facebook.com/' + url);
     });
-  };
-
-  const openLink = async (url, name) => {
-    // Checking if the link is supported for links with custom URL scheme.
-
-    switch (name) {
-      case 'Phone':
-        return openPhoneNumber(url);
-      case 'Messages':
-        return openMessages(url);
-      default:
-        return openUrl(url);
-    }
   };
 
   const getProfile = async (values) => {
@@ -654,6 +647,8 @@ const Profile = () => {
           setIcons(response.data.data);
           setField('');
           setAction('');
+          setUploadedFiles({});
+          setFile({});
           modalizeRef.current?.close();
           getProfile();
         } else {
@@ -689,6 +684,8 @@ const Profile = () => {
           setIcons(response.data.data);
           setAction('');
           setField('');
+          setFile({});
+          setUploadedFiles({});
           modalizeRef.current?.close();
           getProfile();
         } else {
@@ -927,6 +924,7 @@ const Profile = () => {
         onClose={() => {
           setNewState({});
           setField('');
+          setUploadedFiles({});
         }}
         handleStyle={{backgroundColor: '#6B37C3', marginTop: hp(1)}}
         handlePosition="inside">
@@ -972,14 +970,75 @@ const Profile = () => {
                 {newState.name}
               </Text>
               <Block flex={false} margin={[hp(2), 0, 0]}>
-                <NeoInputField
-                  placeholder={`${newState.name} account`}
-                  fontColor="#707070"
-                  icon=""
-                  width={70}
-                  onChangeText={(a) => setField(a)}
-                  value={field}
-                />
+                {newState.name === 'File' ? (
+                  <>
+                    <NeuButton
+                      onPress={async () => {
+                        try {
+                          const res = await DocumentPicker.pick({
+                            type: [
+                              DocumentPicker.types.csv,
+                              DocumentPicker.types.doc,
+                              DocumentPicker.types.docx,
+                              DocumentPicker.types.images,
+                              DocumentPicker.types.pdf,
+                              DocumentPicker.types.ppt,
+                              DocumentPicker.types.pptx,
+                              DocumentPicker.types.xls,
+                              DocumentPicker.types.xlsx,
+                            ],
+                          });
+                          setFile(res);
+                        } catch (err) {
+                          if (DocumentPicker.isCancel(err)) {
+                            // User cancelled the picker, exit any dialogs or menus and move on
+                          } else {
+                            throw err;
+                          }
+                        }
+                      }}
+                      color="#eef2f9"
+                      width={wp(80)}
+                      height={hp(5)}
+                      containerStyle={styles.buttonStyle}
+                      borderRadius={16}>
+                      <Text
+                        capitalize
+                        grey={!strictValidObjectWithKeys(uploadedFiles)}
+                        black={strictValidObjectWithKeys(uploadedFiles)}
+                        size={14}>
+                        {strictValidObjectWithKeys(uploadedFiles)
+                          ? uploadedFiles.name
+                          : 'Upload Files'}
+                      </Text>
+                      <Block flex={false} margin={[0, wp(2), 0, 0]}>
+                        <ImageComponent
+                          name="down_arrow_icon"
+                          height={10}
+                          width={16}
+                        />
+                      </Block>
+                    </NeuButton>
+                    <UploadFile
+                      file={file}
+                      onProgressChange={(v) => console.log(v)}
+                      onUploadComplete={(data) => {
+                        console.log(data, 'data');
+                        setUploadedFiles(file);
+                        setField(data.uplod_file);
+                      }}
+                    />
+                  </>
+                ) : (
+                  <NeoInputField
+                    placeholder={`${newState.name} account`}
+                    fontColor="#707070"
+                    icon=""
+                    width={70}
+                    onChangeText={(a) => setField(a)}
+                    value={field}
+                  />
+                )}
                 <Block flex={false} margin={[hp(2), 0, 0]} />
                 <Button
                   disabled={!field}
@@ -1068,7 +1127,83 @@ const Profile = () => {
                 </Text>
               )}
               <Block flex={false} margin={[hp(2), 0, 0]}>
-                {strictValidObjectWithKeys(newState.icone) && (
+                {strictValidObjectWithKeys(newState.icone) &&
+                newState.icone.name === 'File' ? (
+                  <>
+                    <NeuButton
+                      onPress={async () => {
+                        try {
+                          const res = await DocumentPicker.pick({
+                            type: [
+                              DocumentPicker.types.csv,
+                              DocumentPicker.types.doc,
+                              DocumentPicker.types.docx,
+                              DocumentPicker.types.images,
+                              DocumentPicker.types.pdf,
+                              DocumentPicker.types.ppt,
+                              DocumentPicker.types.pptx,
+                              DocumentPicker.types.xls,
+                              DocumentPicker.types.xlsx,
+                            ],
+                          });
+                          setFile(res);
+                        } catch (err) {
+                          if (DocumentPicker.isCancel(err)) {
+                            // User cancelled the picker, exit any dialogs or menus and move on
+                          } else {
+                            throw err;
+                          }
+                        }
+                      }}
+                      color="#eef2f9"
+                      width={wp(80)}
+                      height={hp(5)}
+                      containerStyle={styles.buttonStyle}
+                      borderRadius={16}>
+                      <Text
+                        capitalize
+                        grey={!strictValidObjectWithKeys(uploadedFiles)}
+                        black={strictValidObjectWithKeys(uploadedFiles)}
+                        size={14}>
+                        {strictValidObjectWithKeys(uploadedFiles)
+                          ? uploadedFiles.name
+                          : strictValidString(field)
+                          ? field.substring(14)
+                          : 'Upload Files'}
+                      </Text>
+                      <Block flex={false} margin={[0, wp(2), 0, 0]}>
+                        <ImageComponent
+                          name="down_arrow_icon"
+                          height={10}
+                          width={16}
+                        />
+                      </Block>
+                    </NeuButton>
+                    <UploadFile
+                      file={file}
+                      onProgressChange={(v) => console.log(v)}
+                      onUploadComplete={(data) => {
+                        console.log(data, 'data');
+                        setUploadedFiles(file);
+                        setField(data.uplod_file);
+                      }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {strictValidObjectWithKeys(newState.icone) && (
+                      <NeoInputField
+                        placeholder={`${newState.icone.name} account`}
+                        fontColor="#707070"
+                        icon=""
+                        width={70}
+                        onChangeText={(a) => setField(a)}
+                        value={field}
+                      />
+                    )}
+                  </>
+                )}
+                {/* {strictValidObjectWithKeys(newState.icone) && (
                   <NeoInputField
                     placeholder={`${newState.icone.name} account`}
                     fontColor="#707070"
@@ -1077,26 +1212,51 @@ const Profile = () => {
                     onChangeText={(a) => setField(a)}
                     value={field}
                   />
+                )} */}
+                {strictValidObjectWithKeys(newState.icone) &&
+                newState.icone.name === 'File' ? (
+                  <>
+                    <Block flex={false} margin={[hp(2), 0, 0]}>
+                      <Button
+                        // style={{width: wp(32)}}
+                        linear
+                        onPress={() => viewFile(field, field.substring(14))}
+                        color="primary">
+                        Download
+                      </Button>
+                    </Block>
+                    <Button
+                      disabled={!field}
+                      isLoading={socialLoading}
+                      onPress={() => updateSocialAccount(newState)}
+                      linear
+                      color="primary">
+                      Update File
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Block flex={false} margin={[hp(2), 0, 0]}>
+                      <Button
+                        // style={{width: wp(32)}}
+                        linear
+                        onPress={() =>
+                          OpenLinks(newState.icone.name, newState.username)
+                        }
+                        color="primary">
+                        Open Link
+                      </Button>
+                    </Block>
+                    <Button
+                      disabled={!field}
+                      isLoading={socialLoading}
+                      onPress={() => updateSocialAccount(newState)}
+                      linear
+                      color="primary">
+                      Update Account
+                    </Button>
+                  </>
                 )}
-                <Block flex={false} margin={[hp(2), 0, 0]}>
-                  <Button
-                    // style={{width: wp(32)}}
-                    linear
-                    onPress={() =>
-                      OpenLinks(newState.icone.name, newState.username)
-                    }
-                    color="primary">
-                    Open Link
-                  </Button>
-                </Block>
-                <Button
-                  disabled={!field}
-                  isLoading={socialLoading}
-                  onPress={() => updateSocialAccount(newState)}
-                  linear
-                  color="primary">
-                  Update Account
-                </Button>
               </Block>
             </Block>
           </>

@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import {Linking, SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 import HeaderSettings from '../../common/header-setting';
 import {hp, wp} from '../../components/responsive';
 import NeuView from '../../common/neu-element/lib/NeuView';
@@ -243,6 +243,7 @@ const Settings = () => {
           </Block>
         </Block>
       </ScrollView>
+
       <Block flex={false} padding={[hp(2), wp(3)]}>
         <Text
           onPress={() => signOut()}

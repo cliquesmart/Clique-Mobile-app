@@ -519,6 +519,8 @@ PODS:
     - Firebase/Messaging (= 8.5.0)
     - React-Core
     - RNFBApp
+  - RNFileViewer (2.1.4):
+    - React-Core
   - RNFS (2.18.0):
     - React
   - RNGestureHandler (1.10.1):
@@ -626,6 +628,7 @@ DEPENDENCIES:
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
+  - RNFileViewer (from `../node_modules/react-native-file-viewer`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
@@ -773,6 +776,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBMessaging:
     :path: "../node_modules/@react-native-firebase/messaging"
+  RNFileViewer:
+    :path: "../node_modules/react-native-file-viewer"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
@@ -874,6 +879,7 @@ SPEC CHECKSUMS:
   RNFastImage: d4870d58f5936111c56218dbd7fcfc18e65b58ff
   RNFBApp: 5f583e80cd7a32621d6057da3b786c4db96f1ef4
   RNFBMessaging: 8cdc29efb1916e27579583c47d8d9634e5b05cb4
+  RNFileViewer: 83cc066ad795b1f986791d03b56fe0ee14b6a69f
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
   RNGestureHandler: 5e58135436aacc1c5d29b75547d3d2b9430d052c
   RNGoogleSignin: 111fd4792913208f338fe3178005f7a22e490ff9

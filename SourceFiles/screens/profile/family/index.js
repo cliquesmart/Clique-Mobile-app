@@ -4,6 +4,9 @@ import {
   Alert,
   FlatList,
   Keyboard,
+  Linking,
+  PermissionsAndroid,
+  Platform,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -28,7 +31,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ValidationMsg from '../../../Constants/ValidationMsg';
 import ImagePicker from 'react-native-image-crop-picker';
 import Webservice from '../../../Constants/API';
-import {showAlert} from '../../../utils/mobile-utils';
+import {renderFileType, showAlert, UPLOAD} from '../../../utils/mobile-utils';
 import LoadingView from '../../../Constants/LoadingView';
 import moment from 'moment';
 import {Modalize} from 'react-native-modalize';
@@ -36,6 +39,8 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DocumentPicker from 'react-native-document-picker';
 import {light} from '../../../components/theme/colors';
 import UploadFile from '../../../components/upload-file';
+import {CommonColors} from '../../../Constants/ColorConstant';
+import UploadImage from '../../../components/upload-image';
 
 const AddFamilyMember = () => {
   const {params} = useRoute();
@@ -50,6 +55,7 @@ const AddFamilyMember = () => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgess] = useState(false);
   const [file, setFile] = useState({});
+  const [files, setFiles] = useState({});
   const [uploadedFiles, setUploadedFiles] = useState(
     strictValidObjectWithKeys(item) &&
       strictValidArrayWithLength(item.uplod_file)
@@ -294,7 +300,17 @@ const AddFamilyMember = () => {
     // Pick a single file
     try {
       const res = await DocumentPicker.pick({
-        type: [DocumentPicker.types.pdf, DocumentPicker.types.allFiles],
+        type: [
+          DocumentPicker.types.csv,
+          DocumentPicker.types.doc,
+          DocumentPicker.types.docx,
+          DocumentPicker.types.images,
+          DocumentPicker.types.pdf,
+          DocumentPicker.types.ppt,
+          DocumentPicker.types.pptx,
+          DocumentPicker.types.xls,
+          DocumentPicker.types.xlsx,
+        ],
       });
 
       if (res.size > '5000000') {
@@ -303,32 +319,6 @@ const AddFamilyMember = () => {
         showAlert('you can upload 5 files at one time');
       } else {
         setFile(res);
-        // const {uri} = res;
-        // const uriParts = uri.split('.');
-        // const filename = uriParts[uriParts.length - 1];
-        // setUploading(true);
-        // const response = await UPLOAD(
-        //   res.name ? res.name : `photo.${filename}`,
-        //   Platform.OS === 'ios' ? res.uri : res.uri,
-        //   res.type,
-        // );
-        // if (response) {
-        //   setUploading(false);
-
-        //   const parsed = JSON.parse(response.data);
-        //   console.log(
-        //     response,
-        //     'respose getting from the backend ====== > ',
-        //     parsed,
-        //   );
-        //   setUploadedFiles((state) => [...state, res]);
-        //   if (strictValidObjectWithKeys(parsed)) {
-        //     setUploadededFiles((prevState) => [
-        //       ...prevState,
-        //       parsed.uplod_file,
-        //     ]);
-        //   }
-        // }
       }
     } catch (err) {
       if (DocumentPicker.isCancel(err)) {
@@ -337,6 +327,160 @@ const AddFamilyMember = () => {
         throw err;
       }
     }
+  };
+
+  // const openCamera = () => {
+  //   launchCamera(
+  //     {
+  //       mediaType: 'photo',
+  //       includeBase64: true,
+  //       quality: 0.7,
+  //     },
+  //     (response) => {
+  //       console.log(JSON.stringify(response));
+
+  //       if (response.didCancel) {
+  //         console.log('User cancelled photo picker');
+  //       } else if (response.errorCode) {
+  //         console.log('ImagePicker Error: ', response.errorCode);
+
+  //         if (response.errorCode == 'permission') {
+  //           alert('Please allow Camera permission from Setting');
+  //         }
+  //       } else if (response.customButton) {
+  //         console.log('User tapped custom button: ', response.customButton);
+  //       } else {
+  //         ImagePicker.openCropper({
+  //           compressImageQuality: 0.7,
+  //           path: response.uri,
+  //           width: 300,
+  //           includeBase64: true,
+  //           cropperCircleOverlay: true,
+  //           height: 300,
+  //         })
+  //           .then(async (res) => {
+  //             var getFilename = res.path.split('/');
+  //             const imgName = getFilename[getFilename.length - 1];
+  //             console.log(imgName, 'path from library');
+  //             console.log(res, 'jkfgsdfysgdyfguydsgfuyfguysdg');
+  //             if (res.size > '5000000') {
+  //               showAlert('you can upload file max 5 mb');
+  //             } else if (uploadedFiles.length >= 5) {
+  //               showAlert('you can upload 5 files at one time');
+  //             } else {
+  //               const response = await UPLOAD(
+  //                 imgName,
+  //                 Platform.OS === 'ios' ? res.path : res.path,
+  //                 res.mime,
+  //               );
+  //               if (response) {
+  //                 const val = await JSON.parse(response.data);
+  //                 console.log(val, response);
+  //                 setUploadedFiles((state) => [
+  //                   ...state,
+  //                   {
+  //                     name: imgName,
+  //                     url: res.path,
+  //                     type: 'jpg',
+  //                   },
+  //                 ]);
+  //                 if (strictValidObjectWithKeys(val)) {
+  //                   setUploadededFiles((prevState) => [
+  //                     ...prevState,
+  //                     val.uplod_file,
+  //                   ]);
+  //                 }
+  //               }
+  //             }
+  //           })
+  //           .catch((e) => {
+  //             // alert(e);
+
+  //             console.log(' Error :=>  ' + e);
+  //           });
+  //       }
+  //     },
+  //   );
+  // };
+
+  const openCamera = () => {
+    launchCamera(
+      {
+        mediaType: 'photo',
+        includeBase64: true,
+        quality: 0.7,
+      },
+      (res) => {
+        if (res.size > '5000000') {
+          showAlert('you can upload file max 5 mb');
+        } else if (uploadedFiles.length >= 5) {
+          showAlert('you can upload 5 files at one time');
+        } else {
+          setFiles(res);
+          console.log(res, 'gallery response');
+        }
+      },
+    );
+  };
+  const requestCameraPermission = async (type) => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: 'Clique App Camera Permission',
+          message:
+            'Clique App App needs access to your camera features ' +
+            'so you can access the camera features.',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        if (type === 'gallery') {
+          openGallery();
+        } else {
+          openCamera();
+        }
+      } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+        console.log('never ask again');
+        showAlert(
+          "You can't acess the camera features. Please give access to Camera service from the app settings",
+        );
+        setTimeout(() => {
+          Linking.openSettings();
+        }, 2000);
+      } else {
+        console.log('never ask again 2');
+        showAlert(
+          "You can't acess the camera features. Please give access to Camera service",
+        );
+        requestCameraPermission();
+        console.log('Location permission denied');
+      }
+    } catch (err) {
+      console.log('never ask again 3', err);
+      console.warn(err);
+    }
+  };
+
+  const openGallery = () => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+        includeBase64: true,
+        quality: 0.7,
+      },
+      (res) => {
+        if (res.size > '5000000') {
+          showAlert('you can upload file max 5 mb');
+        } else if (uploadedFiles.length >= 5) {
+          showAlert('you can upload 5 files at one time');
+        } else {
+          setFiles(res);
+          console.log(res, 'gallery response');
+        }
+      },
+    );
   };
   // console.log(files);
   const onSubmit = (value) => {
@@ -874,7 +1018,7 @@ const AddFamilyMember = () => {
                       )}
                       <Block center flex={false} margin={[hp(1), 0, 0]}>
                         <NeuButton
-                          onPress={() => btnChooseResumeFile('uploaded')}
+                          onPress={() => typeOfAction('uploadFiles')}
                           color="#eef2f9"
                           width={wp(80)}
                           height={hp(5)}
@@ -909,33 +1053,66 @@ const AddFamilyMember = () => {
                             ]);
                           }}
                         />
+                        <UploadImage
+                          file={files}
+                          onProgressChange={(v) => setProgess(v)}
+                          onUploadComplete={(data) => {
+                            console.log(data, 'data');
+                            setUploadedFiles((state) => [...state, files]);
+                            setUploadededFiles((prevState) => [
+                              ...prevState,
+                              data.uplod_file,
+                            ]);
+                          }}
+                        />
                       </Block>
                     </Block>
-                    <FlatList
-                      data={uploadedFiles}
-                      renderItem={({item, index}) => {
-                        return (
-                          <Block
-                            row
-                            space="between"
-                            padding={[hp(0.2), wp(10)]}
-                            flex={false}>
-                            <Text size={14} grey>
-                              {item.name}
-                            </Text>
-                            <TouchableOpacity
-                              onPress={() => removeItemFromArray(index)}>
-                              <ImageComponent
-                                name="close_icon"
-                                height={10}
-                                width={10}
-                                color={light.danger}
-                              />
-                            </TouchableOpacity>
-                          </Block>
-                        );
-                      }}
-                    />
+                    <Block flex={false} padding={[0, wp(8)]}>
+                      <FlatList
+                        data={uploadedFiles}
+                        // horizontal
+                        renderItem={({item, index}) => {
+                          console.log(uploadedFiles, 'item');
+                          return (
+                            <Block
+                              row
+                              center
+                              space="between"
+                              padding={[hp(0.5), wp(2)]}
+                              flex={false}>
+                              <Block
+                                style={{width: wp(70)}}
+                                center
+                                flex={false}
+                                row>
+                                <ImageComponent
+                                  name={renderFileType(item.type)}
+                                  height={25}
+                                  width={25}
+                                  color={CommonColors.gradientEnd}
+                                />
+                                <Text
+                                  numberOfLines={1}
+                                  margin={[0, 0, 0, wp(3)]}
+                                  size={14}
+                                  grey>
+                                  {item.name || item.fileName}
+                                </Text>
+                              </Block>
+                              <TouchableOpacity
+                                onPress={() => removeItemFromArray(index)}>
+                                <ImageComponent
+                                  name="close_icon"
+                                  height={10}
+                                  width={10}
+                                  color={light.danger}
+                                />
+                              </TouchableOpacity>
+                            </Block>
+                          );
+                        }}
+                      />
+                    </Block>
                   </ScrollView>
                   <Block
                     flex={false}
@@ -1280,6 +1457,7 @@ const AddFamilyMember = () => {
                     </Block>
                   </Block>
                 )}
+
                 {action === 'maritial_status' && (
                   <Block flex={false} margin={[hp(1), 0, 0]} padding={[hp(4)]}>
                     <Text
@@ -1332,6 +1510,67 @@ const AddFamilyMember = () => {
                         borderRadius={16}>
                         <Text grey size={14}>
                           Widow
+                        </Text>
+                      </NeuButton>
+                    </Block>
+                  </Block>
+                )}
+                {action === 'uploadFiles' && (
+                  <Block flex={false} margin={[hp(1), 0, 0]} padding={[hp(4)]}>
+                    <Text
+                      semibold
+                      purple
+                      margin={[0, 0, hp(2)]}
+                      size={16}
+                      center>
+                      Choose your suitable option
+                    </Text>
+                    <Block flex={false} margin={[hp(1), 0, 0]} center>
+                      <NeuButton
+                        onPress={() => {
+                          closeModal('male');
+                          Platform.OS === 'ios'
+                            ? openCamera()
+                            : requestCameraPermission('camera');
+                        }}
+                        color="#eef2f9"
+                        width={wp(90)}
+                        height={hp(5)}
+                        borderRadius={16}>
+                        <Text grey size={14}>
+                          Camera
+                        </Text>
+                      </NeuButton>
+                    </Block>
+                    <Block center flex={false} margin={[hp(2), 0, 0]}>
+                      <NeuButton
+                        onPress={() => {
+                          closeModal('female');
+                          Platform.OS === 'ios'
+                            ? openGallery()
+                            : requestCameraPermission('gallery');
+                        }}
+                        color="#eef2f9"
+                        width={wp(90)}
+                        height={hp(5)}
+                        borderRadius={16}>
+                        <Text grey size={14}>
+                          Gallery
+                        </Text>
+                      </NeuButton>
+                    </Block>
+                    <Block center flex={false} margin={[hp(2), 0, 0]}>
+                      <NeuButton
+                        onPress={() => {
+                          closeModal();
+                          btnChooseResumeFile();
+                        }}
+                        color="#eef2f9"
+                        width={wp(90)}
+                        height={hp(5)}
+                        borderRadius={16}>
+                        <Text grey size={14}>
+                          Files
                         </Text>
                       </NeuButton>
                     </Block>

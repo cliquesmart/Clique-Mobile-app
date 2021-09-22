@@ -86,7 +86,7 @@ export default class RegisterProfilePic extends Component {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
         {
-          title: 'Clique App Location Permission',
+          title: 'Clique App Camera Permission',
           message:
             'Clique App App needs access to your camera features ' +
             'so you can access the camera features.',

@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     height:
       Platform.OS === 'ios'
         ? Dimensions.get('screen').height
-        : Dimensions.get('screen').height,
+        : Dimensions.get('window').height,
     width: Dimensions.get('screen').width,
     justifyContent: 'flex-end',
     // backgroundColor: CommonColors.primaryColor,

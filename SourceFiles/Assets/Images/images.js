@@ -78,6 +78,8 @@ export const images = {
   cvv_icon: require('./icons/cvv.png'),
   trash_icon: require('./icons/trash-bin.png'),
   more_icon: require('./icons/vertical-dots.png'),
+  gallery_icon: require('./icons/image-gallery.png'),
+  file_icon: require('./icons/copy.png'),
 
   // Forgot
   forgotBg: require('./forgot/forgot.png'),

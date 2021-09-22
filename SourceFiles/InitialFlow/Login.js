@@ -143,9 +143,11 @@ class Login extends Component {
   }
 
   componentWillUnmount() {
-    appleAuth.onCredentialRevoked(() => {
-      console.log('User auth has been revoked');
-    });
+    if (Platform.OS === 'ios') {
+      appleAuth.onCredentialRevoked(() => {
+        console.log('User auth has been revoked');
+      });
+    }
   }
 
   googleSignOut = async () => {

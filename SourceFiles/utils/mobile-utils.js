@@ -7,6 +7,9 @@ import RNFS from 'react-native-fs';
 import RNFetchBlob from 'rn-fetch-blob';
 import {APIURL} from '../Constants/APIURL';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {light} from '../components/theme/colors';
+import FileViewer from 'react-native-file-viewer';
+
 export const showAlert = (text, color) => {
   Snackbar.show({
     text: text,
@@ -378,13 +381,49 @@ export const UPLOAD = async (fileName, filePath, filetype) => {
     [
       {
         name: 'image',
-        filename: 'image',
-        data: RNFetchBlob.wrap(tempPath),
+        filename: Platform.OS === 'ios' ? 'photo.jpg' : 'photo.jpg',
         type: filetype,
+        data: RNFetchBlob.wrap(tempPath),
       },
     ],
   ).catch((err) => {
     console.log(err, 'err');
   });
   return res;
+};
+
+export const renderFileType = (type) => {
+  switch (type) {
+    case 'image/jpeg':
+      return 'gallery_icon';
+    case 'png':
+      return 'gallery_icon';
+    case 'jpeg':
+      return 'gallery_icon';
+    case 'jpg':
+      return 'gallery_icon';
+    case 'application/pdf':
+      return 'file_icon';
+    case 'pdf':
+      return 'file_icon';
+    default:
+      return 'file_icon';
+  }
+};
+
+export const viewFile = (url, name) => {
+  const localFile = `${RNFS.DocumentDirectoryPath}/${name}`;
+  showAlert('Downloading', light.success);
+  const options = {
+    fromUrl: `${APIURL.ImageUrl}${url}`,
+    toFile: localFile,
+  };
+  RNFS.downloadFile(options)
+    .promise.then(() => FileViewer.open(localFile))
+    .then(() => {
+      showAlert('Success', light.success);
+    })
+    .catch((error) => {
+      showAlert('failed to open file', light.danger);
+    });
 };

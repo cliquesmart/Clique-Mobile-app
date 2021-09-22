@@ -45,6 +45,7 @@
     "react-native-event-listeners": "^1.0.7",
     "react-native-fast-image": "^8.3.4",
     "react-native-fbsdk": "^3.0.0",
+    "react-native-file-viewer": "^2.1.4",
     "react-native-flash-message": "^0.1.23",
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^1.10.1",
