@@ -45,4 +45,6 @@ export const APIURL = {
   AddMember: 'add-member',
   UpdateMember: 'update-member',
   DeleteMember: 'delete-member',
+  UpdatePassword: 'update-password',
+  VerifyForgotDetails: 'verify-forget-password',
 };

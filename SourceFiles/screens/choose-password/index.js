@@ -8,9 +8,8 @@ import {
 } from 'react-native';
 
 //Constant Files
-import {Block, Button, ImageComponent, Input, Text} from '../../components';
+import {Block, Button, ImageComponent, Text} from '../../components';
 import {hp, wp} from '../../components/responsive';
-import LinearGradient from 'react-native-linear-gradient';
 import HeaderPreLogin from '../../common/header';
 import {useNavigation} from '@react-navigation/core';
 import NeoInputField from '../../components/neo-input';
@@ -25,11 +24,6 @@ import NeuView from '../../common/neu-element/lib/NeuView';
 const ChoosePassword = () => {
   const navigation = useNavigation();
   const {params} = useRoute();
-  console.log(params, 'params');
-  const [state, setState] = useState({
-    password: null,
-    confirm_pass: null,
-  });
 
   const onSubmit = (values) => {
     navigation.navigate('RegisterProfilePic', {

@@ -4,31 +4,16 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  Image,
-  BackHandler,
   View,
-  Platform,
 } from 'react-native';
 import {CommonColors} from '../Constants/ColorConstant';
 import LoadingView from '../Constants/LoadingView';
 import Snackbar from 'react-native-snackbar';
-import LinearGradient from 'react-native-linear-gradient';
-import {
-  Block,
-  Button,
-  CustomButton,
-  ImageComponent,
-  Input,
-  Text,
-} from '../components';
+import {Block, Button, ImageComponent, Text} from '../components';
 import {hp, wp} from '../components/responsive';
-import {IMG} from '../Constants/ImageConstant';
 import ValidationMsg from '../Constants/ValidationMsg';
 import HeaderPreLogin from '../common/header';
-import NeuInput from '../common/neu-element/lib/NeuInput';
 import NeoInputField from '../components/neo-input';
-import NeuSpinner from '../common/neu-element/lib/NeuSpinner';
-import NeuProgressBar from '../common/neu-element/lib/NeuProgressBar';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import NeuButton from '../common/neu-element/lib/NeuButton';
 import moment from 'moment';
@@ -229,9 +214,7 @@ export default class RegisterName extends Component {
           </ScrollView>
           <Block flex={false} margin={[0, 0, hp(3), 0]}>
             <Button
-              disabled={
-                !this.state.txtFullName || !this.state.dob || !this.state.gender
-              }
+              disabled={!this.state.txtFullName}
               onPress={() => this.btnNextTap()}
               linear
               color="primary">

@@ -7,10 +7,16 @@ import NeoInputField from '../../../components/neo-input';
 import * as yup from 'yup';
 import {Formik} from 'formik';
 import {t1} from '../../../components/theme/fontsize';
-import {checkColor} from '../../../utils/mobile-utils';
+import {checkColor, showAlert} from '../../../utils/mobile-utils';
 import {renderValidationText} from '../../../utils/constants';
+import {APIURL} from '../../../Constants/APIURL';
+import Webservice from '../../../Constants/API';
+import {useNavigation} from '@react-navigation/core';
 
 const ChangePasswordSettings = () => {
+  const [loading, setloading] = React.useState(false);
+
+  const {goBack} = useNavigation();
   const errorText = (err) => {
     return (
       <Text
@@ -23,7 +29,35 @@ const ChangePasswordSettings = () => {
     );
   };
 
-  const onSubmit = () => {};
+  const onSubmit = (values) => {
+    setloading(true);
+    Webservice.post(APIURL.UpdatePassword, {
+      new_password: values.password,
+      confirm_password: values.confirm_password,
+    })
+      .then(async (response) => {
+        if (response.data == null) {
+          setloading(false);
+          // alert('error');
+          showAlert(response.originalError.message);
+
+          return;
+        }
+
+        if (response.data.status === true) {
+          // setloading(false);
+          goBack();
+          showAlert(response.data.message);
+        } else {
+          setloading(false);
+          showAlert(response.data.message);
+        }
+      })
+      .catch((error) => {
+        setloading(false);
+        showAlert(error.message);
+      });
+  };
   return (
     <Block color="#F2EDFA">
       <SafeAreaView />
@@ -38,7 +72,7 @@ const ChangePasswordSettings = () => {
           password: yup
             .string()
             .required('Please Enter your password')
-            .min(6, 'Password is too short - should be 6 chars minimum.')
+            .min(8, 'Password must be at least 6 characters')
             .matches(
               // eslint-disable-next-line prettier/prettier
               '^(?=.*[a-z])(?=.*[0-9])(?=.{8,})',
@@ -78,7 +112,7 @@ const ChangePasswordSettings = () => {
                 value={values.password}
                 secure
               />
-              {errors.password && errorText(errors.password)}
+              {/* {errors.password && errorText(errors.password)} */}
 
               <Block flex={false} margin={[hp(1), 0]} />
               <NeoInputField
@@ -89,7 +123,7 @@ const ChangePasswordSettings = () => {
                 onChangeText={handleChange('confirm_password')}
                 value={values.confirm_password}
               />
-              {errors.confirm_password && errorText(errors.confirm_password)}
+              {/* {errors.confirm_password && errorText(errors.confirm_password)} */}
             </Block>
             <Block row margin={[hp(1.5), wp(5)]} flex={false}>
               <Text grey size={14}>
@@ -121,6 +155,7 @@ const ChangePasswordSettings = () => {
             <Block padding={[0, wp(3)]}>{renderValidationText()}</Block>
             <Block flex={false} padding={[hp(7), wp(5)]}>
               <Button
+                isLoading={loading}
                 disabled={!isValid || !dirty}
                 onPress={handleSubmit}
                 linear
