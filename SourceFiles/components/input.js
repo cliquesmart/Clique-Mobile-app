@@ -257,35 +257,38 @@ const Input = ({
     );
   }
   return (
-    <Block
-      flex={false}
-      borderRadius={16}
-      borderColor={error ? 'red' : 'transparent'}
-      borderWidth={error ? 1 : 0}
-      margin={[hp(2), 0, 0]}>
-      {renderLabel()}
-      <TextInput
-        placeholder={placeholder}
-        style={inputStyles}
-        secureTextEntry={isSecure}
-        autoComplete="off"
-        autoCapitalize="none"
-        editable={editable}
-        autoCorrect={false}
-        keyboardType={inputType}
-        placeholderTextColor={
-          placeholderTextColor ? placeholderTextColor : '#F2EDFA'
-        }
-        {...rest}
-      />
+    <>
+      <Block
+        flex={false}
+        borderRadius={16}
+        borderColor={error ? 'red' : 'transparent'}
+        borderWidth={error ? 1 : 0}
+        margin={[hp(2), 0, 0]}>
+        {renderLabel()}
+        <TextInput
+          placeholder={placeholder}
+          style={inputStyles}
+          secureTextEntry={isSecure}
+          autoComplete="off"
+          autoCapitalize="none"
+          editable={editable}
+          autoCorrect={false}
+          keyboardType={inputType}
+          placeholderTextColor={
+            placeholderTextColor ? placeholderTextColor : '#F2EDFA'
+          }
+          {...rest}
+        />
+
+        {renderToggle()}
+        {renderRight()}
+      </Block>
       {errorText && error && (
-        <Text size={12} errorColor>
+        <Text white semibold margin={[hp(0.7), wp(2), 0]} size={14}>
           {errorText}
         </Text>
       )}
-      {renderToggle()}
-      {renderRight()}
-    </Block>
+    </>
   );
 };
 

@@ -59,7 +59,7 @@ const componentStyles = () => {
     errorColor: {color: light.warning},
     linkColor: {color: light.link},
     purple: {color: light.purple},
-    red: {color: '#EC5F5F'},
+    red: {color: '#EF0E10'},
     // // fonts
     h1: {fontSize: h1},
     h2: {fontSize: h2},

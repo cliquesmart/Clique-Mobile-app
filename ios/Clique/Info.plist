@@ -50,6 +50,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
 	<string>797151164322896</string>
+	<key>FacebookAutoLogAppEventsEnabled</key>
+	<false/>
 	<key>FacebookClientToken</key>
 	<string>Clique</string>
 	<key>FacebookDisplayName</key>
@@ -123,7 +125,6 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
-		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

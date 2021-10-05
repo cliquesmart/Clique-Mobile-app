@@ -14,7 +14,7 @@ export const light = {
   warning: '#EE3254',
   link: '#0044CC',
   facebook: '#3870DE',
-  danger: '#bb2124',
+  danger: '#EE3254',
   success: '#22bb33',
   pending: '#f0ad4e',
   info: '#aaaaaa',

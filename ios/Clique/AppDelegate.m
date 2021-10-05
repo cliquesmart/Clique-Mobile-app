@@ -73,7 +73,9 @@ static void InitializeFlipper(UIApplication *application) {
    options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
   
-  return [RCTLinkingManager application:application openURL:url options:options];
+  return [[FBSDKApplicationDelegate sharedInstance]application:application
+                                                       openURL:url
+                                                       options:options];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
