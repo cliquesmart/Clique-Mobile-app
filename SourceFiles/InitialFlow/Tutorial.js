@@ -201,8 +201,10 @@ const Tutorial = () => {
     const fcmToken = await messaging().getToken();
     if (fcmToken) {
       console.log('Your Firebase Token is:', fcmToken);
+      AsyncStorage.setItem('token', fcmToken);
     } else {
       console.log('Failed', 'No token received');
+      AsyncStorage.setItem('token', null);
     }
   };
   return (

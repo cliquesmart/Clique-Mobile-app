@@ -22,7 +22,6 @@ import HeaderPreLogin from '../common/header';
 import NeoInputField from '../components/neo-input';
 import {connect} from 'react-redux';
 import NeuView from '../common/neu-element/lib/NeuView';
-import messaging from '@react-native-firebase/messaging';
 
 class RegisterName extends Component {
   constructor(props) {
@@ -56,8 +55,7 @@ class RegisterName extends Component {
   };
 
   createAccount = async () => {
-    const fcmToken = await messaging().getToken();
-
+    const fcmToken = await AsyncStorage.getItem('token');
     this.setState({
       isloading: true,
     });
@@ -69,8 +67,8 @@ class RegisterName extends Component {
       gender: this.props.route.params.gender,
       date_of_birth: this.props.route.params.dob,
       bio: this.state.txtBio,
-      current_lat: this.props.location.latitude,
-      current_long: this.props.location.longitude,
+      current_lat: this.props.location.latitude || 0,
+      current_long: this.props.location.longitude || 0,
       device_token: fcmToken,
     })
       .then(async (response) => {
@@ -130,7 +128,7 @@ class RegisterName extends Component {
   };
 
   btnSkipTap = async () => {
-    const fcmToken = await messaging().getToken();
+    const fcmToken = await AsyncStorage.getItem('token');
     this.setState({
       isloading: true,
     });
@@ -142,8 +140,8 @@ class RegisterName extends Component {
       gender: this.props.route.params.gender,
       date_of_birth: this.props.route.params.dob,
       bio: '',
-      current_lat: this.props.location.latitude,
-      current_long: this.props.location.longitude,
+      current_lat: this.props.location.latitude || 0,
+      current_long: this.props.location.longitude || 0,
       device_token: fcmToken,
     })
       .then(async (response) => {

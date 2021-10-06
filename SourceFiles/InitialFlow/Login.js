@@ -30,7 +30,6 @@ import {
   GraphRequestManager,
 } from 'react-native-fbsdk';
 import {connect} from 'react-redux';
-import messaging from '@react-native-firebase/messaging';
 import {appleAuth} from '@invertase/react-native-apple-authentication';
 import {useNavigation} from '@react-navigation/native';
 let authCredentialListener = null;
@@ -59,17 +58,16 @@ const Login = ({location}) => {
     navigate('RegisterName', {isFromTutorial: false});
   };
 
-  const onSubmit = async (values, formikHelpers) => {
-    console.log(formikHelpers, 'formikHelpers');
-    const fcmToken = await messaging().getToken();
+  const onSubmit = async (values) => {
+    const fcmToken = await AsyncStorage.getItem('token');
     setisloading(true);
 
     Webservice.post(APIURL.userLogin, {
       email: values.email,
       password: values.password,
       social_type: 'N',
-      current_lat: location.latitude,
-      current_long: location.longitude,
+      current_lat: location.latitude || 0,
+      current_long: location.longitude || 0,
       device_token: fcmToken,
     })
       .then(async (response) => {
@@ -147,7 +145,7 @@ const Login = ({location}) => {
   };
 
   const signIn = async () => {
-    const fcmToken = await messaging().getToken();
+    const fcmToken = await AsyncStorage.getItem('token');
     setisloading(true);
     try {
       GoogleSignin.hasPlayServices();
@@ -160,8 +158,8 @@ const Login = ({location}) => {
         email: email,
         avatar: photo || null,
         password: '12345678',
-        current_lat: location.latitude,
-        current_long: location.longitude,
+        current_lat: location.latitude || 0,
+        current_long: location.longitude || 0,
         device_token: fcmToken,
       };
       setisloading(true);
@@ -238,7 +236,7 @@ const Login = ({location}) => {
   };
 
   const fbLogin = async () => {
-    const fcmToken = await messaging().getToken();
+    const fcmToken = await AsyncStorage.getItem('token');
     setisloading(true);
     if (Platform.OS === 'android') {
       LoginManager.setLoginBehavior('web_only');
@@ -265,8 +263,8 @@ const Login = ({location}) => {
                 email: result.email || `${result.id}@facebook.com`,
                 password: '12345678',
                 avatar: result.picture.data.url || null,
-                current_lat: location.latitude,
-                current_long: location.longitude,
+                current_lat: location.latitude || 0,
+                current_long: location.longitude || 0,
                 device_token: fcmToken,
               };
               Webservice.post(APIURL.userLogin, data)
@@ -342,7 +340,7 @@ const Login = ({location}) => {
   };
 
   const onAppleButtonPress = async () => {
-    const fcmToken = await messaging().getToken();
+    const fcmToken = await AsyncStorage.getItem('token');
     // performs login request
     try {
       // performs login request
@@ -375,8 +373,8 @@ const Login = ({location}) => {
               name: response.fullName ? response.fullName.givenName : '-',
               email: response.email ? response.email : '-',
               password: '12345678',
-              current_lat: location.latitude,
-              current_long: location.longitude,
+              current_lat: location.latitude || 0,
+              current_long: location.longitude || 0,
               device_token: fcmToken,
             };
             Webservice.post(APIURL.userLogin, data)
