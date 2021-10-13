@@ -6,10 +6,12 @@ import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
+  Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import HeaderPreLogin from '../../common/header';
 import {Block, Button, ImageComponent, Text} from '../../components';
+import IAPButton from '../../components/iap';
 import NeoInputField from '../../components/neo-input';
 import {hp, wp} from '../../components/responsive';
 import {
@@ -33,7 +35,7 @@ import NeuView from '../../common/neu-element/lib/NeuView';
 
 const Payment = () => {
   const {params} = useRoute();
-  const {title, type, price} = params;
+  const {title, type, price, sku} = params;
   const {goBack, navigate} = useNavigation();
   const formikRef = useRef();
   const [loading, setloading] = useState(false);
@@ -61,6 +63,8 @@ const Payment = () => {
       cvc: cc_cvv,
       amount: price,
       name: values.cc_holder,
+      payment_type: 'S',
+      subscription: type,
     })
       .then(async (response) => {
         if (response.data == null) {
@@ -178,6 +182,10 @@ const Payment = () => {
               '';
             const cardType = getCardType(formattedValue);
             const cardImage = getCardColor(cardType);
+            const buttonTitle =
+              Platform.OS === 'ios'
+                ? 'Pay with Apple Pay'
+                : 'Pay with Google Pay';
             return (
               <>
                 <ScrollView contentContainerStyle={{flexGrow: 1}}>
@@ -269,6 +277,10 @@ const Payment = () => {
                     color="primary">
                     Make Payment
                   </Button>
+                  <Text center margin={[hp(1), 0]} purple semibold>
+                    Or
+                  </Text>
+                  <IAPButton title={buttonTitle} sku={sku} details={params} />
                 </Block>
               </>
             );

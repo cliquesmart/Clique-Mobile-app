@@ -47,6 +47,7 @@
     "react-native-flash-message": "^0.1.23",
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^1.10.1",
+    "react-native-iap": "^6.2.1",
     "react-native-image-crop-picker": "^0.32.2",
     "react-native-image-picker": "^3.2.1",
     "react-native-linear-gradient": "^2.5.6",

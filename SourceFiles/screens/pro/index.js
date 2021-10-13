@@ -3,7 +3,6 @@ import {Block, ImageComponent, Text, Button} from '../../components';
 import {TouchableOpacity, SafeAreaView, ScrollView} from 'react-native';
 import NeuView from '../../common/neu-element/lib/NeuView';
 import {useNavigation} from '@react-navigation/core';
-import {light} from '../../components/theme/colors';
 import {hp, wp} from '../../components/responsive';
 import {t1, t2} from '../../components/theme/fontsize';
 
@@ -81,6 +80,7 @@ const Pro = () => {
                 title: 'Monthly $ 4.99 / month',
                 type: 'Monthly',
                 price: 4.99,
+                sku: 'Clique_Monthly_Plan',
               })
             }
             color="primary">
@@ -91,7 +91,8 @@ const Pro = () => {
               navigate('Payment', {
                 title: 'Yearly $ 3.99 / year (SAVE 20%)',
                 type: 'Yearly',
-                price: 3.99 * 12,
+                price: 47.99,
+                sku: 'Clique_Yearly_Plan',
               })
             }
             color="secondary">
