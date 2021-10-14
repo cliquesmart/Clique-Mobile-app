@@ -86,7 +86,7 @@ const Pro = () => {
             color="primary">
             Monthly $ 4.99 / month
           </Button>
-          <Button
+          {/* <Button
             onPress={() =>
               navigate('Payment', {
                 title: 'Yearly $ 3.99 / year (SAVE 20%)',
@@ -97,6 +97,18 @@ const Pro = () => {
             }
             color="secondary">
             Yearly $ 3.99 / year (SAVE 20%)
+          </Button> */}
+          <Button
+            onPress={() =>
+              navigate('Payment', {
+                title: 'Yearly $47.99 / year (SAVE 20%)',
+                type: 'Yearly',
+                price: 47.99,
+                sku: 'Clique_Yearly_Plan',
+              })
+            }
+            color="secondary">
+            Yearly $47.99 / year (SAVE 20%)
           </Button>
         </Block>
       </ScrollView>
