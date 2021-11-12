@@ -137,7 +137,7 @@ const SwitchNative = (props) => {
   const handleToggle = () => {
     const {onPress} = props;
     const val = !toggleValue;
-    setToggleValue(val);
+    // setToggleValue(val);
     onPress(val);
   };
 

@@ -3,25 +3,23 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   PermissionsAndroid,
   Platform,
   Dimensions,
   Alert,
+  Linking,
 } from 'react-native';
-import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import {Block, ImageComponent} from '../../../components';
 import {hp, wp} from '../../../components/responsive';
 import {useNavigation} from '@react-navigation/core';
 import NeuView from '../../../common/neu-element/lib/NeuView';
 import Geolocation from '@react-native-community/geolocation';
 import {useFocusEffect} from '@react-navigation/native';
-import {users} from '../../../utils/constants';
 import {
   strictValidArrayWithLength,
   strictValidString,
 } from '../../../utils/commonUtils';
-import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Webservice from '../../../Constants/API';
 import {APIURL} from '../../../Constants/APIURL';
@@ -162,8 +160,7 @@ const UserMap = () => {
     );
   };
   const onCenter = (a, b) => {
-    console.log('call');
-    mapRef.current.animateToRegion({
+    mapRef.current?.animateToRegion({
       latitude: a,
       longitude: b,
       latitudeDelta: LATITUDE_DELTA,
@@ -172,26 +169,8 @@ const UserMap = () => {
   };
   return (
     <View style={styles.container}>
-      <MapView
-        ref={mapRef}
-        // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-        style={styles.map}
-        region={location}
-        // showsUserLocation
-        // onRegionChangeComplete={async (coords) => {
-        //   // console.log(coords);
-        //   mapRef.current?.animateCamera(coords);
-        // }}
-      >
+      <MapView ref={mapRef} style={styles.map} region={location}>
         <Marker coordinate={location}>
-          {/* <Block center flex={false}> */}
-          {/* <LottieView
-            style={{height: 70, width: 70}}
-            source={require('../../../Assets/animation.json')}
-            autoPlay
-            loop
-          /> */}
-          {/* </Block> */}
           <ImageComponent name={'current_user_icon'} height={50} width={50} />
         </Marker>
         {strictValidArrayWithLength(arrNearbyPeople) &&

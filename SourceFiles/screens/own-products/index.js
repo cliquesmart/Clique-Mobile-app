@@ -14,11 +14,7 @@ import {hp, wp} from '../../components/responsive';
 import SwitchNative from '../../components/toggle';
 import {light} from '../../components/theme/colors';
 import {useRoute} from '@react-navigation/native';
-import Webservice from '../../Constants/API';
-import {APIURL} from '../../Constants/APIURL';
 import LoadingView from '../../Constants/LoadingView';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {showAlert} from '../../utils/mobile-utils';
 
 const OwnProducts = () => {
   const [activeCard, setActiveCard] = useState(false);

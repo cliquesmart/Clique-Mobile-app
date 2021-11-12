@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Linking, Alert} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+  Alert,
+  Platform,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import Text from '../components/Text';
 import {hp, wp} from '../components/responsive';
@@ -101,11 +108,16 @@ const BottomTab = ({state, descriptors, navigation}) => {
           });
 
           if (!isFocused && !event.defaultPrevented) {
-            if (route.name === 'Pro' && profile.is_pro === '0') {
+            if (
+              route.name === 'Pro' &&
+              profile.is_pro === '0' &&
+              Platform.OS === 'android'
+            ) {
               navigation.navigate('ProCard');
             } else if (
               route.name === 'Nearby' &&
-              profile.is_card_assign === 0
+              profile.is_card_assign === 0 &&
+              Platform.OS === 'android'
             ) {
               Alert.alert(
                 'Info Message',

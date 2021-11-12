@@ -47,4 +47,7 @@ export const APIURL = {
   DeleteMember: 'delete-member',
   UpdatePassword: 'update-password',
   VerifyForgotDetails: 'verify-forget-password',
+  ActiveSocialAccount: 'activeSocialAccount',
+  AssignedCards: 'assigned-cards',
+  ManageCardStatus: 'active-card',
 };

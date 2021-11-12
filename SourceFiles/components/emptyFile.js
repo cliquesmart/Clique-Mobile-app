@@ -1,4 +1,5 @@
 import React from 'react';
+import {ImageComponent} from '.';
 import Block from './Block';
 import Text from './Text';
 import {t2} from './theme/fontsize';

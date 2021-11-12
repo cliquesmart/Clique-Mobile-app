@@ -51,6 +51,7 @@ import messaging from '@react-native-firebase/messaging';
 import {onDisplayNotification} from '../utils/mobile-utils';
 import Splash from '../screens/splash';
 import AddFamilyMember from '../screens/profile/family';
+import CardList from '../screens/settings/card-list';
 
 //Constant Variable for navigation
 const Stack = createStackNavigator();
@@ -208,6 +209,11 @@ function DashboardStack() {
       <Stack.Screen
         name="HelpAndTutorials"
         component={HelpAndTutorials}
+        options={animationOptions}
+      />
+      <Stack.Screen
+        name="CardList"
+        component={CardList}
         options={animationOptions}
       />
       <Stack.Screen

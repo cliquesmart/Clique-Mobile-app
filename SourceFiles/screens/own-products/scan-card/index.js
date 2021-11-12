@@ -85,7 +85,7 @@ const ScanCard = () => {
         console.log('Get Write Card Response : ', response);
 
         if (response.data.status === true) {
-          writeCard();
+          writeCard(card_id);
           showAlert(response.data.message);
           if (params.nfc === true) {
             navigate('ScanTag');
@@ -114,11 +114,11 @@ const ScanCard = () => {
   function buildUrlPayload(valueToWrite) {
     return Ndef.encodeMessage([Ndef.uriRecord(valueToWrite)]);
   }
-  const writeCard = async () => {
+  const writeCard = async (card_id) => {
     const user_id = await AsyncStorage.getItem('custom_id');
     try {
       let bytes = await buildUrlPayload(
-        'http://admin.cliquesocial.co/user/profile/' + user_id,
+        'http://admin.cliquesocial.co/user/profile/' + card_id + '/' + user_id,
       );
       if (bytes) {
         await NfcManager.writeNdefMessage(bytes);

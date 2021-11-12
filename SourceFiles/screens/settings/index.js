@@ -215,8 +215,10 @@ const Settings = () => {
           <Text size={18} margin={[hp(2), 0, 0]} grey semibold>
             Other Settings
           </Text>
+          {renderSelectType('Manage Cards/Tags', 'CardList')}
           {renderSelectType('Change Password', 'ChangePasswordSettings')}
-          {renderSelectType('Help and Tutorials', 'HelpAndTutorials')}
+
+          {/* {renderSelectType('Help and Tutorials', 'HelpAndTutorials')} */}
           <Text size={18} margin={[hp(2), 0, 0]} grey semibold>
             Radius
           </Text>

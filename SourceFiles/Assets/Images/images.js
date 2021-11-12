@@ -80,6 +80,7 @@ export const images = {
   more_icon: require('./icons/vertical-dots.png'),
   gallery_icon: require('./icons/image-gallery.png'),
   file_icon: require('./icons/copy.png'),
+  clique_icon: require('./icons/clique.png'),
 
   // Forgot
   forgotBg: require('./forgot/forgot.png'),

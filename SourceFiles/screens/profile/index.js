@@ -86,47 +86,6 @@ const Profile = () => {
     dispatch(profileRequest(user_id));
   };
 
-  const openPhoneNumber = async (phone) => {
-    let phoneNumber = '';
-    const replacePhone = phone.replace('tel:', '');
-    if (Platform.OS === 'android') {
-      phoneNumber = `tel:${replacePhone}`;
-    } else {
-      phoneNumber = `telprompt:${replacePhone}`;
-    }
-
-    Linking.openURL(phoneNumber);
-  };
-
-  const openUrl = async (url) => {
-    const supported = await Linking.canOpenURL(url);
-    if (supported) {
-      await Linking.openURL(url);
-    } else {
-      Alert.alert(`Don't know how to open this URL: ${url}`);
-    }
-  };
-  const openMessages = async (phone) => {
-    const separator = Platform.OS === 'ios' ? '&' : '?';
-    const url = `sms:${phone}${separator}body=${'Hi'}`;
-
-    Linking.canOpenURL(url)
-      .then((supported) => {
-        if (!supported) {
-          console.log('Unsupported url: ' + url);
-        } else {
-          return Linking.openURL(url);
-        }
-      })
-      .catch((err) => console.error('An error occurred', err));
-  };
-
-  const openFacebook = (url) => {
-    return Linking.openURL(`fb://profile/${url}`).catch(() => {
-      Linking.openURL('https://www.facebook.com/' + url);
-    });
-  };
-
   const getProfile = async (values) => {
     const user_id = await AsyncStorage.getItem('user_id');
     setloading(true);
@@ -174,6 +133,7 @@ const Profile = () => {
     Webservice.post(APIURL.socialIcons, {
       user_id: user_id,
       type: activeOptions,
+      deviceType: Platform.OS === 'ios' ? 'I' : 'A',
     })
       .then(async (response) => {
         if (response.data == null) {
@@ -528,6 +488,34 @@ const Profile = () => {
       </NeuButton>
     );
   };
+
+  const activeSocialAndBusinessIcon = async (values, flagValue) => {
+    setloading(true);
+    Webservice.post(APIURL.ActiveSocialAccount, {
+      id: values,
+    })
+      .then(async (response) => {
+        if (response.data == null) {
+          setloading(false);
+          // alert('error');
+          showAlert(response.originalError.message);
+
+          return;
+        }
+
+        if (response.data.status === true) {
+          // setloading(false);
+          getProfile();
+        } else {
+          setloading(false);
+          showAlert(response.data.message);
+        }
+      })
+      .catch((error) => {
+        setloading(false);
+        Alert.alert(error.message, '', {cancelable: false});
+      });
+  };
   const renderSocialIcons = (data, type) => {
     return (
       <FlatList
@@ -540,19 +528,27 @@ const Profile = () => {
           return (
             <>
               <TouchableOpacity
+                disabled={item.fade_out === 0}
+                onLongPress={() =>
+                  activeSocialAndBusinessIcon(item.id, item.fade_out)
+                }
                 onPress={() => {
                   modalizeRef.current?.open();
                   setAction('open_link');
                   setNewState(item);
                   setField(item.username);
                 }}
-                style={{paddingHorizontal: wp(1), marginTop: hp(2)}}>
+                style={{
+                  paddingHorizontal: wp(1),
+                  marginTop: hp(2),
+                }}>
                 {strictValidObjectWithKeys(item.icone) && (
                   <ImageComponent
                     isURL
                     name={`${APIURL.iconUrl}${item.icone.url}`}
                     height={Platform.OS === 'ios' ? hp(10) : 88}
                     width={Platform.OS === 'ios' ? hp(10) : 88}
+                    styles={item.fade_out === 1 ? {opacity: 1} : {opacity: 0.1}}
                   />
                 )}
               </TouchableOpacity>

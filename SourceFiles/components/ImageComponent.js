@@ -11,6 +11,7 @@ const ImageComponent = ({
   color,
   radius,
   resizeMode,
+  styles,
 }) => {
   return (
     <ResponsiveImage
@@ -18,7 +19,7 @@ const ImageComponent = ({
       initWidth={width}
       initHeight={height}
       borderRadius={radius}
-      style={color && {tintColor: color}}
+      style={[color && {tintColor: color}, {...styles}]}
       resizeMode={resizeMode}
     />
   );
