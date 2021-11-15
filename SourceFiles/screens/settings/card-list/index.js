@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {Alert, FlatList, SafeAreaView} from 'react-native';
 import {Block, ImageComponent, Text} from '../../../components';
 import HeaderSettings from '../../../common/header-setting';
@@ -19,9 +19,6 @@ import {light} from '../../../components/theme/colors';
 const CardList = () => {
   const [loading, setloading] = useState(false);
   const [activeCards, setActiveCards] = useState([]);
-
-  // const value =
-  //   'https://admin.cliquesocial.co/user/profile/049E700A437080/Mzk2';
 
   const changeStatus = async (id) => {
     setloading(true);
