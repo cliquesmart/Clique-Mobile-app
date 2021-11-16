@@ -25,7 +25,7 @@ import RecoverPassword from '../screens/forgot/recover/index';
 
 //Dashborad Flow Files
 import Nearby from '../DashboardFlow/Nearby';
-import UserProfile from '../DashboardFlow/UserProfile';
+import UserProfile from '../screens/user-profile';
 
 import JobDetail from '../DashboardFlow/JobDetail';
 import ChoosePassword from '../screens/choose-password';
@@ -52,6 +52,7 @@ import {onDisplayNotification} from '../utils/mobile-utils';
 import Splash from '../screens/splash';
 import AddFamilyMember from '../screens/profile/family';
 import CardList from '../screens/settings/card-list';
+import ViewProfile from '../screens/view-profile';
 
 //Constant Variable for navigation
 const Stack = createStackNavigator();
@@ -250,6 +251,11 @@ function DashboardStack() {
         options={animationOptions}
         name="ProfileAnalytics"
         component={ProfileAnalytics}
+      />
+      <Stack.Screen
+        name="ViewProfile"
+        component={ViewProfile}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );

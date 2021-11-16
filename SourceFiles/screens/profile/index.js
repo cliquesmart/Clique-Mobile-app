@@ -180,9 +180,28 @@ const Profile = () => {
         space="between"
         flex={false}
         row>
-        <Text white semibold size={18}>
-          {'      '}
-        </Text>
+        <TouchableOpacity
+          onPress={() =>
+            navigate('ViewProfile', {
+              card: true,
+              nfc: false,
+            })
+          }>
+          <NeuView
+            concave
+            color={'#775DF2'}
+            width={40}
+            height={40}
+            borderRadius={20}
+            customGradient={['#5542B6', '#7653DB']}>
+            <ImageComponent
+              resizeMode="contain"
+              height={20}
+              width={20}
+              name={'user_icon'}
+            />
+          </NeuView>
+        </TouchableOpacity>
         <ImageComponent
           resizeMode="contain"
           height={55}

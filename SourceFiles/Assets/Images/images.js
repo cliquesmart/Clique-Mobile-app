@@ -81,6 +81,7 @@ export const images = {
   gallery_icon: require('./icons/image-gallery.png'),
   file_icon: require('./icons/copy.png'),
   clique_icon: require('./icons/clique.png'),
+  user_icon: require('./icons/user.png'),
 
   // Forgot
   forgotBg: require('./forgot/forgot.png'),

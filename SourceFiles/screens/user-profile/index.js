@@ -11,28 +11,28 @@ import {
 } from 'react-native';
 
 //Constants
-import {CommonColors} from '../Constants/ColorConstant';
-import {ConstantKeys} from '../Constants/ConstantKey';
-import {SetFontSize} from '../Constants/FontSize';
-import LoadingView from '../Constants/LoadingView';
-import Webservice from '../Constants/API';
-import {APIURL} from '../Constants/APIURL';
-import ValidationMsg from '../Constants/ValidationMsg';
+import {CommonColors} from '../../Constants/ColorConstant';
+import {ConstantKeys} from '../../Constants/ConstantKey';
+import {SetFontSize} from '../../Constants/FontSize';
+import LoadingView from '../../Constants/LoadingView';
+import Webservice from '../../Constants/API';
+import {APIURL} from '../../Constants/APIURL';
+import ValidationMsg from '../../Constants/ValidationMsg';
 
 //Third Party
 import Snackbar from 'react-native-snackbar';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {Block, Button, ImageComponent, Text} from '../components';
+import {Block, Button, ImageComponent, Text} from '../../components';
 import {
   strictValidArray,
   strictValidObjectWithKeys,
   strictValidString,
-} from '../utils/commonUtils';
-import {hp, wp} from '../components/responsive';
-import NeuView from '../common/neu-element/lib/NeuView';
-import {OpenLinks} from '../utils/mobile-utils';
-import {light} from '../components/theme/colors';
-import NeuButton from '../common/neu-element/lib/NeuButton';
+} from '../../utils/commonUtils';
+import {hp, wp} from '../../components/responsive';
+import NeuView from '../../common/neu-element/lib/NeuView';
+import {OpenLinks} from '../../utils/mobile-utils';
+import {light} from '../../components/theme/colors';
+import NeuButton from '../../common/neu-element/lib/NeuButton';
 
 export default class UserProfile extends Component {
   constructor(props) {
