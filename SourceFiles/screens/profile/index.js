@@ -119,6 +119,7 @@ const Profile = () => {
               text: 'Try Again',
               onPress: () => {
                 getProfile();
+                callProfile();
               },
             },
           ],
@@ -183,8 +184,7 @@ const Profile = () => {
         <TouchableOpacity
           onPress={() =>
             navigate('ViewProfile', {
-              card: true,
-              nfc: false,
+              data: profile,
             })
           }>
           <NeuView
@@ -332,11 +332,10 @@ const Profile = () => {
         </Block>
         <Block flex={false} right>
           <TouchableOpacity
-            onPress={() =>
-              navigate('EditProfile', {
-                profile: profile,
-              })
-            }>
+            onPress={() => {
+              modalizeRef.current?.open();
+              setAction('edit_dialog');
+            }}>
             <NeuView
               concave
               color="#E866B6"
@@ -394,6 +393,8 @@ const Profile = () => {
           showAlert(response.data.message);
           setactiveOptions(type);
           await AsyncStorage.setItem('flag', type);
+          callProfile();
+          getProfile();
         } else {
           setloading(false);
           showAlert(response.data.message);
@@ -525,6 +526,7 @@ const Profile = () => {
         if (response.data.status === true) {
           // setloading(false);
           getProfile();
+          callProfile();
         } else {
           setloading(false);
           showAlert(response.data.message);
@@ -666,6 +668,7 @@ const Profile = () => {
           setFile({});
           modalizeRef.current?.close();
           getProfile();
+          callProfile();
         } else {
           setSocialLoading(false);
           showAlert(response.data.message);
@@ -703,6 +706,7 @@ const Profile = () => {
           setUploadedFiles({});
           modalizeRef.current?.close();
           getProfile();
+          callProfile();
         } else {
           setSocialLoading(false);
           showAlert(response.data.message);
@@ -741,6 +745,7 @@ const Profile = () => {
         if (response.data.status === true) {
           // setloading(false);
           getProfile();
+          callProfile();
           showAlert(response.data.message);
         } else {
           setloading(false);
@@ -943,6 +948,52 @@ const Profile = () => {
         }}
         handleStyle={{backgroundColor: '#6B37C3', marginTop: hp(1)}}
         handlePosition="inside">
+        {action === 'edit_dialog' && (
+          <Block
+            flex={false}
+            margin={[hp(1), 0, 0]}
+            padding={[hp(4), 0, hp(2)]}>
+            <Text semibold purple margin={[0, 0, hp(2)]} size={16} center>
+              Select Action
+            </Text>
+            <Block flex={false} margin={[hp(1), 0, 0]} center>
+              <NeuButton
+                onPress={() => {
+                  modalizeRef.current?.close();
+                  navigate('EditProfile', {
+                    profile: profile,
+                  });
+                }}
+                color="#eef2f9"
+                width={wp(90)}
+                height={hp(5)}
+                // containerStyle={styles.buttonStyle}
+                borderRadius={16}>
+                <Text grey size={14}>
+                  Edit Profile
+                </Text>
+              </NeuButton>
+            </Block>
+            <Block center flex={false} margin={[hp(2), 0, 0]}>
+              <NeuButton
+                onPress={() => {
+                  modalizeRef.current?.close();
+                  navigate('PreviewProfile', {
+                    profile: profile,
+                  });
+                }}
+                color="#6B37C3"
+                width={wp(90)}
+                height={hp(5)}
+                noShadow
+                borderRadius={16}>
+                <Text white size={14}>
+                  View Profile
+                </Text>
+              </NeuButton>
+            </Block>
+          </Block>
+        )}
         {action === 'add_account' && (
           <>
             <CustomButton
@@ -952,23 +1003,8 @@ const Profile = () => {
               }}
               margin={[hp(4), wp(3), 0]}
               flex={false}
-              style={{alignSelf: 'flex-end'}}>
-              {/* <NeuView
-                concave
-                color="#eef2f9"
-                width={40}
-                height={40}
-                borderRadius={20}
-                customGradient={['#FAF8F8', '#DCC8FA']}>
-                <ImageComponent
-                  resizeMode="contain"
-                  height={14}
-                  width={14}
-                  name={'close_icon'}
-                  color={light.purple}
-                />
-              </NeuView> */}
-            </CustomButton>
+              style={{alignSelf: 'flex-end'}}
+            />
             {AddSocialIcons()}
           </>
         )}

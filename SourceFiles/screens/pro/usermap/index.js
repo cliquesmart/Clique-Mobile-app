@@ -31,7 +31,7 @@ const LATITUDE_DELTA = 0.04;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const UserMap = () => {
-  const {goBack} = useNavigation();
+  const {goBack, navigate} = useNavigation();
   const [loading, setLoading] = useState(false);
   const [arrNearbyPeople, setArNearbyPeople] = useState([]);
   const [location, setlocation] = useState({
@@ -43,11 +43,15 @@ const UserMap = () => {
   const mapRef = useRef();
   console.log(arrNearbyPeople, 'arrNearbyPeople');
 
-  useFocusEffect(
-    React.useCallback(() => {
-      requestLocationPermission();
-    }, []),
-  );
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     requestLocationPermission();
+  //   }, []),
+  // );
+
+  useEffect(() => {
+    requestLocationPermission();
+  }, []);
 
   const requestLocationPermission = async () => {
     if (Platform.OS === 'ios') {
@@ -180,7 +184,11 @@ const UserMap = () => {
               longitude: JSON.parse(item.current_long),
             };
             return (
-              <Marker coordinate={marker}>
+              <Marker
+                onPress={() =>
+                  navigate('UserProfile', {profile_id: item.user_id})
+                }
+                coordinate={marker}>
                 {strictValidString(item.avatar) ? (
                   <ImageComponent
                     isURL

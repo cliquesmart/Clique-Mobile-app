@@ -53,6 +53,7 @@ import Splash from '../screens/splash';
 import AddFamilyMember from '../screens/profile/family';
 import CardList from '../screens/settings/card-list';
 import ViewProfile from '../screens/view-profile';
+import PreviewProfile from '../screens/profile/preview';
 
 //Constant Variable for navigation
 const Stack = createStackNavigator();
@@ -138,6 +139,11 @@ function ProStack() {
         options={animationOptions}
         name="AnalyticsView"
         component={AnalyticsView}
+      />
+      <Stack.Screen
+        name="UserProfile"
+        component={UserProfile}
+        options={{headerShown: false}}
       />
     </Stack.Navigator>
   );
@@ -255,6 +261,11 @@ function DashboardStack() {
       <Stack.Screen
         name="ViewProfile"
         component={ViewProfile}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="PreviewProfile"
+        component={PreviewProfile}
         options={{headerShown: false}}
       />
     </Stack.Navigator>
