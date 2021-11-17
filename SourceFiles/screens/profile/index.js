@@ -187,7 +187,8 @@ const Profile = () => {
               data: profile,
             })
           }>
-          <NeuView
+          <Text>{'     '}</Text>
+          {/* <NeuView
             concave
             color={'#775DF2'}
             width={40}
@@ -200,7 +201,7 @@ const Profile = () => {
               width={20}
               name={'user_icon'}
             />
-          </NeuView>
+          </NeuView> */}
         </TouchableOpacity>
         <ImageComponent
           resizeMode="contain"
@@ -281,7 +282,12 @@ const Profile = () => {
         <Block center flex={false} row>
           {strictValidObjectWithKeys(profile) &&
           strictValidString(profile.avatar) ? (
-            <Block
+            <CustomButton
+              onPress={() => {
+                navigate('PreviewProfile', {
+                  profile: profile,
+                });
+              }}
               flex={false}
               borderWidth={3}
               borderRadius={80}
@@ -293,7 +299,7 @@ const Profile = () => {
                 width={80}
                 radius={80}
               />
-            </Block>
+            </CustomButton>
           ) : (
             <ImageComponent name="demouser" height={100} width={100} />
           )}
@@ -333,8 +339,9 @@ const Profile = () => {
         <Block flex={false} right>
           <TouchableOpacity
             onPress={() => {
-              modalizeRef.current?.open();
-              setAction('edit_dialog');
+              navigate('EditProfile', {
+                profile: profile,
+              });
             }}>
             <NeuView
               concave
@@ -393,8 +400,8 @@ const Profile = () => {
           showAlert(response.data.message);
           setactiveOptions(type);
           await AsyncStorage.setItem('flag', type);
-          callProfile();
-          getProfile();
+          // callProfile();
+          // getProfile();
         } else {
           setloading(false);
           showAlert(response.data.message);
@@ -948,52 +955,6 @@ const Profile = () => {
         }}
         handleStyle={{backgroundColor: '#6B37C3', marginTop: hp(1)}}
         handlePosition="inside">
-        {action === 'edit_dialog' && (
-          <Block
-            flex={false}
-            margin={[hp(1), 0, 0]}
-            padding={[hp(4), 0, hp(2)]}>
-            <Text semibold purple margin={[0, 0, hp(2)]} size={16} center>
-              Select Action
-            </Text>
-            <Block flex={false} margin={[hp(1), 0, 0]} center>
-              <NeuButton
-                onPress={() => {
-                  modalizeRef.current?.close();
-                  navigate('EditProfile', {
-                    profile: profile,
-                  });
-                }}
-                color="#eef2f9"
-                width={wp(90)}
-                height={hp(5)}
-                // containerStyle={styles.buttonStyle}
-                borderRadius={16}>
-                <Text grey size={14}>
-                  Edit Profile
-                </Text>
-              </NeuButton>
-            </Block>
-            <Block center flex={false} margin={[hp(2), 0, 0]}>
-              <NeuButton
-                onPress={() => {
-                  modalizeRef.current?.close();
-                  navigate('PreviewProfile', {
-                    profile: profile,
-                  });
-                }}
-                color="#6B37C3"
-                width={wp(90)}
-                height={hp(5)}
-                noShadow
-                borderRadius={16}>
-                <Text white size={14}>
-                  View Profile
-                </Text>
-              </NeuButton>
-            </Block>
-          </Block>
-        )}
         {action === 'add_account' && (
           <>
             <CustomButton

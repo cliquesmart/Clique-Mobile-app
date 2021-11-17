@@ -262,22 +262,29 @@ export default class UserProfile extends Component {
   renderProfile = () => {
     return (
       <Block margin={[0, wp(3), hp(2)]} center flex={false} row>
-        {strictValidObjectWithKeys(this.state.profileData) &&
-          strictValidString(this.state.profileData.avatar) && (
-            <Block
-              flex={false}
-              borderWidth={3}
-              borderRadius={80}
-              borderColor={'#fff'}>
-              <ImageComponent
-                isURL
-                name={`${APIURL.ImageUrl}${this.state.profileData.avatar}`}
-                height={80}
-                width={80}
-                radius={80}
-              />
-            </Block>
-          )}
+        <TouchableOpacity
+          onPress={() => {
+            this.props.navigation.navigate('PreviewProfile', {
+              profile: this.state.profileData,
+            });
+          }}>
+          {strictValidObjectWithKeys(this.state.profileData) &&
+            strictValidString(this.state.profileData.avatar) && (
+              <Block
+                flex={false}
+                borderWidth={3}
+                borderRadius={80}
+                borderColor={'#fff'}>
+                <ImageComponent
+                  isURL
+                  name={`${APIURL.ImageUrl}${this.state.profileData.avatar}`}
+                  height={80}
+                  width={80}
+                  radius={80}
+                />
+              </Block>
+            )}
+        </TouchableOpacity>
         <Block margin={[0, 0, 0, wp(3)]} flex={false}>
           <Text capitalize white bold size={24}>
             {strictValidObjectWithKeys(this.state.profileData) &&

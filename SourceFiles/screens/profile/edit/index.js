@@ -359,10 +359,6 @@ const EditProfile = () => {
 
         if (response.data.status === true) {
           setDeleteSocialLoading(false);
-          // setIcons(response.data.data);
-          // setAction('');
-          // setField('');
-          // getProfile();
           goBack();
         } else {
           setDeleteSocialLoading(false);
@@ -442,7 +438,10 @@ const EditProfile = () => {
         <StatusBar barStyle="light-content" />
         <SafeAreaView />
         {renderHeader()}
-        <ScrollView contentContainerStyle={styles.container} bounces={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.container}
+          bounces={false}>
           <Block
             style={{flexGrow: 1}}
             borderTopLeftRadius={20}

@@ -40,7 +40,6 @@ const IAPButton = ({sku, style, title, details}) => {
       });
       const products = await getProducts(productIds);
       const subscription = await getSubscriptions(productIds);
-      console.log(products, subscription, 'subscription', productIds);
       if (strictValidArrayWithLength(products)) {
         setProductINP(products[0]);
       } else if (strictValidArrayWithLength(subscription)) {
@@ -57,10 +56,8 @@ const IAPButton = ({sku, style, title, details}) => {
 
   const processNewPurchase = async (purchase) => {
     const {transactionReceipt, productId, transactionId} = purchase;
-    console.log(purchase, 'purchase');
     const user_id = await AsyncStorage.getItem('user_id');
     if (transactionReceipt !== undefined && sku === productId) {
-      console.log(transactionReceipt, 'transactionReceipt');
       setLoading(false);
       Webservice.post(APIURL.makePayment, {
         user_id: user_id,

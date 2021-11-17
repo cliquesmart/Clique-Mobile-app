@@ -50,7 +50,6 @@ const UploadFile = ({
     }
   }, [progress]);
   const upload = async (index = 0) => {
-    console.log(files, 'files');
     if (strictValidArrayWithLength(files)) {
       const file = files[index];
       const {uri} = file;

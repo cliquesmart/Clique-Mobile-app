@@ -50,7 +50,6 @@ const UploadImage = ({
     }
   }, [progress]);
   const upload = async (index = 0) => {
-    console.log(files, 'files-image');
     if (strictValidArrayWithLength(files)) {
       const file = files[index];
       // var getFilename = res.path.split('/');
