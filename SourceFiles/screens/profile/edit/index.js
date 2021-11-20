@@ -2,7 +2,6 @@ import React, {useRef, useState} from 'react';
 import {
   Alert,
   FlatList,
-  Image,
   Platform,
   SafeAreaView,
   ScrollView,
@@ -10,13 +9,12 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import {Block, Text, ImageComponent, Button} from '../../../components';
 import {hp, wp} from '../../../components/responsive';
 import NeuView from '../../../common/neu-element/lib/NeuView';
 import NeuButton from '../../../common/neu-element/lib/NeuButton';
 import NeuInput from '../../../common/neu-element/lib/NeuInput';
-import {useNavigation, useRoute} from '@react-navigation/core';
+import {useFocusEffect, useNavigation, useRoute} from '@react-navigation/core';
 import {
   strictValidArray,
   strictValidObjectWithKeys,
@@ -30,27 +28,52 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Webservice from '../../../Constants/API';
 import {showAlert} from '../../../utils/mobile-utils';
 import LoadingView from '../../../Constants/LoadingView';
-import Slider from '@react-native-community/slider';
-import {CommonColors} from '../../../Constants/ColorConstant';
 import moment from 'moment';
 import {Modalize} from 'react-native-modalize';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {useDispatch, useSelector} from 'react-redux';
+import {profileRequest} from '../action';
 
 const EditProfile = () => {
-  const {params} = useRoute();
-  const {profile} = params;
+  const dispatch = useDispatch();
+  const [profile, profileLoading] = useSelector((v) => [
+    v.profile.data,
+    v.profile.loading,
+  ]);
   const [activeOptions, setactiveOptions] = useState('social');
   const {goBack} = useNavigation();
-  const [name, setName] = useState(profile.name || '');
-  const [company, setcompany] = useState(profile.bio || '');
-  const [email, setEmail] = useState(profile.email || '');
-  const [dob, setDob] = useState(profile.date_of_birth || '');
-  const [gender, setGender] = useState(profile.gender || '');
+  const [name, setName] = useState(
+    (strictValidObjectWithKeys(profile) && profile.name) || '',
+  );
+  const [company, setcompany] = useState(
+    (strictValidObjectWithKeys(profile) && profile.bio) || '',
+  );
+  const [email, setEmail] = useState(
+    (strictValidObjectWithKeys(profile) && profile.email) || '',
+  );
+  const [dob, setDob] = useState(
+    (strictValidObjectWithKeys(profile) && profile.date_of_birth) || '',
+  );
+  const [gender, setGender] = useState(
+    (strictValidObjectWithKeys(profile) && profile.gender) || '',
+  );
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
   const modalizeRef = useRef();
   const [profileImage, setProfileImage] = useState('');
   const [loading, setloading] = useState(false);
   const [deleteSocialLoading, setDeleteSocialLoading] = useState(false);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      callProfile();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
+  const callProfile = async () => {
+    const user_id = await AsyncStorage.getItem('user_id');
+    dispatch(profileRequest(user_id));
+  };
+
   const submitadata = async (values) => {
     const user_id = await AsyncStorage.getItem('user_id');
     setloading(true);
@@ -109,8 +132,8 @@ const EditProfile = () => {
                 } else if (response.errorCode) {
                   console.log('ImagePicker Error: ', response.errorCode);
 
-                  if (response.errorCode == 'permission') {
-                    alert('Please allow Camera permission from Setting');
+                  if (response.errorCode === 'permission') {
+                    showAlert('Please allow Camera permission from Setting');
                   }
                 } else if (response.customButton) {
                   console.log(
@@ -162,8 +185,8 @@ const EditProfile = () => {
                 } else if (response.errorCode) {
                   console.log('ImagePicker Error: ', response.error);
 
-                  if (response.errorCode == 'permission') {
-                    alert('Please allow Camera permission from Setting');
+                  if (response.errorCode === 'permission') {
+                    showAlert('Please allow Camera permission from Setting');
                   }
                 } else if (response.customButton) {
                   console.log(
@@ -261,10 +284,7 @@ const EditProfile = () => {
         />
         <TouchableOpacity
           onPress={() => btnSelectImage()}
-          style={{
-            position: 'absolute',
-            top: 0,
-          }}>
+          style={styles.editIcon}>
           <NeuView color="#F2F0F7" height={30} width={30} borderRadius={30}>
             <ImageComponent
               resizeMode="contain"
@@ -340,7 +360,7 @@ const EditProfile = () => {
       </Block>
     );
   };
-  const deleteSocialAccount = async (data) => {
+  const deleteId = async (data) => {
     const user_id = await AsyncStorage.getItem('user_id');
     setDeleteSocialLoading(true);
     Webservice.post(APIURL.socialIcons, {
@@ -359,7 +379,7 @@ const EditProfile = () => {
 
         if (response.data.status === true) {
           setDeleteSocialLoading(false);
-          goBack();
+          callProfile();
         } else {
           setDeleteSocialLoading(false);
           showAlert(response.data.message);
@@ -369,6 +389,25 @@ const EditProfile = () => {
         setDeleteSocialLoading(false);
         showAlert(error.message);
       });
+  };
+
+  const deleteSocialAccount = (data) => {
+    Alert.alert(
+      'Info Message',
+      'Are you sure you want to delete this social account?',
+      [
+        {
+          text: 'No',
+          style: 'cancel',
+        },
+        {
+          text: 'Yes',
+          onPress: () => {
+            deleteId(data);
+          },
+        },
+      ],
+    );
   };
 
   const fomatDOB = (a) => {
@@ -435,8 +474,10 @@ const EditProfile = () => {
   return (
     <>
       <Block linear>
+        {profileLoading && <LoadingView />}
         <StatusBar barStyle="light-content" />
         <SafeAreaView />
+
         {renderHeader()}
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -481,7 +522,7 @@ const EditProfile = () => {
             </Block>
             <Block center flex={false} margin={[hp(1), 0]}>
               <NeuButton
-                onPress={() => setIsDatePickerVisible(true)}
+                onPress={() => showDatePicker()}
                 color="#eef2f9"
                 width={wp(80)}
                 height={hp(5)}
@@ -685,6 +726,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: wp(2),
     flexDirection: 'row',
+  },
+  editIcon: {
+    position: 'absolute',
+    top: 0,
   },
 });
 export default EditProfile;

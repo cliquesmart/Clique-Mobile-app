@@ -20,6 +20,7 @@ export default class LoadingView extends Component {
           alignItems: 'center',
           justifyContent: 'center',
           position: 'absolute',
+          zIndex: 1000,
         }}>
         <View
           style={{
