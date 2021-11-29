@@ -187,21 +187,17 @@ const Profile = () => {
               data: profile,
             })
           }>
-          <Text>{'     '}</Text>
-          {/* <NeuView
+          <NeuView
             concave
             color={'#775DF2'}
-            width={40}
+            width={80}
             height={40}
             borderRadius={20}
             customGradient={['#5542B6', '#7653DB']}>
-            <ImageComponent
-              resizeMode="contain"
-              height={20}
-              width={20}
-              name={'user_icon'}
-            />
-          </NeuView> */}
+            <Text semibold white size={14}>
+              Preview
+            </Text>
+          </NeuView>
         </TouchableOpacity>
         <ImageComponent
           resizeMode="contain"
@@ -400,7 +396,7 @@ const Profile = () => {
           showAlert(response.data.message);
           setactiveOptions(type);
           await AsyncStorage.setItem('flag', type);
-          // callProfile();
+          callProfile();
           // getProfile();
         } else {
           setloading(false);

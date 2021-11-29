@@ -34,10 +34,16 @@ import {OpenLinks} from '../../utils/mobile-utils';
 import {light} from '../../components/theme/colors';
 import NeuButton from '../../common/neu-element/lib/NeuButton';
 import {useNavigation, useRoute} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
+import EmptyFile from '../../components/emptyFile';
 const UserProfile = () => {
   const [activeOptions, setActiveOptions] = useState('social');
   const {params} = useRoute();
-  const [profileData, setProfileData] = useState(params.data);
+  // const [profileData, setProfileData] = useState(params.data);
+  const [profileData, loading] = useSelector((v) => [
+    v.profile.data,
+    v.profile.loading,
+  ]);
   const {navigate, goBack} = useNavigation();
   const showAlert = (text) => {
     Snackbar.show({
@@ -126,18 +132,20 @@ const UserProfile = () => {
         renderItem={({item}) => {
           return (
             <>
-              <TouchableOpacity
-                onPress={() => OpenLinks(item.icone.name, item.username)}
-                style={{paddingHorizontal: wp(1), marginTop: hp(2)}}>
-                {strictValidObjectWithKeys(item.icone) && (
-                  <ImageComponent
-                    isURL
-                    name={`${APIURL.iconUrl}${item.icone.url}`}
-                    height={Platform.OS === 'ios' ? hp(10) : 67}
-                    width={Platform.OS === 'ios' ? hp(10) : 67}
-                  />
-                )}
-              </TouchableOpacity>
+              {item.fade_out === 1 && (
+                <TouchableOpacity
+                  onPress={() => OpenLinks(item.icone.name, item.username)}
+                  style={{paddingHorizontal: wp(1), marginTop: hp(2)}}>
+                  {strictValidObjectWithKeys(item.icone) && (
+                    <ImageComponent
+                      isURL
+                      name={`${APIURL.iconUrl}${item.icone.url}`}
+                      height={Platform.OS === 'ios' ? hp(10) : 67}
+                      width={Platform.OS === 'ios' ? hp(10) : 67}
+                    />
+                  )}
+                </TouchableOpacity>
+              )}
             </>
           );
         }}
@@ -239,6 +247,11 @@ const UserProfile = () => {
               {strictValidObjectWithKeys(profileData) &&
                 strictValidArray(profileData.business) &&
                 renderSocialIcons(profileData.business, 'business')}
+            </>
+          )}
+          {profileData.account_flag === 'hospital' && (
+            <>
+              <EmptyFile text="No Contact's Found" />
             </>
           )}
         </ScrollView>
