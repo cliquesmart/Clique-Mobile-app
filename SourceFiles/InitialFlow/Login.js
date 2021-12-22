@@ -115,14 +115,16 @@ const Login = ({location}) => {
   };
 
   useEffect(() => {
-    authCredentialListener = appleAuth.onCredentialRevoked(async () => {
-      //user credentials have been revoked. Sign out of account
-    });
-    return () => {
-      if (authCredentialListener.remove !== undefined) {
-        authCredentialListener.remove();
-      }
-    };
+    if (Platform.OS === 'ios') {
+      authCredentialListener = appleAuth.onCredentialRevoked(async () => {
+        //user credentials have been revoked. Sign out of account
+      });
+      return () => {
+        if (authCredentialListener.remove !== undefined) {
+          authCredentialListener.remove();
+        }
+      };
+    }
   }, []);
 
   useEffect(() => {
