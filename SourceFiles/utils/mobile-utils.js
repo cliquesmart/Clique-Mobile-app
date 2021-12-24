@@ -237,10 +237,12 @@ export const OpenLinks = (item, url) => {
       }
     } else if (item === 'Whatsapp') {
       Linking.openURL('https://wa.me/' + `+91${url}`);
+    } else if (item === 'Paypal') {
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      }
+      Linking.openURL('https://www.paypal.me/' + url);
     }
-    //  else if (item === 'Paypal') {
-    //   Linking.openURL('paypal://' + url);
-    // }
     // else if (item === 'Amazon music') {
     //   Linking.openURL('https://www.primevideo.com/' + url);
     // }

@@ -7,7 +7,6 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   TouchableOpacity,
   ImageBackground,
   SectionList,
@@ -38,13 +37,13 @@ import {
   strictValidString,
 } from '../../utils/commonUtils';
 import {t2} from '../../components/theme/fontsize';
-import {light} from '../../components/theme/colors';
 import {profileRequest} from './action';
 import {useDispatch} from 'react-redux';
 import Neomorph from '../../common/shadow-src/Neomorph';
 import {CommonColors} from '../../Constants/ColorConstant';
 import DocumentPicker from 'react-native-document-picker';
 import UploadFile from '../../components/upload-file';
+import {styles} from './profile-style';
 
 const Profile = () => {
   const {navigate} = useNavigation();
@@ -67,7 +66,6 @@ const Profile = () => {
     const val = (await AsyncStorage.getItem('flag')) || profile.account_flag;
     setactiveOptions(val);
   };
-  console.log(uploadedFiles, 'uploadedFiles', file);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -103,6 +101,10 @@ const Profile = () => {
 
         if (response.data.status === true) {
           setloading(false);
+          await AsyncStorage.setItem(
+            'flag',
+            response.data.data.user.account_flag,
+          );
           setprofile(response.data.data.user);
         } else {
           setloading(false);
@@ -173,6 +175,26 @@ const Profile = () => {
         );
       });
   };
+
+  const openPreview = () => {
+    if (strictValidObjectWithKeys(profile.activeAccount)) {
+      if (profile.activeAccount.icone.name === 'File') {
+        viewFile(
+          profile.activeAccount.username,
+          profile.activeAccount.username.substring(14),
+        );
+      } else {
+        OpenLinks(
+          profile.activeAccount.icone.name,
+          profile.activeAccount.username,
+        );
+      }
+    } else {
+      navigate('ViewProfile', {
+        data: profile,
+      });
+    }
+  };
   const renderHeader = () => {
     return (
       <Block
@@ -181,30 +203,27 @@ const Profile = () => {
         space="between"
         flex={false}
         row>
-        <TouchableOpacity
-          onPress={() =>
-            navigate('ViewProfile', {
-              data: profile,
-            })
-          }>
+        <TouchableOpacity onPress={() => openPreview()}>
           <NeuView
             concave
             color={'#775DF2'}
-            width={80}
+            width={70}
             height={40}
             borderRadius={20}
             customGradient={['#5542B6', '#7653DB']}>
-            <Text semibold white size={14}>
+            <Text semibold white size={12}>
               Preview
             </Text>
           </NeuView>
         </TouchableOpacity>
-        <ImageComponent
-          resizeMode="contain"
-          height={55}
-          width={159}
-          name={'nameBg'}
-        />
+        <Block flex={false} margin={[0, wp(4), 0, 0]}>
+          <ImageComponent
+            resizeMode="contain"
+            height={55}
+            width={159}
+            name={'nameBg'}
+          />
+        </Block>
         <TouchableOpacity
           onPress={() =>
             navigate('ScanCard', {
@@ -299,7 +318,7 @@ const Profile = () => {
           ) : (
             <ImageComponent name="demouser" height={100} width={100} />
           )}
-          <Block margin={[0, 0, 0, wp(3)]} flex={false}>
+          <Block style={{width: wp(55)}} margin={[0, 0, 0, wp(3)]} flex={false}>
             <Block center flex={false} row>
               <Text margin={[0, wp(2), 0, 0]} capitalize white bold size={24}>
                 {strictValidObjectWithKeys(profile) && profile.name}
@@ -378,7 +397,7 @@ const Profile = () => {
     );
   };
   const activeFlagValue = async (type) => {
-    setloading(true);
+    // setloading(true);
     Webservice.post(APIURL.flagValue, {
       flag: type,
     })
@@ -652,6 +671,8 @@ const Profile = () => {
       id: data.id,
       type: activeOptions,
       link: field,
+      action: 'add',
+      socialId: 0,
     })
       .then(async (response) => {
         if (response.data == null) {
@@ -690,6 +711,8 @@ const Profile = () => {
       id: data.icone_id,
       type: activeOptions,
       link: field,
+      action: 'update',
+      socialId: data.id,
     })
       .then(async (response) => {
         if (response.data == null) {
@@ -797,12 +820,7 @@ const Profile = () => {
                 <Neomorph
                   style={[
                     styles.neoSubContainer,
-                    item.by_default === 1
-                      ? {
-                          borderWidth: 1.5,
-                          borderColor: CommonColors.gradientEnd,
-                        }
-                      : {},
+                    item.by_default === 1 ? styles.activeHospital : {},
                   ]}>
                   <Block
                     space="between"
@@ -933,9 +951,9 @@ const Profile = () => {
       </Block>
       <Modalize
         adjustToContentHeight={action === 'add_account' ? !toggle : toggle}
-        overlayStyle={{backgroundColor: 'rgba(72, 30, 140,0.7)'}}
+        overlayStyle={styles.overlayStyle}
         tapGestureEnabled={false}
-        modalStyle={[{backgroundColor: '#F2F0F7'}]}
+        modalStyle={styles.modalStyle}
         scrollViewProps={{
           scrollEnabled: true,
           showsVerticalScrollIndicator: false,
@@ -949,7 +967,7 @@ const Profile = () => {
           setField('');
           setUploadedFiles({});
         }}
-        handleStyle={{backgroundColor: '#6B37C3', marginTop: hp(1)}}
+        handleStyle={styles.handleStyle}
         handlePosition="inside">
         {action === 'add_account' && (
           <>
@@ -960,7 +978,7 @@ const Profile = () => {
               }}
               margin={[hp(4), wp(3), 0]}
               flex={false}
-              style={{alignSelf: 'flex-end'}}
+              style={styles.flexEnd}
             />
             {AddSocialIcons()}
           </>
@@ -1031,7 +1049,6 @@ const Profile = () => {
                       file={file}
                       onProgressChange={(v) => console.log(v)}
                       onUploadComplete={(data) => {
-                        console.log(data, 'data');
                         setUploadedFiles(file);
                         setField(data.uplod_file);
                       }}
@@ -1191,7 +1208,6 @@ const Profile = () => {
                       file={file}
                       onProgressChange={(v) => console.log(v)}
                       onUploadComplete={(data) => {
-                        console.log(data, 'data');
                         setUploadedFiles(file);
                         setField(data.uplod_file);
                       }}
@@ -1211,16 +1227,7 @@ const Profile = () => {
                     )}
                   </>
                 )}
-                {/* {strictValidObjectWithKeys(newState.icone) && (
-                  <NeoInputField
-                    placeholder={`${newState.icone.name} account`}
-                    fontColor="#707070"
-                    icon=""
-                    width={70}
-                    onChangeText={(a) => setField(a)}
-                    value={field}
-                  />
-                )} */}
+
                 {strictValidObjectWithKeys(newState.icone) &&
                 newState.icone.name === 'File' ? (
                   <>
@@ -1274,63 +1281,4 @@ const Profile = () => {
     </Block>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    marginBottom: hp(3),
-  },
-  linear: {
-    height: 40,
-    width: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 20,
-  },
-  neomorphStyle: {
-    width: 150,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  activeNeomorph: {
-    borderRadius: 10,
-    shadowRadius: 6,
-    backgroundColor: '#F2F0F7',
-    padding: hp(1),
-  },
-  inactiveText: {
-    width: wp(20),
-  },
-  containerStyle: {
-    alignItems: 'center',
-  },
-  neoContainer: {
-    flexDirection: 'row',
-  },
-  bgImage: {
-    height: Platform.OS === 'ios' ? hp(8) : 62,
-    width: Platform.OS === 'ios' ? hp(8) : 62,
-  },
-  pro: {position: 'absolute', right: -10, top: -15, zIndex: 99},
-  socialIcons: {
-    flexGrow: 1,
-    paddingHorizontal: wp(1),
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  buttonStyle: {
-    justifyContent: 'space-between',
-    paddingHorizontal: wp(2),
-    flexDirection: 'row',
-  },
-  neoSubContainer: {
-    shadowRadius: 3,
-    backgroundColor: '#F2F0F7',
-    width: wp(90),
-    height: Platform.OS === 'ios' ? hp(10) : hp(12),
-    marginTop: Platform.OS === 'ios' ? hp(1) : hp(2.5),
-    borderRadius: 10,
-  },
-});
 export default Profile;

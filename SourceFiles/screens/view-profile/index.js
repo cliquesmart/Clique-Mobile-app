@@ -1,12 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  Alert,
   ScrollView,
-  Linking,
   Platform,
 } from 'react-native';
 
@@ -14,51 +12,23 @@ import {
 import {CommonColors} from '../../Constants/ColorConstant';
 import {ConstantKeys} from '../../Constants/ConstantKey';
 import {SetFontSize} from '../../Constants/FontSize';
-import LoadingView from '../../Constants/LoadingView';
-import Webservice from '../../Constants/API';
 import {APIURL} from '../../Constants/APIURL';
-import ValidationMsg from '../../Constants/ValidationMsg';
-
-//Third Party
-import Snackbar from 'react-native-snackbar';
-import Clipboard from '@react-native-clipboard/clipboard';
-import {Block, Button, ImageComponent, Text} from '../../components';
+import {Block, ImageComponent, Text} from '../../components';
 import {
-  strictValidArray,
+  strictValidArrayWithLength,
   strictValidObjectWithKeys,
   strictValidString,
 } from '../../utils/commonUtils';
 import {hp, wp} from '../../components/responsive';
 import NeuView from '../../common/neu-element/lib/NeuView';
 import {OpenLinks} from '../../utils/mobile-utils';
-import {light} from '../../components/theme/colors';
-import NeuButton from '../../common/neu-element/lib/NeuButton';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import EmptyFile from '../../components/emptyFile';
 const UserProfile = () => {
-  const [activeOptions, setActiveOptions] = useState('social');
-  const {params} = useRoute();
-  // const [profileData, setProfileData] = useState(params.data);
-  const [profileData, loading] = useSelector((v) => [
-    v.profile.data,
-    v.profile.loading,
-  ]);
-  const {navigate, goBack} = useNavigation();
-  const showAlert = (text) => {
-    Snackbar.show({
-      text: text,
-      backgroundColor: CommonColors.errorColor,
-      textColor: CommonColors.whiteColor,
-      // fontFamily: ConstantKeys.Averta_BOLD,
-      duration: Snackbar.LENGTH_LONG,
-    });
-  };
-  const btnBackTap = () => {
-    requestAnimationFrame(() => {
-      goBack();
-    });
-  };
+  const [profileData] = useSelector((v) => [v.profile.data]);
+  const {goBack} = useNavigation();
+
   const renderHeader = () => {
     return (
       <Block center padding={[hp(2), wp(3)]} space="between" flex={false} row>
@@ -152,69 +122,7 @@ const UserProfile = () => {
       />
     );
   };
-  const renderOptions = () => {
-    return (
-      <Block middle center margin={[hp(2), 0]} flex={false}>
-        <NeuView
-          color="#F2F0F7"
-          height={hp(5)}
-          width={wp(45)}
-          borderRadius={16}
-          containerStyle={styles.neoContainer}
-          inset>
-          {activeOptions === 'social' ? (
-            <NeuButton
-              color="#F2F0F7"
-              width={wp(20)}
-              height={hp(3.5)}
-              style={{marginHorizontal: wp(2)}}
-              borderRadius={6}>
-              <Text semibold purple size={13}>
-                Social
-              </Text>
-            </NeuButton>
-          ) : (
-            <Text
-              style={[styles.inactiveText, {marginRight: wp(1)}]}
-              onPress={() => this.setActiveState('social')}
-              grey
-              regular
-              center
-              size={13}>
-              Social
-            </Text>
-          )}
-          {activeOptions === 'business' ? (
-            <NeuButton
-              color="#F2F0F7"
-              width={wp(20)}
-              height={hp(3.5)}
-              style={{marginRight: wp(2)}}
-              borderRadius={6}>
-              <Text
-                semibold
-                onPress={() => this.setActiveState('business')}
-                purple
-                center
-                size={13}>
-                Business
-              </Text>
-            </NeuButton>
-          ) : (
-            <Text
-              style={[styles.inactiveText]}
-              onPress={() => this.setActiveState('business')}
-              grey
-              regular
-              center
-              size={13}>
-              Business
-            </Text>
-          )}
-        </NeuView>
-      </Block>
-    );
-  };
+
   return (
     <Block linear>
       {console.log(profileData, 'profileData')}
@@ -237,21 +145,27 @@ const UserProfile = () => {
           {profileData.account_flag === 'social' && (
             <>
               {strictValidObjectWithKeys(profileData) &&
-                strictValidArray(profileData.social) &&
-                renderSocialIcons(profileData.social, 'social')}
+              strictValidArrayWithLength(profileData.social) ? (
+                renderSocialIcons(profileData.social, 'social')
+              ) : (
+                <EmptyFile text="Social Contact's not found" />
+              )}
             </>
           )}
 
           {profileData.account_flag === 'business' && (
             <>
               {strictValidObjectWithKeys(profileData) &&
-                strictValidArray(profileData.business) &&
-                renderSocialIcons(profileData.business, 'business')}
+              strictValidArrayWithLength(profileData.business) ? (
+                renderSocialIcons(profileData.business, 'business')
+              ) : (
+                <EmptyFile text="Business Contact's not found" />
+              )}
             </>
           )}
           {profileData.account_flag === 'hospital' && (
             <>
-              <EmptyFile text="No Contact's Found" />
+              <EmptyFile text="Contact's not found" />
             </>
           )}
         </ScrollView>
