@@ -617,19 +617,21 @@ const Profile = () => {
                           }
                         }}
                         style={{paddingHorizontal: wp(1), marginTop: hp(2)}}>
-                        <ImageBackground
-                          source={{uri: `${APIURL.iconUrl}${item.url}`}}
-                          style={styles.bgImage}>
-                          {item.is_pro === '1' && (
-                            <Block style={styles.pro}>
-                              <ImageComponent
-                                name={'pro_icon'}
-                                height={40}
-                                width={40}
-                              />
-                            </Block>
-                          )}
-                        </ImageBackground>
+                        <ImageComponent
+                          isURL
+                          name={`${APIURL.iconUrl}${item.url}`}
+                          height={68}
+                          width={68}
+                        />
+                        {item.is_pro === '1' && (
+                          <Block style={styles.pro}>
+                            <ImageComponent
+                              name={'pro_icon'}
+                              height={40}
+                              width={40}
+                            />
+                          </Block>
+                        )}
                       </TouchableOpacity>
                     </>
                   );
@@ -1309,8 +1311,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   bgImage: {
-    height: Platform.OS === 'ios' ? hp(8) : 62,
-    width: Platform.OS === 'ios' ? hp(8) : 62,
+    height: Platform.OS === 'ios' ? hp(9.5) : 62,
+    width: Platform.OS === 'ios' ? hp(9.5) : 62,
   },
   pro: {position: 'absolute', right: -10, top: -15, zIndex: 99},
   socialIcons: {
