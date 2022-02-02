@@ -10,7 +10,6 @@ import {
   FlatList,
   RefreshControl,
   TouchableOpacity,
-  Linking,
 } from 'react-native';
 import {useSelector} from 'react-redux';
 import {Block, Text, ImageComponent, CustomButton} from '../components';
@@ -23,7 +22,6 @@ import {
   strictValidObjectWithKeys,
   strictValidString,
 } from '../utils/commonUtils';
-import * as Animatable from 'react-native-animatable';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Geolocation from '@react-native-community/geolocation';
@@ -243,66 +241,6 @@ const Nearby = () => {
     );
   };
 
-  const renderProfile = () => {
-    return (
-      // <Block center middle>
-      //   <Animatable.View
-      //     animation={logoanimation2}
-      //     delay={2000}
-      //     duration={2000}
-      //     iterationCount="infinite"
-      //     style={styles.animation4}
-      //     easing={easing}>
-      //     <Animatable.View
-      //       animation={logoanimation2}
-      //       delay={2000}
-      //       duration={2000}
-      //       iterationCount="infinite"
-      //       style={styles.animation}
-      //       easing={easing}>
-      //       <Animatable.View
-      //         animation={logoanimation2}
-      //         delay={2000}
-      //         duration={2000}
-      //         iterationCount="infinite"
-      //         style={styles.animation1}
-      //         easing={easing}>
-      //         <Animatable.View
-      //           animation={logoanimation2}
-      //           delay={2000}
-      //           duration={2000}
-      //           iterationCount="infinite"
-      //           style={styles.animation2}
-      //           easing={easing}>
-      //           <Animatable.View
-      //             animation={logoanimation2}
-      //             delay={2000}
-      //             duration={2000}
-      //             iterationCount="infinite"
-      //             style={styles.animation3}
-      //             easing={easing}>
-      //             <ImageComponent
-      //               isURL
-      //               name={`${APIURL.ImageUrl}${profile.avatar}`}
-      //               height={130}
-      //               width={130}
-      //               radius={130}
-      //             />
-      //           </Animatable.View>
-      //         </Animatable.View>
-      //       </Animatable.View>
-      //     </Animatable.View>
-      //   </Animatable.View>
-      // </Block>
-      <Block center flex={false}>
-        <LottieView
-          source={require('../Assets/animation.json')}
-          autoPlay
-          loop
-        />
-      </Block>
-    );
-  };
   return (
     <>
       <SafeAreaView style={styles.container}>
@@ -380,7 +318,12 @@ const Nearby = () => {
                       }}
                       resizeMode={FastImage.resizeMode.cover}
                     />
-                    <Text size={16} purple semibold margin={[hp(1.5), 0, 0]}>
+                    <Text
+                      center
+                      size={16}
+                      purple
+                      semibold
+                      margin={[hp(1.5), 0, 0]}>
                       {item.name}
                     </Text>
                   </NeuView>

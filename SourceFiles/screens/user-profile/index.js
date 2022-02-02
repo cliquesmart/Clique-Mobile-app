@@ -294,11 +294,9 @@ export default class UserProfile extends Component {
             strictValidString(this.state.profileData.bio) && (
               <Text
                 style={{width: wp(55)}}
-                capitalize
                 margin={[hp(0.5), 0, 0]}
                 size={14}
                 white
-                numberOfLines={3}
                 regular>
                 {this.state.profileData.bio}
               </Text>

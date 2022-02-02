@@ -96,4 +96,15 @@ export const images = {
   CameraIcon: require('./OtherImages/ic_camera.png'),
 
   splash: require('./icons/splash.gif'),
+
+  whatsapp: require('./clique-icone/whatsapp.png'),
+  tiktok: require('./clique-icone/tiktok.png'),
+  sound_cloud: require('./clique-icone/sound_cloud.png'),
+  pinterest: require('./clique-icone/pinterest.png'),
+  twitter: require('./clique-icone/group5419.png'),
+  facebook: require('./clique-icone/group5418.png'),
+  spotify_icon: require('./clique-icone/group5417.png'),
+  linkedin: require('./clique-icone/group5412.png'),
+  instagram_icon: require('./clique-icone/group5410.png'),
+  youtube: require('./clique-icone/group5408.png'),
 };

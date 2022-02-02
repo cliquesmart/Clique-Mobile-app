@@ -1,6 +1,7 @@
 import {Block, Text} from '../components';
 import {hp, wp} from '../components/responsive';
 import React from 'react';
+import {images} from '../Assets/Images/images';
 export const neomorph = {
   borderRadius: 20,
   shadowRadius: 100,
@@ -67,5 +68,48 @@ export const users = [
   {
     longitude: 76.768656,
     latitude: 30.732078,
+  },
+];
+
+export const IconsData = [
+  {
+    icon: 'whatsapp',
+    title: 'Whatsapp',
+  },
+  {
+    icon: 'tiktok',
+    title: 'tiktok',
+  },
+  {
+    icon: 'sound_cloud',
+    title: 'sound cloud',
+  },
+  {
+    icon: 'pinterest',
+    title: 'pinterest',
+  },
+  {
+    icon: 'twitter',
+    title: 'twitter',
+  },
+  {
+    icon: 'facebook',
+    title: 'facebook',
+  },
+  {
+    icon: 'spotify_icon',
+    title: 'spotify',
+  },
+  {
+    icon: 'linkedin',
+    title: 'linkedin',
+  },
+  {
+    icon: 'instagram_icon',
+    title: 'instagram',
+  },
+  {
+    icon: 'youtube',
+    title: 'youtube',
   },
 ];

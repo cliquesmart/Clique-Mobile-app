@@ -19,4 +19,6 @@ export const light = {
   pending: '#f0ad4e',
   info: '#aaaaaa',
   purple: 'rgb(111,58,200)',
+  gradientStart: '#E866B6',
+  gradientEnd: '#6961FF',
 };

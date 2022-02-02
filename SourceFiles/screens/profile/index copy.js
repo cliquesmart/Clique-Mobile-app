@@ -44,9 +44,6 @@ import {CommonColors} from '../../Constants/ColorConstant';
 import DocumentPicker from 'react-native-document-picker';
 import UploadFile from '../../components/upload-file';
 import {styles} from './profile-style';
-import {IconsData} from '../../utils/constants';
-import SwitchNative from '../../components/toggle';
-import {light} from '../../components/theme/colors';
 
 const Profile = () => {
   const {navigate} = useNavigation();
@@ -565,73 +562,39 @@ const Profile = () => {
     return (
       <FlatList
         ListFooterComponent={_renderFooter(type)}
-        // contentContainerStyle={styles.socialIcons}
-        // numColumns={4}
-        // bounces={false}
-        data={IconsData}
+        contentContainerStyle={styles.socialIcons}
+        numColumns={4}
+        bounces={false}
+        data={data}
         renderItem={({item}) => {
           return (
-            <Block
-              flex={false}
-              color="#F2F0F7"
-              margin={[hp(1), wp(3)]}
-              shadow
-              borderRadius={10}
-              padding={[hp(1.5)]}>
+            <>
               <TouchableOpacity
-                // disabled={item.fade_out === 0}
-                // onLongPress={() =>
-                //   activeSocialAndBusinessIcon(item.id, item.fade_out)
-                // }
+                disabled={item.fade_out === 0}
+                onLongPress={() =>
+                  activeSocialAndBusinessIcon(item.id, item.fade_out)
+                }
                 onPress={() => {
-                  // modalizeRef.current?.open();
-                  // setAction('open_link');
-                  // setNewState(item);
-                  // setField(item.username);
+                  modalizeRef.current?.open();
+                  setAction('open_link');
+                  setNewState(item);
+                  setField(item.username);
                 }}
-                style={
-                  {
-                    // paddingHorizontal: wp(1),
-                    // marginTop: hp(2),
-                  }
-                }>
-                {/* {strictValidObjectWithKeys(item.icone) && ( */}
-                <Block flex={false} row center space="between">
-                  <Block row flex={false} center>
-                    <ImageComponent
-                      // isURL
-                      name={item.icon}
-                      // name={`${APIURL.iconUrl}${item.icone.url}`}
-                      height={70}
-                      width={70}
-                      radius={20}
-                      // styles={item.fade_out === 1 ? {opacity: 1} : {opacity: 0.1}}
-                    />
-                    <Text
-                      capitalize
-                      semibold
-                      grey
-                      size={18}
-                      margin={[0, wp(3)]}>
-                      {item.title}
-                    </Text>
-                  </Block>
-                  <SwitchNative
-                    activeColor="red"
-                    value={
-                      item.title === 'Whatsapp' || item.title === 'sound cloud'
-                        ? true
-                        : false
-                    }
-                    // onPress={(newState) => manageStatus(item.id, newState)}
-                    trackBarStyle={trackBar}
-                    trackBar={track}
-                    thumbButton={thumbButton}
+                style={{
+                  paddingHorizontal: wp(1),
+                  marginTop: hp(2),
+                }}>
+                {strictValidObjectWithKeys(item.icone) && (
+                  <ImageComponent
+                    isURL
+                    name={`${APIURL.iconUrl}${item.icone.url}`}
+                    height={Platform.OS === 'ios' ? hp(10) : 88}
+                    width={Platform.OS === 'ios' ? hp(10) : 88}
+                    styles={item.fade_out === 1 ? {opacity: 1} : {opacity: 0.1}}
                   />
-                </Block>
-                {/* )} */}
+                )}
               </TouchableOpacity>
-            </Block>
+            </>
           );
         }}
       />
@@ -1318,28 +1281,5 @@ const Profile = () => {
       {loading || socialLoading ? <LoadingView /> : null}
     </Block>
   );
-};
-
-const trackBar = {
-  borderColor: '#fff',
-  width: 62,
-  height: 35,
-  inActiveBackgroundColor: light.purple,
-  activeBackgroundColor: '#E9E6ED',
-};
-const track = {
-  borderWidth: 2,
-  activeBackgroundColor: light.purple,
-  inActiveBackgroundColor: '#E9E6ED',
-  width: 60,
-};
-
-const thumbButton = {
-  width: 29,
-  height: 28,
-  radius: 30,
-  activeBackgroundColor: '#fff',
-  inActiveBackgroundColor: '#fff',
-  marginLeft: 10,
 };
 export default Profile;
