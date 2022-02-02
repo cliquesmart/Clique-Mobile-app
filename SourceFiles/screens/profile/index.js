@@ -520,16 +520,21 @@ const Profile = () => {
   };
   const _renderFooter = (type) => {
     return (
-      <NeuButton
-        onPress={() => onOpen(type)}
-        active
-        color="#eef2f9"
-        height={hp(9.3)}
-        width={wp(19.3)}
-        borderRadius={16}
-        style={{marginHorizontal: wp(1.5), marginTop: hp(2.5)}}>
-        <ImageComponent name="add_icon" height={25} width={25} />
-      </NeuButton>
+      // <NeuButton
+      //   onPress={() => onOpen(type)}
+      //   active
+      //   color="#eef2f9"
+      //   height={hp(6)}
+      //   width={wp(90)}
+      //   borderRadius={16}
+      //   style={{marginHorizontal: wp(1.5), marginTop: hp(2.5)}}>
+      //   <ImageComponent name="add_icon" height={25} width={25} />
+      // </NeuButton>
+      <Block flex={false}>
+        <Button onPress={() => onOpen(type)} linear color="primary">
+          Add Icon
+        </Button>
+      </Block>
     );
   };
 
@@ -565,11 +570,9 @@ const Profile = () => {
     return (
       <FlatList
         ListFooterComponent={_renderFooter(type)}
-        // contentContainerStyle={styles.socialIcons}
-        // numColumns={4}
-        // bounces={false}
-        data={IconsData}
+        data={data}
         renderItem={({item}) => {
+          console.log(item, 'item');
           return (
             <Block
               flex={false}
@@ -579,15 +582,12 @@ const Profile = () => {
               borderRadius={10}
               padding={[hp(1.5)]}>
               <TouchableOpacity
-                // disabled={item.fade_out === 0}
-                // onLongPress={() =>
-                //   activeSocialAndBusinessIcon(item.id, item.fade_out)
-                // }
+                disabled={item.fade_out === 0}
                 onPress={() => {
-                  // modalizeRef.current?.open();
-                  // setAction('open_link');
-                  // setNewState(item);
-                  // setField(item.username);
+                  modalizeRef.current?.open();
+                  setAction('open_link');
+                  setNewState(item);
+                  setField(item.username);
                 }}
                 style={
                   {
@@ -595,41 +595,46 @@ const Profile = () => {
                     // marginTop: hp(2),
                   }
                 }>
-                {/* {strictValidObjectWithKeys(item.icone) && ( */}
-                <Block flex={false} row center space="between">
-                  <Block row flex={false} center>
-                    <ImageComponent
-                      // isURL
-                      name={item.icon}
-                      // name={`${APIURL.iconUrl}${item.icone.url}`}
-                      height={70}
-                      width={70}
-                      radius={20}
-                      // styles={item.fade_out === 1 ? {opacity: 1} : {opacity: 0.1}}
+                {console.log(
+                  `${APIURL.iconUrl}${item.icone.url}`,
+                  item.icone.name,
+                )}
+                {strictValidObjectWithKeys(item.icone) && (
+                  <Block
+                    style={item.opacity === 1 ? {opacity: 1} : {opacity: 0.1}}
+                    flex={false}
+                    row
+                    center
+                    space="between">
+                    <Block row flex={false} center>
+                      <ImageComponent
+                        isURL
+                        name={`${APIURL.iconUrl}${item.icone.url}`}
+                        height={50}
+                        width={50}
+                        radius={20}
+                      />
+                      <Text
+                        capitalize
+                        semibold
+                        grey
+                        size={18}
+                        margin={[0, wp(3)]}>
+                        {item.icone.name}
+                      </Text>
+                    </Block>
+                    <SwitchNative
+                      activeColor="red"
+                      value={item.fade_out === 1 ? true : false}
+                      onPress={(newState) => {
+                        activeSocialAndBusinessIcon(item.id, item.fade_out);
+                      }}
+                      trackBarStyle={trackBar}
+                      trackBar={track}
+                      thumbButton={thumbButton}
                     />
-                    <Text
-                      capitalize
-                      semibold
-                      grey
-                      size={18}
-                      margin={[0, wp(3)]}>
-                      {item.title}
-                    </Text>
                   </Block>
-                  <SwitchNative
-                    activeColor="red"
-                    value={
-                      item.title === 'Whatsapp' || item.title === 'sound cloud'
-                        ? true
-                        : false
-                    }
-                    // onPress={(newState) => manageStatus(item.id, newState)}
-                    trackBarStyle={trackBar}
-                    trackBar={track}
-                    thumbButton={thumbButton}
-                  />
-                </Block>
-                {/* )} */}
+                )}
               </TouchableOpacity>
             </Block>
           );

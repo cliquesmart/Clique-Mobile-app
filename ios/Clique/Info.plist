@@ -48,6 +48,8 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>CodePushDeploymentKey</key>
+	<string>RwAplARxSf7sCFLuq_5wpEPKD7CJf-B64Q0rf</string>
 	<key>FacebookAppID</key>
 	<string>797151164322896</string>
 	<key>FacebookAutoLogAppEventsEnabled</key>
@@ -103,7 +105,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) requires to access your camera to show image on profile </string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) want to use your location when clocking in and out. Clocking in through nearby feature may be rejected if location information is not provided.</string>
+	<string>$(PRODUCT_NAME) want to use your location when clocking in and out.Clocking in through nearby feature may be rejected if location information is not provided.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>$(PRODUCT_NAME) want to use your location when clocking in and out. Clocking in through nearby feature may be rejected if location information is not provided.</string>
 	<key>NSLocationUsageDescription</key>
