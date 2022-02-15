@@ -517,16 +517,21 @@ const Profile = () => {
   };
   const _renderFooter = (type) => {
     return (
-      <NeuButton
-        onPress={() => onOpen(type)}
-        active
-        color="#eef2f9"
-        height={hp(9.3)}
-        width={wp(19.3)}
-        borderRadius={16}
-        style={{marginHorizontal: wp(1.5), marginTop: hp(2.5)}}>
-        <ImageComponent name="add_icon" height={25} width={25} />
-      </NeuButton>
+      // <NeuButton
+      //   onPress={() => onOpen(type)}
+      //   active
+      //   color="#eef2f9"
+      //   height={hp(6)}
+      //   width={wp(90)}
+      //   borderRadius={16}
+      //   style={{marginHorizontal: wp(1.5), marginTop: hp(2.5)}}>
+      //   <ImageComponent name="add_icon" height={25} width={25} />
+      // </NeuButton>
+      <Block flex={false}>
+        <Button onPress={() => onOpen(type)} linear color="primary">
+          Add Icon
+        </Button>
+      </Block>
     );
   };
 
@@ -567,6 +572,7 @@ const Profile = () => {
         bounces={false}
         data={data}
         renderItem={({item}) => {
+          console.log(item, 'item');
           return (
             <>
               <TouchableOpacity

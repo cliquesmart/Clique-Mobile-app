@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "app-build": "cd android && ./gradlew clean && cd .. && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && cd android && ./gradlew assembleDebug"
+    "app-build": "cd android && ./gradlew clean && cd .. && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && cd android && ./gradlew assembleDebug",
+    "code-push:ios ": "appcenter codepush release-react -a bharatsoftelevation-gmail.com/Clique-IOS -d Production"
   },
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^2.1.4",
@@ -39,6 +40,7 @@
     "react-native-animatable": "^1.3.3",
     "react-native-app-intro-slider": "^4.0.4",
     "react-native-chart-kit": "^6.11.0",
+    "react-native-code-push": "^7.0.4",
     "react-native-document-picker": "^5.2.0",
     "react-native-event-listeners": "^1.0.7",
     "react-native-fast-image": "^8.3.4",
