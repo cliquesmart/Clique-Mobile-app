@@ -331,6 +331,36 @@ export const OpenLinks = (item, url) => {
       } else {
         Linking.openURL('https://gpay.app.goo.gl/9i2F');
       }
+    } else if (item === 'Open Sea') {
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://opensea.io/' + url);
+      }
+    } else if (item === 'Magic Eden') {
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://magiceden.io/marketplace/' + url);
+      }
+    } else if (item === 'Telegram') {
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://t.me/' + url);
+      }
+    } else if (item === 'Discord') {
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://discordapp.com/users/' + url);
+      }
+    } else if (item === 'Audius') {
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://audius.co/' + url);
+      }
     } else {
       if (url.includes('https' && 'http')) {
         Linking.canOpenURL(url)
