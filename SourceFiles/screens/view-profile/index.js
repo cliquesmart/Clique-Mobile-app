@@ -83,7 +83,6 @@ const UserProfile = () => {
                 margin={[hp(0.5), 0, 0]}
                 size={14}
                 white
-                numberOfLines={3}
                 regular>
                 {profileData.bio}
               </Text>
@@ -105,13 +104,13 @@ const UserProfile = () => {
               {item.fade_out === 1 && (
                 <TouchableOpacity
                   onPress={() => OpenLinks(item.icone.name, item.username)}
-                  style={{paddingHorizontal: wp(1), marginTop: hp(2)}}>
+                  style={{paddingHorizontal: wp(2), marginTop: hp(2)}}>
                   {strictValidObjectWithKeys(item.icone) && (
                     <ImageComponent
                       isURL
                       name={`${APIURL.iconUrl}${item.icone.url}`}
-                      height={Platform.OS === 'ios' ? hp(10) : 67}
-                      width={Platform.OS === 'ios' ? hp(10) : 67}
+                      height={Platform.OS === 'ios' ? hp(9) : 67}
+                      width={Platform.OS === 'ios' ? hp(9) : 67}
                     />
                   )}
                 </TouchableOpacity>

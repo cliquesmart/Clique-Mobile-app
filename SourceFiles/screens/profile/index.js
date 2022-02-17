@@ -397,6 +397,7 @@ const Profile = () => {
   };
   const activeFlagValue = async (type) => {
     // setloading(true);
+    setactiveOptions(type);
     Webservice.post(APIURL.flagValue, {
       flag: type,
     })
@@ -412,7 +413,7 @@ const Profile = () => {
         if (response.data.status === true) {
           setloading(false);
           showAlert(response.data.message);
-          setactiveOptions(type);
+
           await AsyncStorage.setItem('flag', type);
           callProfile();
           // getProfile();
@@ -521,10 +522,10 @@ const Profile = () => {
         onPress={() => onOpen(type)}
         active
         color="#eef2f9"
-        height={hp(9.3)}
-        width={wp(19.3)}
+        height={hp(8.5)}
+        width={hp(8.5)}
         borderRadius={16}
-        style={{marginHorizontal: wp(1.5), marginTop: hp(2.5)}}>
+        style={{marginHorizontal: wp(2), marginTop: hp(2.5)}}>
         <ImageComponent name="add_icon" height={25} width={25} />
       </NeuButton>
     );
@@ -567,7 +568,6 @@ const Profile = () => {
         bounces={false}
         data={data}
         renderItem={({item}) => {
-          console.log(item, 'item');
           return (
             <>
               <TouchableOpacity
@@ -582,15 +582,16 @@ const Profile = () => {
                   setField(item.username);
                 }}
                 style={{
-                  paddingHorizontal: wp(1),
+                  paddingHorizontal: wp(2),
                   marginTop: hp(2),
                 }}>
                 {strictValidObjectWithKeys(item.icone) && (
                   <ImageComponent
                     isURL
                     name={`${APIURL.iconUrl}${item.icone.url}`}
-                    height={Platform.OS === 'ios' ? hp(10) : 88}
-                    width={Platform.OS === 'ios' ? hp(10) : 88}
+                    height={Platform.OS === 'ios' ? hp(9) : 88}
+                    width={Platform.OS === 'ios' ? hp(9) : 88}
+                    radius={20}
                     styles={item.fade_out === 1 ? {opacity: 1} : {opacity: 0.1}}
                   />
                 )}
@@ -619,7 +620,7 @@ const Profile = () => {
             </Text>
             {strictValidArrayWithLength(section.data) && (
               <FlatList
-                numColumns={5}
+                numColumns={4}
                 data={section.data}
                 renderItem={({item}) => {
                   return (
@@ -635,12 +636,13 @@ const Profile = () => {
                             setNewState(item);
                           }
                         }}
-                        style={{paddingHorizontal: wp(1), marginTop: hp(2)}}>
+                        style={{paddingHorizontal: wp(2), marginTop: hp(2)}}>
                         <ImageComponent
                           isURL
                           name={`${APIURL.iconUrl}${item.url}`}
-                          height={68}
-                          width={68}
+                          height={hp(9)}
+                          width={hp(9)}
+                          radius={20}
                         />
                         {item.is_pro === '1' && (
                           <Block style={styles.pro}>
