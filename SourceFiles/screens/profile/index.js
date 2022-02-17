@@ -995,6 +995,7 @@ const Profile = () => {
                 name={`${APIURL.iconUrl}${newState.url}`}
                 height={95}
                 width={95}
+                radius={20}
               />
               <Text capitalize purple semibold margin={[hp(1), 0]}>
                 {newState.name}
@@ -1148,6 +1149,7 @@ const Profile = () => {
                   name={`${APIURL.iconUrl}${newState.icone.url}`}
                   height={95}
                   width={95}
+                  radius={20}
                 />
               )}
               {strictValidObjectWithKeys(newState.icone) && (

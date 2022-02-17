@@ -111,6 +111,7 @@ const UserProfile = () => {
                       name={`${APIURL.iconUrl}${item.icone.url}`}
                       height={Platform.OS === 'ios' ? hp(9) : 67}
                       width={Platform.OS === 'ios' ? hp(9) : 67}
+                      radius={20}
                     />
                   )}
                 </TouchableOpacity>
