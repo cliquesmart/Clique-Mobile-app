@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint .",
     "app-build": "cd android && ./gradlew clean && cd .. && react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && cd android && ./gradlew assembleDebug",
-    "code-push:ios ": "appcenter codepush release-react -a bharatsoftelevation-gmail.com/Clique-IOS -d Production"
+    "code-push:ios ": "appcenter codepush release-react -a bharatsoftelevation-gmail.com/Clique-IOS -d Production",
+    "code-push:android": "appcenter codepush release-react -a bharatsoftelevation-gmail.com/Clique-Android -d Production"
   },
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^2.1.4",

@@ -368,13 +368,14 @@ export default class UserProfile extends Component {
             <>
               <TouchableOpacity
                 onPress={() => OpenLinks(item.icone.name, item.username)}
-                style={{paddingHorizontal: wp(1), marginTop: hp(2)}}>
+                style={{paddingHorizontal: wp(1.5), marginTop: hp(2)}}>
                 {strictValidObjectWithKeys(item.icone) && (
                   <ImageComponent
                     isURL
                     name={`${APIURL.iconUrl}${item.icone.url}`}
-                    height={Platform.OS === 'ios' ? hp(10) : 67}
-                    width={Platform.OS === 'ios' ? hp(10) : 67}
+                    height={Platform.OS === 'ios' ? hp(9) : hp(11)}
+                    width={Platform.OS === 'ios' ? hp(9) : hp(11)}
+                    radius={20}
                   />
                 )}
               </TouchableOpacity>

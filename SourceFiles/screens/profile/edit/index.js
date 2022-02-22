@@ -438,15 +438,15 @@ const EditProfile = () => {
           return (
             <>
               <Block
-                style={{paddingHorizontal: wp(1), marginTop: hp(2)}}
+                style={{paddingHorizontal: wp(1.5), marginTop: hp(2)}}
                 flex={false}
                 row>
                 {strictValidObjectWithKeys(item.icone) && (
                   <ImageComponent
                     isURL
                     name={`${APIURL.iconUrl}${item.icone.url}`}
-                    height={Platform.OS === 'ios' ? 85 : 80}
-                    width={Platform.OS === 'ios' ? 85 : 80}
+                    height={Platform.OS === 'ios' ? hp(9) : hp(10.5)}
+                    width={Platform.OS === 'ios' ? hp(9) : hp(10.5)}
                     resizeMode="contain"
                   />
                 )}

@@ -2,4 +2,7 @@
     <string name="app_name">Clique</string>
     <string name="facebook_app_id">797151164322896</string>
     <string name="facebook_client_token">Clique</string>
+    <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true" translatable="false">DO_NOT_ASK_JAVASCRIPT</string>
+    <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true" translatable="false">ALWAYS_SEND</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">3Fg5iZdACN4HRyEFmCJ4x2TiE8S5OZr1ChCGU</string>
 </resources>

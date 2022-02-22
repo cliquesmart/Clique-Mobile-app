@@ -109,8 +109,8 @@ const UserProfile = () => {
                     <ImageComponent
                       isURL
                       name={`${APIURL.iconUrl}${item.icone.url}`}
-                      height={Platform.OS === 'ios' ? hp(9) : 67}
-                      width={Platform.OS === 'ios' ? hp(9) : 67}
+                      height={Platform.OS === 'ios' ? hp(9) : hp(10.5)}
+                      width={Platform.OS === 'ios' ? hp(9) : hp(10.5)}
                       radius={20}
                     />
                   )}

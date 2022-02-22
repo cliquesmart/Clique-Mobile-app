@@ -177,6 +177,7 @@ const Profile = () => {
   };
 
   const openPreview = () => {
+    console.log(profile.activeAccount, ' profile.activeAccount');
     if (strictValidObjectWithKeys(profile.activeAccount)) {
       if (profile.activeAccount.icone.name === 'File') {
         viewFile(
@@ -320,7 +321,7 @@ const Profile = () => {
           )}
           <Block style={{width: wp(55)}} margin={[0, 0, 0, wp(3)]} flex={false}>
             <Block center flex={false} row>
-              <Text margin={[0, wp(2), 0, 0]} capitalize white bold size={24}>
+              <Text margin={[0, wp(1), 0, 0]} capitalize white bold size={24}>
                 {strictValidObjectWithKeys(profile) && profile.name}
               </Text>
               <ImageComponent
@@ -522,8 +523,8 @@ const Profile = () => {
         onPress={() => onOpen(type)}
         active
         color="#eef2f9"
-        height={hp(8.5)}
-        width={hp(8.5)}
+        height={Platform.OS === 'ios' ? hp(8.5) : hp(9)}
+        width={Platform.OS === 'ios' ? hp(8.5) : hp(9)}
         borderRadius={16}
         style={{marginHorizontal: wp(2), marginTop: hp(2.5)}}>
         <ImageComponent name="add_icon" height={25} width={25} />
@@ -589,8 +590,8 @@ const Profile = () => {
                   <ImageComponent
                     isURL
                     name={`${APIURL.iconUrl}${item.icone.url}`}
-                    height={Platform.OS === 'ios' ? hp(9) : 88}
-                    width={Platform.OS === 'ios' ? hp(9) : 88}
+                    height={Platform.OS === 'ios' ? hp(9) : hp(10.5)}
+                    width={Platform.OS === 'ios' ? hp(9) : hp(10.5)}
                     radius={20}
                     styles={item.fade_out === 1 ? {opacity: 1} : {opacity: 0.1}}
                   />
@@ -640,8 +641,8 @@ const Profile = () => {
                         <ImageComponent
                           isURL
                           name={`${APIURL.iconUrl}${item.url}`}
-                          height={hp(9)}
-                          width={hp(9)}
+                          height={Platform.OS === 'ios' ? hp(9) : hp(10.5)}
+                          width={Platform.OS === 'ios' ? hp(9) : hp(10.5)}
                           radius={20}
                         />
                         {item.is_pro === '1' && (
