@@ -373,8 +373,8 @@ export default class UserProfile extends Component {
                   <ImageComponent
                     isURL
                     name={`${APIURL.iconUrl}${item.icone.url}`}
-                    height={Platform.OS === 'ios' ? hp(9) : hp(11)}
-                    width={Platform.OS === 'ios' ? hp(9) : hp(11)}
+                    height={Platform.OS === 'ios' ? hp(9.5) : hp(11)}
+                    width={Platform.OS === 'ios' ? hp(9.5) : hp(11)}
                     radius={20}
                   />
                 )}
