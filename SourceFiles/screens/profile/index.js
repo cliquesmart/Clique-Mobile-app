@@ -434,7 +434,7 @@ const Profile = () => {
         <NeuView
           color="#F2F0F7"
           height={hp(5)}
-          width={wp(66)}
+          width={wp(48)}
           borderRadius={16}
           containerStyle={styles.neoContainer}
           inset>
@@ -483,7 +483,7 @@ const Profile = () => {
               Business
             </Text>
           )}
-          {activeOptions === 'hospital' ? (
+          {/* {activeOptions === 'hospital' ? (
             <NeuButton
               color="#F2F0F7"
               width={wp(20)}
@@ -504,7 +504,7 @@ const Profile = () => {
               size={13}>
               Hospital
             </Text>
-          )}
+          )} */}
         </NeuView>
       </Block>
     );
