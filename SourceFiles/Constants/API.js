@@ -22,7 +22,6 @@ const monitor = (response) => {
     `Requesting [${method.toUpperCase()}] ${url}:`,
     response.config.data,
   );
-  console.log('Response Data:', data);
   console.groupEnd();
 };
 api.addMonitor(monitor);

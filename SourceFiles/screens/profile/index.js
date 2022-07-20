@@ -177,7 +177,6 @@ const Profile = () => {
   };
 
   const openPreview = () => {
-    console.log(profile.activeAccount, ' profile.activeAccount');
     if (strictValidObjectWithKeys(profile.activeAccount)) {
       if (profile.activeAccount.icone.name === 'File') {
         viewFile(
@@ -1060,6 +1059,22 @@ const Profile = () => {
                       }}
                     />
                   </>
+                ) : newState.name === 'Address' ? (
+                  <NeoInputField
+                    placeholder={`${newState.name} account`}
+                    fontColor="#707070"
+                    icon=""
+                    width={70}
+                    onChangeText={(a) => {
+                      var matches = a.match(/\bhttps?:\/\/\S+/gi);
+                      if (strictValidArray(matches)) {
+                        setField(matches[0]);
+                      } else {
+                        setField(a);
+                      }
+                    }}
+                    value={field}
+                  />
                 ) : (
                   <NeoInputField
                     placeholder={`${newState.name} account`}

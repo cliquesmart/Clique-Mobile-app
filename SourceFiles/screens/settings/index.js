@@ -219,7 +219,7 @@ const Settings = () => {
           {renderSelectType('Change Password', 'ChangePasswordSettings')}
 
           {/* {renderSelectType('Help and Tutorials', 'HelpAndTutorials')} */}
-          <Text size={18} margin={[hp(2), 0, 0]} grey semibold>
+          {/* <Text size={18} margin={[hp(2), 0, 0]} grey semibold>
             Radius
           </Text>
           <Slider
@@ -242,7 +242,7 @@ const Settings = () => {
             <Text size={18} margin={[hp(2), 0, 0]} grey semibold>
               300
             </Text>
-          </Block>
+          </Block> */}
         </Block>
       </ScrollView>
 

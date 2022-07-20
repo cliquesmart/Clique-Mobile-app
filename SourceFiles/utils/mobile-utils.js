@@ -236,7 +236,11 @@ export const OpenLinks = (item, url) => {
         Linking.openURL('https://www.tiktok.com/@' + url);
       }
     } else if (item === 'Whatsapp') {
-      Linking.openURL('https://wa.me/' + `+91${url}`);
+      if (url.includes('https') || url.includes('http')) {
+        Linking.openURL(url);
+      } else {
+        Linking.openURL('https://wa.me/' + `+${url}`);
+      }
     } else if (item === 'Paypal') {
       if (url.includes('https') || url.includes('http')) {
         Linking.openURL(url);
